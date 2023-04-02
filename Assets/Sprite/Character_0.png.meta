@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9ee30eb7d2f1f404790266ee96a67099
+guid: 2e9a41348c26a5945aba8401a27a6751
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -38,12 +38,12 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -66,7 +66,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -100,41 +100,17 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tile 0
+      name: Run 0
       rect:
         serializedVersion: 2
         x: 0
-        y: 19
+        y: 23
         width: 18
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d9f812108496e0d4da2fe09a2360c314
-      internalID: 2093186594
+      spriteID: 6f48c365d17e8c440b63fda431e99edd
+      internalID: -1504461736
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tile 1
+      name: Run 1
       rect:
         serializedVersion: 2
         x: 19
-        y: 19
+        y: 23
         width: 18
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa519104451eb2b4fa72798f5712fe93
-      internalID: -2031541144
+      spriteID: 65d581673c88f0540b5eafaca371194f
+      internalID: 1569025167
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tile 2
+      name: Run 2
       rect:
         serializedVersion: 2
         x: 38
-        y: 19
+        y: 23
         width: 18
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +160,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c275ace70e8c1e642944a4e5f47b1f52
-      internalID: 693853673
+      spriteID: 9bef1f05503899e47b6b996c6a9cf14b
+      internalID: -572488499
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tile 3
+      name: Stand
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 1
         width: 18
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 801a3a7999d0d7347b4ee52cbce915d1
-      internalID: 179664457
+      spriteID: 8ccfb7c6be009d545a6945d897caf54c
+      internalID: -96411997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Tile 4
+      name: Dead
       rect:
         serializedVersion: 2
         x: 19
-        y: 0
+        y: 1
         width: 18
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -226,29 +202,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 499b9b258a33b704fa976966c6b6b3bd
-      internalID: 1830541467
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Tile 5
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 0
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 021a06fb2ea20024587725277c4e262c
-      internalID: -133327340
+      spriteID: b63ad543ade57d547a5d699e80392da2
+      internalID: -1273475434
       vertices: []
       indices: 
       edges: []
@@ -256,7 +211,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 4292c56752efe5f49a82615ef4203c69
     internalID: 0
     vertices: []
     indices: 
@@ -264,12 +219,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Tile 2: 693853673
-      Tile 3: 179664457
-      Tile 4: 1830541467
-      Tile 0: 2093186594
-      Tile 1: -2031541144
-      Tile 5: -133327340
+      Run 0: -1504461736
+      Run 2: -572488499
+      Stand: -96411997
+      Run 1: 1569025167
+      Dead: -1273475434
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

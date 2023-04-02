@@ -46,4 +46,9 @@ public class Enemy : MonoBehaviour
     {
         this.pool = pool;
     }
+
+    public void Hit()
+    {
+
+    }
 }

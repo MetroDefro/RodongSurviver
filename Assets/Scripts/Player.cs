@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
         InputVector2.Subscribe(_ =>
         {
             if (InputVector2.Value.x != 0)
-                spriteRenderer.flipX = InputVector2.Value.x < 0;
+                spriteRenderer.flipX = InputVector2.Value.x > 0;
 
             anim.SetFloat(speedId, InputVector2.Value.magnitude);
         }).AddTo(this);
