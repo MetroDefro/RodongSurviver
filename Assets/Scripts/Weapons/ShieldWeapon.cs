@@ -7,7 +7,7 @@ public class ShieldWeapon : Weapon
 {
     protected override float CalculateDamage()
     {
-        return data.Damage * level * 1;
+        return data.Damage * Level * 1;
     }
 
     protected override void Movement()

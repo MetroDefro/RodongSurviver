@@ -157,6 +157,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e32e638591a624ba2ce173a73330e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expMarblePrefab: {fileID: 3999889164516602753, guid: b58215cf105797d4ea076639b967fc41, type: 3}
   anim: {fileID: 132884151746741321}
   rigidbody: {fileID: 132884151746741326}
   spriteRenderer: {fileID: 132884151746741323}
+  data:
+    Speed: 1
+    Damage: 1
+    HP: 1
+    Defence: 1
+    exp: 1

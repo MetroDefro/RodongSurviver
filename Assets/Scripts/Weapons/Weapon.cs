@@ -9,15 +9,14 @@ public class WeaponData
 {
     public float Damage;
     public float Speed;
-    public float SpeedMultiplier;
-    public float DamageMultiplier;
 }
 
 public abstract class Weapon : MonoBehaviour
 {
     protected Player player;
     [SerializeField] protected WeaponData data;
-    protected int level = 1;
+    public SpriteRenderer SpriteRenderer;
+    public int Level = 1;
 
     public Weapon Initialize(Player player)
     {
@@ -30,8 +29,8 @@ public abstract class Weapon : MonoBehaviour
 
     public int PlusLevel()
     {
-        level++;
-        return level;
+        Level++;
+        return Level;
     }
 
     private void SubscribeOnCollisionStay2D()

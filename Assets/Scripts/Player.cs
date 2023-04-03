@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 [System.Serializable]
 public class PlayerInitData
 {
-    public Weapon Weapon;
+    public WeaponType WeaponType;
     public float HP;
     public float Damage;
     public float Speed;
@@ -17,6 +17,8 @@ public class PlayerInitData
 
 public class Player : MonoBehaviour
 {
+    public WeaponType WeaponType => initData.WeaponType;
+
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
@@ -25,10 +27,10 @@ public class Player : MonoBehaviour
 
     private ReactiveProperty<Vector2> InputVector2 = new ReactiveProperty<Vector2>();
     private ReactiveProperty<float> HP = new ReactiveProperty<float>();
-    private List<Weapon> weapons = new List<Weapon>();
 
     private int Level = 1;
     private float EXP = 0;
+    private float NecessaryEXP = 2;
     private float speed;
 
     private int speedId;
@@ -47,13 +49,9 @@ public class Player : MonoBehaviour
         HP.Value = initData.HP;
         speed = initData.Speed;
 
-        Weapon weapon = Instantiate(initData.Weapon);
-        weapon.Initialize(this);
-        weapons.Add(weapon);
-
         SubscribeFixedUpdate();
         SubscribeInputVector2();
-        SubscribeInputHP();
+        SubscribeHP();
 
         return this;
     }
@@ -61,6 +59,21 @@ public class Player : MonoBehaviour
     public void Hit(float damge)
     {
         HP.Value -= damge;
+    }
+
+    public void PlusEXP(float addedEXP)
+    {
+        EXP += addedEXP;
+
+        if (EXP >= NecessaryEXP)
+        {
+            EXP -= NecessaryEXP;
+            NecessaryEXP *= 1.2f;
+            Level++;
+            hud.SetLevelUp(Level);
+        }
+
+        hud.SetEXPbar(Mathf.InverseLerp(0, NecessaryEXP, EXP));
     }
     #endregion
 
@@ -87,7 +100,7 @@ public class Player : MonoBehaviour
         }).AddTo(disposables);
     }
 
-    private void SubscribeInputHP()
+    private void SubscribeHP()
     {
         HP.Subscribe(value =>
         {
@@ -98,7 +111,7 @@ public class Player : MonoBehaviour
                 anim.SetBool(isDeadId, true);
                 disposables.Clear();
             }
-        }).AddTo(this);
+        }).AddTo(disposables);
     }
 
     private void OnMove(InputValue value)

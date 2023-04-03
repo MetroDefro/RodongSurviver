@@ -5,30 +5,36 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine.Pool;
 
+[System.Serializable]
 public class EnemyData
 {
     public float Speed;
     public float Damage;
     public float HP;
     public float Defence;
+    public float exp;
 }
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    private EnemyData data;
+    [SerializeField] private EnemyData data;
     private Player player;
     private int isHitId;
     private int isDeadId;
+
+    private bool isDead;
 
     private IObjectPool<Enemy> pool;
     private CompositeDisposable disposables = new CompositeDisposable();
 
     private void OnEnable()
     {
-        
+        SubscribeFixedUpdate();
+        SubscribeOnCollisionStay2D();
     }
 
     private void OnDisable()
@@ -44,22 +50,14 @@ public class Enemy : MonoBehaviour
         isHitId = Animator.StringToHash("IsHit");
         isDeadId = Animator.StringToHash("IsDead");
 
-        data = new EnemyData
-        {
-            Damage = 2,
-            Speed = 1,
-            HP = 5,
-            Defence = 1,
-        };
-
-        SubscribeFixedUpdate();
-        SubscribeOnCollisionStay2D();
-
         return this;
     }
 
     public void Hit(float damage)
     {
+        if (isDead)
+            return;
+
         data.HP -= damage;
 
         if (data.HP <= 0)
@@ -93,7 +91,7 @@ public class Enemy : MonoBehaviour
                 {
                     player.Hit(data.Damage);
                 }
-            }).AddTo(this);
+            }).AddTo(disposables);
     }
 
     private IEnumerator Hitting()
@@ -105,10 +103,18 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Dying()
     {
+        isDead = true;
+
         anim.SetBool(isDeadId, true);
         disposables.Clear();
+
+        EXPMarble expMarble = Instantiate(expMarblePrefab, transform.position, transform.rotation);
+        expMarble.Initialize(player, data.exp);
+
         yield return new WaitForSeconds(1f);
-        pool.Release(this);
+
+        isDead = false;
+        gameObject.SetActive(false);
     }
     #endregion
 }
