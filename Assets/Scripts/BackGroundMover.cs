@@ -6,8 +6,15 @@ using System.Linq;
 
 public class BackGroundMover : MonoBehaviour
 {
-    [SerializeField] private BoxCollider2D gameArea;
-    [SerializeField] private Player player;
+    private BoxCollider2D gameArea;
+    private Player player;
+
+    public BackGroundMover Initialize(Player player, BoxCollider2D gameArea)
+    {
+        this.player = player;
+        this.gameArea = gameArea;
+        return this;
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
