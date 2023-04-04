@@ -4,9 +4,10 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine.InputSystem;
+using System;
 
 [System.Serializable]
-public class PlayerInitData
+public class PlayerData
 {
     public WeaponType WeaponType;
     public float HP;
@@ -17,37 +18,38 @@ public class PlayerInitData
 
 public class Player : MonoBehaviour
 {
-    public WeaponType WeaponType => initData.WeaponType;
+    public WeaponType WeaponType => data.WeaponType;
 
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
-    [SerializeField] private PlayerInitData initData;
+    [SerializeField] private PlayerData data;
     private PlayerHUD hud;
 
-    private ReactiveProperty<Vector2> InputVector2 = new ReactiveProperty<Vector2>();
-    private ReactiveProperty<float> HP = new ReactiveProperty<float>();
+    private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
+    private ReactiveProperty<float> hp = new ReactiveProperty<float>();
 
-    private int Level = 1;
-    private float EXP = 0;
-    private float NecessaryEXP = 2;
-    private float speed;
+    private int level = 1;
+    private float exp = 0;
+    private float necessaryEXP = 2;
 
     private int speedId;
     private int isDeadId;
 
+    private Action<int> onLevelUp;
+
     private CompositeDisposable disposables = new CompositeDisposable();
     
     #region Public Method
-    public Player Initialize(PlayerHUD hud)
+    public Player Initialize(PlayerHUD hud, Action<int> onLevelUp)
     {
         this.hud = hud;
+        this.onLevelUp = onLevelUp;
 
         speedId = Animator.StringToHash("Speed");
         isDeadId = Animator.StringToHash("IsDead");
 
-        HP.Value = initData.HP;
-        speed = initData.Speed;
+        hp.Value = data.HP;
 
         SubscribeFixedUpdate();
         SubscribeInputVector2();
@@ -58,22 +60,22 @@ public class Player : MonoBehaviour
 
     public void Hit(float damge)
     {
-        HP.Value -= damge;
+        hp.Value -= damge;
     }
 
-    public void PlusEXP(float addedEXP)
+    public void AddEXP(float addedEXP)
     {
-        EXP += addedEXP;
+        exp += addedEXP;
 
-        if (EXP >= NecessaryEXP)
+        if (exp >= necessaryEXP)
         {
-            EXP -= NecessaryEXP;
-            NecessaryEXP *= 1.2f;
-            Level++;
-            hud.SetLevelUp(Level);
+            exp -= necessaryEXP;
+            necessaryEXP *= 1.2f;
+            level++;
+            onLevelUp?.Invoke(level);
         }
 
-        hud.SetEXPbar(Mathf.InverseLerp(0, NecessaryEXP, EXP));
+        hud.SetEXPbar(Mathf.InverseLerp(0, necessaryEXP, exp));
     }
     #endregion
 
@@ -84,14 +86,14 @@ public class Player : MonoBehaviour
         Observable.EveryFixedUpdate()
             .Subscribe(_ =>
             {
-                Vector2 direction = InputVector2.Value * speed * Time.deltaTime;
+                Vector2 direction = inputVector2.Value * data.Speed * Time.deltaTime;
                 rigidbody.MovePosition(rigidbody.position + direction);
             }).AddTo(disposables);
     }
 
     private void SubscribeInputVector2()
     {
-        InputVector2.Subscribe(value =>
+        inputVector2.Subscribe(value =>
         {
             if (value.x != 0)
                 spriteRenderer.flipX = value.x > 0;
@@ -102,9 +104,9 @@ public class Player : MonoBehaviour
 
     private void SubscribeHP()
     {
-        HP.Subscribe(value =>
+        hp.Subscribe(value =>
         {
-            hud.SetHPbar(Mathf.InverseLerp(0, initData.HP, value));
+            hud.SetHPbar(Mathf.InverseLerp(0, data.HP, value));
 
             if(value <= 0)
             {
@@ -116,7 +118,7 @@ public class Player : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-        InputVector2.Value = value.Get<Vector2>();
+        inputVector2.Value = value.Get<Vector2>();
     }
 
     #endregion

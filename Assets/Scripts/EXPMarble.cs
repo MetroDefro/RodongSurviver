@@ -6,27 +6,21 @@ using UniRx.Triggers;
 
 public class EXPMarble : MonoBehaviour
 {
-    private Player player;
-    private float exp;
-
     public EXPMarble Initialize(Player player, float exp)
     {
-        this.player = player;
-        this.exp = exp;
-
-        SubscribeOnTriggerEnter2D();
+        SubscribeOnTriggerEnter2D(player, exp);
 
         return this;
     }
 
-    private void SubscribeOnTriggerEnter2D()
+    private void SubscribeOnTriggerEnter2D(Player player, float exp)
     {
         this.OnTriggerEnter2DAsObservable()
             .Subscribe(collision =>
             {
                 if (collision.gameObject == player.gameObject)
                 {
-                    player.PlusEXP(exp);
+                    player.AddEXP(exp);
                     Destroy(gameObject);
                 }
             }).AddTo(this);

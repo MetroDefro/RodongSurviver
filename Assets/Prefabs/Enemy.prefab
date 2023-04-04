@@ -160,10 +160,11 @@ MonoBehaviour:
   expMarblePrefab: {fileID: 3999889164516602753, guid: b58215cf105797d4ea076639b967fc41, type: 3}
   anim: {fileID: 132884151746741321}
   rigidbody: {fileID: 132884151746741326}
+  collider2D: {fileID: -2708136330554889209}
   spriteRenderer: {fileID: 132884151746741323}
   data:
     Speed: 1
     Damage: 1
     HP: 1
     Defence: 1
-    exp: 1
+    EXP: 1

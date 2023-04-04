@@ -8,28 +8,35 @@ using System;
 
 public class PlayerHUD : MonoBehaviour
 {
-    [SerializeField] private RectTransform HPbar;
-    [SerializeField] private RectTransform EXPbar;
+    [SerializeField] private RectTransform hpBar;
+    [SerializeField] private RectTransform expBar;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private GameObject levelUpPanel;
     [SerializeField] private Button[] levelUpButton;
+    [SerializeField] private TextMeshProUGUI[] levelUpButtonExplainText;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private Image[] weaponSlot;
+    [SerializeField] private Image[] itemSlot;
+    [SerializeField] private TextMeshProUGUI[] weaponSlotLevelText;
+    [SerializeField] private TextMeshProUGUI[] itemSlotLevelText;
     private float maxHPbarWidth;
     private float maxEXPbarWidth;
 
-    private Action onLevelUp;
     private Action<WeaponType> onWeaponUp;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    public void Initialize(Action onLevelUp, Action<WeaponType> onWeaponUp)
+    public void Initialize(Action<WeaponType> onWeaponUp)
     {
-        this.onLevelUp = onLevelUp;
         this.onWeaponUp = onWeaponUp;
         levelUpPanel.SetActive(false);
 
-        maxHPbarWidth = HPbar.sizeDelta.x;
-        maxEXPbarWidth = EXPbar.sizeDelta.x;
-        EXPbar.sizeDelta = new Vector2(0, EXPbar.sizeDelta.y);
+        maxHPbarWidth = hpBar.sizeDelta.x;
+        maxEXPbarWidth = expBar.sizeDelta.x;
+        expBar.sizeDelta = new Vector2(0, expBar.sizeDelta.y);
+
+        SubscribeEveryUpdate();
     }
 
     public void SetHPbar(float normalizeHP)
@@ -37,7 +44,7 @@ public class PlayerHUD : MonoBehaviour
         if (maxHPbarWidth == 0)
             return;
 
-        HPbar.sizeDelta = new Vector2(maxHPbarWidth * normalizeHP, HPbar.sizeDelta.y);
+        hpBar.sizeDelta = new Vector2(maxHPbarWidth * normalizeHP, hpBar.sizeDelta.y);
     }
 
     public void SetEXPbar(float normalizeEXP)
@@ -45,23 +52,25 @@ public class PlayerHUD : MonoBehaviour
         if (maxEXPbarWidth == 0)
             return;
 
-        EXPbar.sizeDelta = new Vector2(maxEXPbarWidth * normalizeEXP, EXPbar.sizeDelta.y);
+        expBar.sizeDelta = new Vector2(maxEXPbarWidth * normalizeEXP, expBar.sizeDelta.y);
     }    
-    
-    public void SetLevelUp(int level)
+
+    public void SetLevelUpPanel(int level, (WeaponType, Sprite, string)[] weapons)
     {
         levelText.text = "LV. " + level;
-        onLevelUp?.Invoke();
-    }
-
-    public void SetLevelUpPanel((WeaponType, Sprite)[] weapons)
-    {
         levelUpPanel.SetActive(true);
         for(int i = 0; i < levelUpButton.Length; i++)
         {
             levelUpButton[i].image.sprite = weapons[i].Item2;
+            levelUpButtonExplainText[i].text = weapons[i].Item3;
             SubscribeLevelUpButton(levelUpButton[i], weapons[i].Item1);
         }
+    }
+
+    public void SetWeaponSlot(int index, int Level, Sprite sprite)
+    {
+        weaponSlot[index].sprite = sprite;
+        weaponSlotLevelText[index].text = "" + Level;
     }
 
     private void SubscribeLevelUpButton(Button button, WeaponType weaponType)
@@ -75,5 +84,18 @@ public class PlayerHUD : MonoBehaviour
                 disposables.Clear();
             })
             .AddTo(disposables);
+    }
+
+    private void SubscribeEveryUpdate()
+    {
+        timerText.text = "00 : 00";
+        float spanSeconds = 0;
+        Observable.EveryUpdate()
+            .Subscribe(_ => 
+            {
+                spanSeconds += Time.deltaTime;
+                TimeSpan spantime = TimeSpan.FromSeconds(spanSeconds);
+                timerText.text = spantime.ToString("mm' : 'ss");
+            }).AddTo(this);
     }
 }

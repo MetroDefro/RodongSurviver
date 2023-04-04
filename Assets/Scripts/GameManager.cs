@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,55 +11,63 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] weapons = new Weapon[1];
-    // [SerializeField] private Item[] items = new Item[1];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[1];
+    private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
+    // private List<Item> items = new List<Item>();
 
-    public List<int> Levels = new List<int>();
+    private int maxLevel = 6;
 
     private void Start()
     {
         foreach (var bg in backGroundMovers) 
             bg.Initialize(player, gameArea);
 
-        foreach(var w in weapons)
-            Levels.Add(w.Level);
-
-        player.Initialize(playerHUD);
-        Instantiate(weapons[(int)player.WeaponType]).Initialize(player);
-        
-        playerHUD.Initialize(() => OnLevelUp(), (weaponType) => OnWeaponLevelUp(weaponType));
+        player.Initialize(playerHUD, (level) => OnLevelUp(level));
+        playerHUD.Initialize((weaponType) => OnWeaponLevelUp(weaponType));
         enemySpawner.Initialize(player, gameArea);
+
+
+        Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
+        weapons.Add((player.WeaponType, firstWeapon));
+        playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Sprite);
     }
 
-    private void OnLevelUp()
+    private void OnLevelUp(int level)
     {
-        playerHUD.SetLevelUpPanel(new (WeaponType, Sprite)[] { getWeapon(), getWeapon(), getWeapon() });
+        playerHUD.SetLevelUpPanel(level, new(WeaponType, Sprite, string)[] { getWeapon(), getWeapon(), getWeapon() });
     }
 
     private void OnWeaponLevelUp(WeaponType weaponType)
     {
-        weapons[(int)weaponType].PlusLevel();
-        Levels[(int)weaponType]++;
+        weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2.AddLevel();
+
+        playerHUD.SetWeaponSlot((int)weaponType, weapons[(int)weaponType].Item2.Level, weapons[(int)weaponType].Item2.Sprite);
     }
 
-    private (WeaponType, Sprite) getWeapon()
+    private (WeaponType, Sprite, string) getWeapon()
     {
         // If all are max level, instead, money & HP will come out
-        int minLevel = 6;
-        foreach(var level in Levels)
+        if (weapons.Count >= 6)
         {
-            if(minLevel > level)
-                minLevel = level;
+            Debug.Log("To Do::");
+
+            int minLevel = maxLevel;
+            foreach (var weapon in weapons)
+            {
+                if (minLevel > weapon.Item2.Level)
+                    minLevel = weapon.Item2.Level;
+            }
+
+            if (minLevel == maxLevel)
+                return (0, weapons[0].Item2.Sprite, weapons[0].Item2.Explanation); // must be corrected
         }
 
-        if (minLevel == 6)
-            return (0, weapons[0].SpriteRenderer.sprite);
 
-        int weaponType = Random.Range(0, weapons.Length - 1);
-        while (Levels[weaponType] == 6)
+        int weaponType = Random.Range(0, allWeaponPrefabs.Length - 1);
+        while (weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2.Level == maxLevel)
         {
-            weaponType = Random.Range(0, weapons.Length - 1);
+            weaponType = Random.Range(0, allWeaponPrefabs.Length - 1);
         }
-        return ((WeaponType)weaponType, weapons[weaponType].SpriteRenderer.sprite);
+        return ((WeaponType)weaponType, allWeaponPrefabs[weaponType].Sprite, allWeaponPrefabs[weaponType].Explanation);
     }
 }

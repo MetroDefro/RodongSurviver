@@ -7,35 +7,64 @@ using UniRx.Triggers;
 [System.Serializable]
 public class WeaponData
 {
+    public GameObject WeaponObject;
+    public Sprite Sprite;
+    public string Explanation;
     public float Damage;
     public float Speed;
+    public float Size;
+    public int Count;
 }
 
 public abstract class Weapon : MonoBehaviour
 {
-    protected Player player;
+    public string Explanation => data.Explanation;
+    public Sprite Sprite => data.Sprite;
+    public int Level => level;
+
     [SerializeField] protected WeaponData data;
-    public SpriteRenderer SpriteRenderer;
-    public int Level = 1;
+    protected Player player;
+    protected int level;
+
+    protected List<GameObject> weaponObjects = new List<GameObject>();
+
+    private void OnDisable()
+    {
+        weaponObjects.Clear();
+    }
 
     public Weapon Initialize(Player player)
     {
+        level = 1;
         this.player = player;
 
+        InitObject(data.Count);
+
         Movement();
-        SubscribeOnCollisionStay2D();
+
         return this;
     }
 
-    public int PlusLevel()
+    public int AddLevel()
     {
-        Level++;
-        return Level;
+        level++;
+
+        if(weaponObjects.Count < CalculateCount())
+        {
+            int count = CalculateCount() - weaponObjects.Count;
+            InitObject(count);
+        }
+
+        float size = CalculateSize();
+        foreach (GameObject weapon in weaponObjects)
+            weapon.transform.localScale = new Vector3(size, size, size);
+
+        return level;
     }
 
-    private void SubscribeOnCollisionStay2D()
+    private void SubscribeOnCollisionStay2D(GameObject weapon)
     {
-        this.OnCollisionStay2DAsObservable()
+        weapon.OnCollisionStay2DAsObservable()
             .ThrottleFirst(System.TimeSpan.FromSeconds(0.1))
             .Subscribe(collision => 
             {
@@ -46,8 +75,25 @@ public abstract class Weapon : MonoBehaviour
             }).AddTo(this);
     }
 
+    private void InitObject(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            GameObject weapon = Instantiate(data.WeaponObject, transform);
+            weaponObjects.Add(weapon);
+            SubscribeOnCollisionStay2D(weapon);
+        }
+
+        SetPosition();
+    }
+
     protected abstract void Movement();
 
-    // (WeaponDamage * WeaponLevel * WeaponRank * weight) * (PlayerDamage * weight)
+    protected abstract void SetPosition();
+
+    // CalculateDamage() * (PlayerDamage * weight)
     protected abstract float CalculateDamage();
+    protected abstract float CalculateSpeed();
+    protected abstract float CalculateSize();
+    protected abstract int CalculateCount();
 }

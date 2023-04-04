@@ -12,7 +12,7 @@ public class EnemyData
     public float Damage;
     public float HP;
     public float Defence;
-    public float exp;
+    public float EXP;
 }
 
 public class Enemy : MonoBehaviour
@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Animator anim;
     [SerializeField] private Rigidbody2D rigidbody;
+    [SerializeField] private CapsuleCollider2D collider2D;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private EnemyData data;
     private Player player;
@@ -33,6 +34,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        collider2D.enabled = true;
         SubscribeFixedUpdate();
         SubscribeOnCollisionStay2D();
     }
@@ -84,7 +86,8 @@ public class Enemy : MonoBehaviour
 
     private void SubscribeOnCollisionStay2D()
     {
-        this.OnCollisionEnter2DAsObservable()
+        this.OnCollisionStay2DAsObservable()
+            .ThrottleFirst(System.TimeSpan.FromSeconds(0.1))
             .Subscribe(collision =>
             {
                 if (collision.gameObject == player.gameObject)
@@ -107,9 +110,10 @@ public class Enemy : MonoBehaviour
 
         anim.SetBool(isDeadId, true);
         disposables.Clear();
+        collider2D.enabled = false;
 
         EXPMarble expMarble = Instantiate(expMarblePrefab, transform.position, transform.rotation);
-        expMarble.Initialize(player, data.exp);
+        expMarble.Initialize(player, data.EXP);
 
         yield return new WaitForSeconds(1f);
 
