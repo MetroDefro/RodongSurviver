@@ -7,17 +7,20 @@ using UniRx.Triggers;
 [System.Serializable]
 public class WeaponData
 {
+    public WeaponType WeaponType;
     public GameObject WeaponObject;
     public Sprite Sprite;
     public string Explanation;
     public float Damage;
     public float Speed;
     public float Size;
+    public float Range;
     public int Count;
 }
 
 public abstract class Weapon : MonoBehaviour
 {
+    public WeaponType WeaponType => data.WeaponType;
     public string Explanation => data.Explanation;
     public Sprite Sprite => data.Sprite;
     public int Level => level;
@@ -95,5 +98,6 @@ public abstract class Weapon : MonoBehaviour
     protected abstract float CalculateDamage();
     protected abstract float CalculateSpeed();
     protected abstract float CalculateSize();
+    protected abstract float CalculateRange();
     protected abstract int CalculateCount();
 }

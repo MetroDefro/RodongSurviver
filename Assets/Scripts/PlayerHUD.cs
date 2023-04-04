@@ -20,6 +20,7 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private Image[] itemSlot;
     [SerializeField] private TextMeshProUGUI[] weaponSlotLevelText;
     [SerializeField] private TextMeshProUGUI[] itemSlotLevelText;
+
     private float maxHPbarWidth;
     private float maxEXPbarWidth;
 
@@ -55,15 +56,15 @@ public class PlayerHUD : MonoBehaviour
         expBar.sizeDelta = new Vector2(maxEXPbarWidth * normalizeEXP, expBar.sizeDelta.y);
     }    
 
-    public void SetLevelUpPanel(int level, (WeaponType, Sprite, string)[] weapons)
+    public void SetLevelUpPanel(int level, Weapon[] weapons)
     {
         levelText.text = "LV. " + level;
         levelUpPanel.SetActive(true);
         for(int i = 0; i < levelUpButton.Length; i++)
         {
-            levelUpButton[i].image.sprite = weapons[i].Item2;
-            levelUpButtonExplainText[i].text = weapons[i].Item3;
-            SubscribeLevelUpButton(levelUpButton[i], weapons[i].Item1);
+            levelUpButton[i].image.sprite = weapons[i].Sprite;
+            levelUpButtonExplainText[i].text = weapons[i].Explanation;
+            SubscribeLevelUpButton(levelUpButton[i], weapons[i].WeaponType);
         }
     }
 

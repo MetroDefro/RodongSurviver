@@ -30,11 +30,37 @@ public class EnemySpawner : MonoBehaviour
             .Subscribe(_ => 
             {
                 if (enemies.Count <= maxEnemyCount)
+                {
                     pool.Get();
+                }
             }).AddTo(this);
     }
 
     private Enemy SpwanEnemy()
+    {
+        Enemy enemy = Instantiate(enemyPrefab, GetRandomVector(), enemyPrefab.transform.rotation, transform);
+        enemies.Add(enemy.Initialize(player, pool));
+        return enemy;
+    }
+
+    private void OnGetPool(Enemy enemy)
+    {
+        enemy.transform.position = GetRandomVector();
+        enemy.gameObject.SetActive(true);
+    }
+
+    private void OnReleasePool(Enemy enemy)
+    {
+        enemy.gameObject.SetActive(false);
+        enemies.Remove(enemy);
+    }
+
+    private void OnDestroyPool(Enemy enemy)
+    {
+        Destroy(enemy.gameObject);
+    }
+
+    private Vector2 GetRandomVector()
     {
         Vector2 randomVector = GetRandomRange(spwanRange);
 
@@ -43,24 +69,7 @@ public class EnemySpawner : MonoBehaviour
             randomVector = GetRandomRange(spwanRange);
         }
 
-        Enemy enemy = Instantiate(enemyPrefab, randomVector, enemyPrefab.transform.rotation, transform);
-        enemies.Add(enemy.Initialize(player, pool));
-        return enemy;
-    }
-
-    private void OnGetPool(Enemy enemy)
-    {
-        enemy.gameObject.SetActive(true);
-    }
-
-    private void OnReleasePool(Enemy enemy)
-    {
-        enemy.gameObject.SetActive(false);
-    }
-
-    private void OnDestroyPool(Enemy enemy)
-    {
-        Destroy(enemy.gameObject);
+        return randomVector;
     }
 
     private Vector2 GetRandomRange(float spwanRange)

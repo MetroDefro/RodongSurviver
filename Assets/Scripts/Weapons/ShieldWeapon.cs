@@ -19,6 +19,10 @@ public class ShieldWeapon : Weapon
     {
         return data.Size + (level - 1) * data.Size * 0.2f;
     }
+    protected override float CalculateRange()
+    {
+        return data.Range + (level - 1) * data.Range * 0.2f;
+    }
 
     protected override int CalculateCount()
     {

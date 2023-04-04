@@ -52,6 +52,7 @@ MonoBehaviour:
     Damage: 1
     Speed: 100
     Size: 1
+    Range: 1
     Count: 1
 --- !u!114 &-3787983276219149332
 MonoBehaviour:

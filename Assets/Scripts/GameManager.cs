@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[1];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[2];
     private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
@@ -34,17 +34,23 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelUp(int level)
     {
-        playerHUD.SetLevelUpPanel(level, new(WeaponType, Sprite, string)[] { getWeapon(), getWeapon(), getWeapon() });
+        playerHUD.SetLevelUpPanel(level, new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
     }
 
     private void OnWeaponLevelUp(WeaponType weaponType)
     {
+        if (weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2 == null)
+        {
+            Weapon weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
+            weapons.Add((weaponType, weapon));
+        }
+
         weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2.AddLevel();
 
         playerHUD.SetWeaponSlot((int)weaponType, weapons[(int)weaponType].Item2.Level, weapons[(int)weaponType].Item2.Sprite);
     }
 
-    private (WeaponType, Sprite, string) getWeapon()
+    private Weapon GetWeapon()
     {
         // If all are max level, instead, money & HP will come out
         if (weapons.Count >= 6)
@@ -59,15 +65,15 @@ public class GameManager : MonoBehaviour
             }
 
             if (minLevel == maxLevel)
-                return (0, weapons[0].Item2.Sprite, weapons[0].Item2.Explanation); // must be corrected
+                return weapons[0].Item2; // must be corrected
         }
 
-
-        int weaponType = Random.Range(0, allWeaponPrefabs.Length - 1);
-        while (weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2.Level == maxLevel)
-        {
-            weaponType = Random.Range(0, allWeaponPrefabs.Length - 1);
-        }
-        return ((WeaponType)weaponType, allWeaponPrefabs[weaponType].Sprite, allWeaponPrefabs[weaponType].Explanation);
+        int weaponType = Random.Range(0, allWeaponPrefabs.Length);
+        // If the number of weapon types is less than 6, an error continues
+        //while (weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2.Level == maxLevel)
+        //{
+        //    weaponType = Random.Range(0, allWeaponPrefabs.Length);
+        //}
+        return allWeaponPrefabs[weaponType];
     }
 }
