@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
         if (exp >= necessaryEXP)
         {
             exp -= necessaryEXP;
-            necessaryEXP *= 1.2f;
+            necessaryEXP *= 1.5f;
             level++;
             onLevelUp?.Invoke(level);
         }

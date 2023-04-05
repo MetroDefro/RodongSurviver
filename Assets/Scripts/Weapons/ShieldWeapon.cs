@@ -19,9 +19,10 @@ public class ShieldWeapon : Weapon
     {
         return data.Size + (level - 1) * data.Size * 0.2f;
     }
+
     protected override float CalculateRange()
     {
-        return data.Range + (level - 1) * data.Range * 0.2f;
+        return data.Range * level * 1;
     }
 
     protected override int CalculateCount()
@@ -56,35 +57,3 @@ public class ShieldWeapon : Weapon
             }).AddTo(this);
     }
 }
-
-
-
-//float time = 0;
-//Observable.EveryFixedUpdate()
-//    .Subscribe(_ =>
-//    {
-//        time += Time.deltaTime;
-
-//        if (time >= 6)
-//        {
-//            time = 0;
-//        }
-//        else if (time >= 5)
-//        {
-//            gameObject.SetActive(false);
-//        }
-//        else if (time >= 3)
-//        {
-//            transform.position = player.transform.position + new Vector3(-1, 0, 0);
-//            gameObject.SetActive(true);
-//        }
-//        else if (time >= 2)
-//        {
-//            gameObject.SetActive(false);
-//        }
-//        else if (time >= 0)
-//        {
-//            transform.position = player.transform.position + new Vector3(1, 0, 0);
-//            gameObject.SetActive(true);
-//        }
-//    }).AddTo(this);
