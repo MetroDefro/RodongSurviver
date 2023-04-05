@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[2];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[3];
     private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
@@ -39,15 +39,17 @@ public class GameManager : MonoBehaviour
 
     private void OnWeaponLevelUp(WeaponType weaponType)
     {
-        if (weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2 == null)
+        Weapon weapon = weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2;
+        if (weapon == null)
         {
-            Weapon weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
+            weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
             weapons.Add((weaponType, weapon));
         }
 
-        weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2.AddLevel();
+        int index = weapons.IndexOf((weaponType, weapon));
+        weapon.AddLevel();
 
-        playerHUD.SetWeaponSlot((int)weaponType, weapons[(int)weaponType].Item2.Level, weapons[(int)weaponType].Item2.Sprite);
+        playerHUD.SetWeaponSlot(index, weapon.Level, weapon.Sprite);
     }
 
     private Weapon GetWeapon()

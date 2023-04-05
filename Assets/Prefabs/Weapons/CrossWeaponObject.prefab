@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8933647714911918374}
   - component: {fileID: 5463355224165266032}
   m_Layer: 9
-  m_Name: SwordWeaponObject
+  m_Name: CrossWeaponObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 1244911645
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a48f2cb9d21361441b407da8fae3adbf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5b654e3b8693aa14d8d95ff4b62307db, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -109,5 +109,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 1}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0

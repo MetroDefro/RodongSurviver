@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class SwordWeapon : Weapon
 {
+    [SerializeField] private int fireSpeed = 10;
     private bool isWaitingTime;
+
     protected override float CalculateDamage()
     {
         return data.Damage * Level * 1;
@@ -13,17 +15,16 @@ public class SwordWeapon : Weapon
 
     protected override float CalculateSpeed()
     {
-        return data.Speed;
+        return data.Speed + (level - 1) * data.Speed * 0.4f;
     }
 
     protected override float CalculateSize()
     {
         return data.Size + (level - 1) * data.Size * 0.2f;
     }
-
     protected override float CalculateRange()
     {
-        return data.Range + (level - 1) * data.Range * 0.4f;
+        return data.Range * level * 1;
     }
 
     protected override int CalculateCount()
@@ -58,7 +59,7 @@ public class SwordWeapon : Weapon
                 if (!isWaitingTime)
                 {
                     foreach (var weapon in weaponObjects)
-                        weapon.transform.Translate(Vector3.up * CalculateSpeed() * Time.fixedDeltaTime);
+                        weapon.transform.Translate(Vector3.up * fireSpeed * Time.fixedDeltaTime);
                 }
                 else
                 {
@@ -75,7 +76,7 @@ public class SwordWeapon : Weapon
             isWaitingTime = false;
             foreach (var weapon in weaponObjects)
                 weapon.SetActive(true);
-            yield return new WaitForSeconds(CalculateRange());
+            yield return new WaitForSeconds(CalculateSpeed());
 
             isWaitingTime = true;
             foreach (var weapon in weaponObjects)
