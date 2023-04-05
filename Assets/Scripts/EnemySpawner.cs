@@ -37,9 +37,36 @@ public class EnemySpawner : MonoBehaviour
         enemies.Clear();
     }
 
+    public void Play()
+    {
+        SubscribeUpdate();
+
+        var enemiesArray = enemies.ToArray();
+        var length = enemiesArray.Length;
+
+        for (int i = 0; i < length; i++)
+        {
+            enemiesArray[i].Play();
+        }
+    }
+
+
+    public void Pause()
+    {
+        Disposables.Clear();
+
+        var enemiesArray = enemies.ToArray();
+        var length = enemiesArray.Length;
+
+        for (int i = 0; i < length; i++)
+        {
+            enemiesArray[i].Pause();
+        }            
+    }
+
     private void SubscribeUpdate()
     {
-        Observable.EveryUpdate()
+        Observable.EveryFixedUpdate()
             .Subscribe(_ => 
             {
                 if (enemies.Count <= maxEnemyCount)

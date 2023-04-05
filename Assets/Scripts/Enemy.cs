@@ -75,6 +75,17 @@ public class Enemy : MonoBehaviour
         disposables.Clear();
         pool.Release(this);
     }
+
+    public void Pause()
+    {
+        disposables.Clear();
+    }
+
+    public void Play()
+    {
+        SubscribeFixedUpdate();
+        SubscribeOnCollisionStay2D();
+    }
     #endregion
 
     #region Private Method

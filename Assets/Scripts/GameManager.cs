@@ -42,7 +42,11 @@ public class GameManager : MonoBehaviour
             bg.Initialize(player, gameArea);
 
         player.Initialize(playerHUD, (level) => OnLevelUp(level));
-        playerHUD.Initialize((weaponType) => OnWeaponLevelUp(weaponType));
+        playerHUD.Initialize((weaponType) =>
+        {
+            OnWeaponLevelUp(weaponType);
+            PlayGame();
+        });
         enemySpawner.Initialize(player, gameArea);
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
@@ -52,7 +56,19 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelUp(int level)
     {
+        PauseGame();
         playerHUD.SetLevelUpPanel(level, new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
+    }
+
+    private void PauseGame()
+    {
+        //player.Pause();
+        enemySpawner.Pause();
+    }
+
+    private void PlayGame()
+    {
+        enemySpawner.Play();
     }
 
     private void OnWeaponLevelUp(WeaponType weaponType)
