@@ -39,7 +39,9 @@ public class Player : MonoBehaviour
     private Action<int> onLevelUp;
 
     private CompositeDisposable disposables = new CompositeDisposable();
-    
+
+    public Action OnDied { get; set; } = null;
+
     #region Public Method
     public Player Initialize(PlayerHUD hud, Action<int> onLevelUp)
     {
@@ -77,6 +79,12 @@ public class Player : MonoBehaviour
 
         hud.SetEXPbar(Mathf.InverseLerp(0, necessaryEXP, exp));
     }
+
+    public void Dispose()
+    {
+        rigidbody.MovePosition(new Vector2(0, 0));
+        anim.SetBool(isDeadId, false);
+    }
     #endregion
 
     #region Private Method
@@ -112,6 +120,7 @@ public class Player : MonoBehaviour
             {
                 anim.SetBool(isDeadId, true);
                 disposables.Clear();
+                OnDied?.Invoke();
             }
         }).AddTo(disposables);
     }

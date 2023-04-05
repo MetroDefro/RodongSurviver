@@ -16,12 +16,25 @@ public class EnemySpawner : MonoBehaviour
     private List<Enemy> enemies = new List<Enemy>();
     private IObjectPool<Enemy> pool;
 
+    private CompositeDisposable Disposables { get; set; } = new CompositeDisposable();
+
     public void Initialize(Player player, BoxCollider2D gameArea)
     {
         this.player = player;
         this.gameArea = gameArea;
         pool = new ObjectPool<Enemy>(SpwanEnemy, OnGetPool, OnReleasePool, OnDestroyPool, true, enemyCount, maxEnemyCount);
         SubscribeUpdate();
+    }
+
+    public void Dispose()
+    {
+        Disposables.Clear();
+
+        foreach(var enemy in enemies.ToArray())
+            enemy.Dispose();
+
+        pool.Clear();
+        enemies.Clear();
     }
 
     private void SubscribeUpdate()
@@ -33,7 +46,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     pool.Get();
                 }
-            }).AddTo(this);
+            }).AddTo(Disposables);
     }
 
     private Enemy SpwanEnemy()

@@ -67,6 +67,12 @@ public class Enemy : MonoBehaviour
         else
             StartCoroutine(Hitting());
     }
+
+    public void Dispose()
+    {
+        disposables.Clear();
+        pool.Release(this);
+    }
     #endregion
 
     #region Private Method

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,13 +20,30 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (var bg in backGroundMovers) 
+        Initialize();
+    }
+
+    public void OnReset()
+    {
+        player.Dispose();
+        enemySpawner.Dispose();
+        foreach (var weapon in weapons)
+            DestroyImmediate(weapon.Item2.gameObject);
+
+        weapons.Clear();
+        Initialize();
+    }
+
+    public void SetupDiedAction(Action onDied) => player.OnDied = onDied;
+
+    public void Initialize()
+    {
+        foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
         player.Initialize(playerHUD, (level) => OnLevelUp(level));
         playerHUD.Initialize((weaponType) => OnWeaponLevelUp(weaponType));
         enemySpawner.Initialize(player, gameArea);
-
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         weapons.Add((player.WeaponType, firstWeapon));
@@ -68,7 +86,7 @@ public class GameManager : MonoBehaviour
                 return weapons[0].Item2; // must be corrected
         }
 
-        int weaponType = Random.Range(0, allWeaponPrefabs.Length);
+        int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
         // If the number of weapon types is less than 6, an error continues
         //while (weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2.Level == maxLevel)
         //{
