@@ -8,7 +8,8 @@ using UnityEngine.Pool;
 [System.Serializable]
 public class EnemyData
 {
-    public float Speed;
+    public float Speed { get; set; }
+
     public float Damage;
     public float HP;
     public float Defence;
@@ -47,6 +48,7 @@ public class Enemy : MonoBehaviour
     #region Public Method
     public Enemy Initialize(Player player, IObjectPool<Enemy> pool)
     {
+        data.Speed = Random.Range(1, 3);
         this.player = player;
         this.pool = pool;
         isHitId = Animator.StringToHash("IsHit");
