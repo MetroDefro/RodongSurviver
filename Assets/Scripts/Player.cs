@@ -48,6 +48,10 @@ public class Player : MonoBehaviour
         this.hud = hud;
         this.onLevelUp = onLevelUp;
 
+        level = 1;
+        exp = 0;
+        necessaryEXP = 2;
+
         speedId = Animator.StringToHash("Speed");
         isDeadId = Animator.StringToHash("IsDead");
 

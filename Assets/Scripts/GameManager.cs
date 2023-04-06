@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public void OnReset()
     {
         player.Dispose();
+        playerHUD.Dispose();
         enemySpawner.Dispose();
         foreach (var weapon in weapons)
             DestroyImmediate(weapon.Item2.gameObject);
@@ -63,9 +64,12 @@ public class GameManager : MonoBehaviour
             weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
             weapons.Add((weaponType, weapon));
         }
+        else
+        {
+            weapon.AddLevel();
+        }
 
         int index = weapons.IndexOf((weaponType, weapon));
-        weapon.AddLevel();
 
         playerHUD.SetWeaponSlot(index, weapon.Level, weapon.Sprite);
     }
