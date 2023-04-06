@@ -69,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
         Observable.EveryFixedUpdate()
             .Subscribe(_ => 
             {
-                if (enemies.Count <= maxEnemyCount)
+                if (enemies.Count < maxEnemyCount)
                 {
                     pool.Get();
                 }
@@ -79,12 +79,12 @@ public class EnemySpawner : MonoBehaviour
     private Enemy SpwanEnemy()
     {
         Enemy enemy = Instantiate(enemyPrefab, GetRandomVector(), enemyPrefab.transform.rotation, transform);
-        enemies.Add(enemy.Initialize(player, pool));
         return enemy;
     }
 
     private void OnGetPool(Enemy enemy)
     {
+        enemies.Add(enemy.Initialize(player, pool));
         enemy.transform.position = GetRandomVector();
         enemy.gameObject.SetActive(true);
     }

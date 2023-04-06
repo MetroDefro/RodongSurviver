@@ -136,8 +136,8 @@ public class Enemy : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        pool.Release(this);
         isDead = false;
-        gameObject.SetActive(false);
     }
     #endregion
 }
