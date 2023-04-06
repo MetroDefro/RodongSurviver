@@ -26,6 +26,7 @@ public class PlayerHUD : MonoBehaviour
 
     private Action<WeaponType> onWeaponUp;
 
+    private CompositeDisposable levelupButtonDisposables = new CompositeDisposable();
     private CompositeDisposable disposables = new CompositeDisposable();
 
     public void Initialize(Action<WeaponType> onWeaponUp)
@@ -37,7 +38,18 @@ public class PlayerHUD : MonoBehaviour
         maxEXPbarWidth = expBar.sizeDelta.x;
         expBar.sizeDelta = new Vector2(0, expBar.sizeDelta.y);
 
+        levelText.text = "LV. " + 1;
+
         SubscribeEveryUpdate();
+    }
+
+    public void Dispose()
+    {
+        disposables.Clear();
+        for(int i = 0; i < weaponSlot.Length; i++)
+        {
+            SetWeaponSlot(i, 1, null);
+        }
     }
 
     public void SetHPbar(float normalizeHP)
@@ -82,9 +94,9 @@ public class PlayerHUD : MonoBehaviour
             {
                 onWeaponUp.Invoke(weaponType);
                 levelUpPanel.SetActive(false);
-                disposables.Clear();
+                levelupButtonDisposables.Clear();
             })
-            .AddTo(disposables);
+            .AddTo(levelupButtonDisposables);
     }
 
     private void SubscribeEveryUpdate()
