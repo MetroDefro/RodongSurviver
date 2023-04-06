@@ -8,7 +8,6 @@ using System;
 
 public class PlayerHUD : MonoBehaviour
 {
-    [SerializeField] private RectTransform hpBar;
     [SerializeField] private RectTransform expBar;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private GameObject levelUpPanel;
@@ -21,7 +20,6 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] weaponSlotLevelText;
     [SerializeField] private TextMeshProUGUI[] itemSlotLevelText;
 
-    private float maxHPbarWidth;
     private float maxEXPbarWidth;
 
     private Action<WeaponType> onWeaponUp;
@@ -34,7 +32,6 @@ public class PlayerHUD : MonoBehaviour
         this.onWeaponUp = onWeaponUp;
         levelUpPanel.SetActive(false);
 
-        maxHPbarWidth = hpBar.sizeDelta.x;
         maxEXPbarWidth = expBar.sizeDelta.x;
         expBar.sizeDelta = new Vector2(0, expBar.sizeDelta.y);
 
@@ -50,14 +47,6 @@ public class PlayerHUD : MonoBehaviour
         {
             SetWeaponSlot(i, 1, null);
         }
-    }
-
-    public void SetHPbar(float normalizeHP)
-    {
-        if (maxHPbarWidth == 0)
-            return;
-
-        hpBar.sizeDelta = new Vector2(maxHPbarWidth * normalizeHP, hpBar.sizeDelta.y);
     }
 
     public void SetEXPbar(float normalizeEXP)

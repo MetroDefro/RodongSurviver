@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private PlayerData data;
+    [SerializeField] private Transform hpBar;
     private PlayerHUD hud;
 
     private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour
 
     private int speedId;
     private int isDeadId;
+
+    private float maxHPbarScaleX;
 
     private Action<int> onLevelUp;
 
@@ -60,6 +63,8 @@ public class Player : MonoBehaviour
         SubscribeFixedUpdate();
         SubscribeInputVector2();
         SubscribeHP();
+
+        maxHPbarScaleX = hpBar.localScale.x;
 
         return this;
     }
@@ -118,7 +123,7 @@ public class Player : MonoBehaviour
     {
         hp.Subscribe(value =>
         {
-            hud.SetHPbar(Mathf.InverseLerp(0, data.HP, value));
+            SetHPbar(Mathf.InverseLerp(0, data.HP, value));
 
             if(value <= 0)
             {
@@ -127,6 +132,14 @@ public class Player : MonoBehaviour
                 OnDied?.Invoke();
             }
         }).AddTo(disposables);
+    }
+
+    public void SetHPbar(float normalizeHP)
+    {
+        if (maxHPbarScaleX == 0)
+            return;
+
+        hpBar.localScale = new Vector2(maxHPbarScaleX * normalizeHP, hpBar.localScale.y);
     }
 
     private void OnMove(InputValue value)
