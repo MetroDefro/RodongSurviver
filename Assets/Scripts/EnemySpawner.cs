@@ -6,9 +6,13 @@ using UniRx;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private int enemyCount = 10;
-    [SerializeField] private int maxEnemyCount = 50;
-    [SerializeField] private float spwanRange = 40;
+    public int MaxEnemyCount { get => maxEnemyCount; set => maxEnemyCount =  value; }
+    public int InitEnemyCount => initEnemyCount;
+
+    [SerializeField] private int initEnemyCount = 30;
+    [SerializeField] private int maxPoolEnemyCount = 500;
+    [SerializeField] private int maxEnemyCount = 30;
+    [SerializeField] private float spwanRange = 60;
     [SerializeField] private Enemy enemyPrefab;
     private BoxCollider2D gameArea;
     private Player player;
@@ -22,7 +26,7 @@ public class EnemySpawner : MonoBehaviour
     {
         this.player = player;
         this.gameArea = gameArea;
-        pool = new ObjectPool<Enemy>(SpwanEnemy, OnGetPool, OnReleasePool, OnDestroyPool, true, enemyCount, maxEnemyCount);
+        pool = new ObjectPool<Enemy>(SpwanEnemy, OnGetPool, OnReleasePool, OnDestroyPool, true, initEnemyCount, maxPoolEnemyCount);
         SubscribeUpdate();
     }
 

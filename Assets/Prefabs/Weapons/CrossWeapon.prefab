@@ -55,7 +55,7 @@ MonoBehaviour:
     Size: 1
     Range: 5
     Count: 1
-  fallHeight: 20
+  fallHeight: 10
   fallSpeed: 10
 --- !u!114 &-3787983276219149332
 MonoBehaviour:

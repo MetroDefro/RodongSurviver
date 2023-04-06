@@ -25,7 +25,6 @@ public class PlayerHUD : MonoBehaviour
     private Action<WeaponType> onWeaponUp;
 
     private CompositeDisposable levelupButtonDisposables = new CompositeDisposable();
-    private CompositeDisposable disposables = new CompositeDisposable();
 
     public void Initialize(Action<WeaponType> onWeaponUp)
     {
@@ -36,13 +35,10 @@ public class PlayerHUD : MonoBehaviour
         expBar.sizeDelta = new Vector2(0, expBar.sizeDelta.y);
 
         levelText.text = "LV. " + 1;
-
-        SubscribeEveryUpdate();
     }
 
     public void Dispose()
     {
-        disposables.Clear();
         for(int i = 0; i < weaponSlot.Length; i++)
         {
             SetWeaponSlot(i, 1, null);
@@ -75,6 +71,12 @@ public class PlayerHUD : MonoBehaviour
         weaponSlotLevelText[index].text = "" + Level;
     }
 
+    public void SetTimer(float spanSeconds)
+    {
+        TimeSpan spantime = TimeSpan.FromSeconds(spanSeconds);
+        timerText.text = spantime.ToString("mm' : 'ss");
+    }
+
     private void SubscribeLevelUpButton(Button button, WeaponType weaponType)
     {
         button.OnClickAsObservable()
@@ -86,18 +88,5 @@ public class PlayerHUD : MonoBehaviour
                 levelupButtonDisposables.Clear();
             })
             .AddTo(levelupButtonDisposables);
-    }
-
-    private void SubscribeEveryUpdate()
-    {
-        timerText.text = "00 : 00";
-        float spanSeconds = 0;
-        Observable.EveryUpdate()
-            .Subscribe(_ => 
-            {
-                spanSeconds += Time.deltaTime;
-                TimeSpan spantime = TimeSpan.FromSeconds(spanSeconds);
-                timerText.text = spantime.ToString("mm' : 'ss");
-            }).AddTo(this);
     }
 }

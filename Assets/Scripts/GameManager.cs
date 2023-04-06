@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UniRx;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
     private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
+    private CompositeDisposable disposables = new CompositeDisposable();
+
+    private float spanSeconds = 0;
     private int maxLevel = 6;
 
     private void Start()
@@ -25,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     public void OnReset()
     {
+        disposables.Clear();
         player.Dispose();
         playerHUD.Dispose();
         enemySpawner.Dispose();
@@ -53,6 +58,9 @@ public class GameManager : MonoBehaviour
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         weapons.Add((player.WeaponType, firstWeapon));
         playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
+
+
+        SubscribeEveryUpdate();
     }
 
     private void OnLevelUp(int level)
@@ -64,12 +72,27 @@ public class GameManager : MonoBehaviour
     private void PauseGame()
     {
         //player.Pause();
+        disposables.Clear();
         enemySpawner.Pause();
     }
 
     private void PlayGame()
     {
+        SubscribeEveryUpdate();
         enemySpawner.Play();
+    }
+
+    private void SubscribeEveryUpdate()
+    {
+        Observable.EveryUpdate()
+            .Subscribe(_ =>
+            {
+                spanSeconds += Time.deltaTime;
+                playerHUD.SetTimer(spanSeconds);
+
+                if (spanSeconds % 30 < 0.1f)
+                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount + enemySpawner.InitEnemyCount * Mathf.FloorToInt(spanSeconds / 30);
+            }).AddTo(disposables);
     }
 
     private void OnWeaponLevelUp(WeaponType weaponType)

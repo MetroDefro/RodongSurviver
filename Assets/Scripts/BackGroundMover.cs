@@ -20,7 +20,6 @@ public class BackGroundMover : MonoBehaviour
     {
         if (collision != gameArea)
             return;
-
         Vector3 playerPos = player.transform.position;
         Vector3 backgroundPos = transform.position;
 
@@ -31,8 +30,8 @@ public class BackGroundMover : MonoBehaviour
         float directionY = playerPos.y - backgroundPos.y < 0 ? -1 : 1;
 
         if (distanceX > distanceY)
-            transform.Translate(Vector2.right * directionX * 40);
+            transform.Translate(Vector2.right * directionX * 80);
         else if (distanceX < distanceY)
-            transform.Translate(Vector2.up * directionY * 40);
+            transform.Translate(Vector2.up * directionY * 80);
     }
 }

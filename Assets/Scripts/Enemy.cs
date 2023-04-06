@@ -68,8 +68,7 @@ public class Enemy : MonoBehaviour
     public void Dispose()
     {
         disposables.Clear();
-        if (gameObject.activeSelf)
-            pool.Release(this);
+        pool.Release(this);
     }
 
     public void Pause()

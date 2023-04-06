@@ -163,7 +163,6 @@ MonoBehaviour:
   collider2D: {fileID: -2708136330554889209}
   spriteRenderer: {fileID: 132884151746741323}
   data:
-    Speed: 1
     Damage: 1
     HP: 1
     Defence: 1

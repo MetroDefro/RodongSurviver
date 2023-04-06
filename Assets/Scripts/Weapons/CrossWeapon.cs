@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CrossWeapon : Weapon
 {
-    [SerializeField] private float fallHeight = 100;
+    [SerializeField] private float fallHeight = 10;
     [SerializeField] private int fallSpeed = 10;
 
     private bool isWaitingTime;
