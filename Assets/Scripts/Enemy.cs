@@ -40,11 +40,6 @@ public class Enemy : MonoBehaviour
         SubscribeOnCollisionStay2D();
     }
 
-    private void OnDisable()
-    {
-        pool.Release(this);
-    }
-
     #region Public Method
     public Enemy Initialize(Player player, IObjectPool<Enemy> pool)
     {
@@ -73,7 +68,8 @@ public class Enemy : MonoBehaviour
     public void Dispose()
     {
         disposables.Clear();
-        pool.Release(this);
+        if (gameObject.activeSelf)
+            pool.Release(this);
     }
 
     public void Pause()

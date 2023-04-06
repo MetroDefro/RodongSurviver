@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8933647714911918375}
-  - component: {fileID: 8933647714911918376}
   - component: {fileID: -3787983276219149332}
+  - component: {fileID: -3816222524319298571}
   m_Layer: 0
-  m_Name: ShieldWeapon
+  m_Name: HammerWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,28 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8933647714911918376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8933647714911918373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fe23ee6d070f9345b509b13cd36b26f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    WeaponType: 0
-    WeaponObject: {fileID: 8933647714911918373, guid: bbdd10c7ed1763044b48f721829126eb, type: 3}
-    IconSprite: {fileID: 21300000, guid: a8d4d88c028cb58429e7524de8285054, type: 3}
-    Explanation: Spin around and attack enemies.
-    Damage: 1
-    Speed: 100
-    Size: 1
-    Range: 1
-    Count: 1
 --- !u!114 &-3787983276219149332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,3 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb219b23cdf4b314f94a27bca3cc8012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3816222524319298571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8933647714911918373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083b559c3dafb4c4faf1d11ab69987b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    WeaponType: 4
+    WeaponObject: {fileID: 8933647714911918373, guid: 85e848fa7cfdccf4e91b3fb53591db64, type: 3}
+    IconSprite: {fileID: 21300000, guid: b32acedd5d43cb84e85b3eb45366fc15, type: 3}
+    Explanation: attack in a random places
+    Damage: 1
+    Speed: 5
+    Size: 1
+    Range: 5
+    Count: 2
+  rotateSpeed: 200

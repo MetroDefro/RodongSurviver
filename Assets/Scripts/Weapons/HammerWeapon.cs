@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class CrossWeapon : Weapon
+public class HammerWeapon : Weapon
 {
-    [SerializeField] private float fallHeight = 100;
-    [SerializeField] private int fallSpeed = 10;
-
+    [SerializeField] private float rotateSpeed;
     private bool isWaitingTime;
 
     protected override float CalculateDamage()
@@ -43,25 +41,26 @@ public class CrossWeapon : Weapon
     {
         for (int i = 0; i < weaponObjects.Count; i++)
         {
-            weaponObjects[i].transform.position = GetRandomRange(CalculateRange()) + new Vector2(0, fallHeight);
+            weaponObjects[i].transform.position = GetRandomRange(CalculateRange());
+            weaponObjects[i].transform.rotation = Quaternion.Euler(Vector3.zero);
         }
     }
 
     private void SubscribeMovement()
     {
-        float accumulateHeight = 0;
+        float accumulateRotate = 0;
         Observable.EveryFixedUpdate()
             .Subscribe(_ =>
             {
                 if (!isWaitingTime)
                 {
                     foreach (var weapon in weaponObjects)
-                        weapon.transform.position += (Vector3.down * fallSpeed * Time.fixedDeltaTime);
-                    accumulateHeight += fallSpeed * Time.fixedDeltaTime;
+                        weapon.transform.Rotate(Vector3.forward * rotateSpeed * Time.fixedDeltaTime);
+                    accumulateRotate += rotateSpeed * Time.fixedDeltaTime;
 
-                    if (accumulateHeight >= fallHeight)
+                    if (accumulateRotate >= 90)
                     {
-                        accumulateHeight = 0;
+                        accumulateRotate = 0;
                         StartCoroutine(Waiting());
                     }
                 }

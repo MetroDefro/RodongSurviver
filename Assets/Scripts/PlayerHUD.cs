@@ -63,7 +63,7 @@ public class PlayerHUD : MonoBehaviour
         levelUpPanel.SetActive(true);
         for(int i = 0; i < levelUpButton.Length; i++)
         {
-            levelUpButton[i].image.sprite = weapons[i].Sprite;
+            levelUpButton[i].image.sprite = weapons[i].IconSprite;
             levelUpButtonExplainText[i].text = weapons[i].Explanation;
             SubscribeLevelUpButton(levelUpButton[i], weapons[i].WeaponType);
         }

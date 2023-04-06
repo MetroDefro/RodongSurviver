@@ -9,7 +9,7 @@ public class WeaponData
 {
     public WeaponType WeaponType;
     public GameObject WeaponObject;
-    public Sprite Sprite;
+    public Sprite IconSprite;
     public string Explanation;
     public float Damage;
     public float Speed;
@@ -22,7 +22,7 @@ public abstract class Weapon : MonoBehaviour
 {
     public WeaponType WeaponType => data.WeaponType;
     public string Explanation => data.Explanation;
-    public Sprite Sprite => data.Sprite;
+    public Sprite IconSprite => data.IconSprite;
     public int Level => level;
 
     [SerializeField] protected WeaponData data;

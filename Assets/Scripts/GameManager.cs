@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[3];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[5];
     private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         weapons.Add((player.WeaponType, firstWeapon));
-        playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Sprite);
+        playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
     }
 
     private void OnLevelUp(int level)
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
         int index = weapons.IndexOf((weaponType, weapon));
 
-        playerHUD.SetWeaponSlot(index, weapon.Level, weapon.Sprite);
+        playerHUD.SetWeaponSlot(index, weapon.Level, weapon.IconSprite);
     }
 
     private Weapon GetWeapon()

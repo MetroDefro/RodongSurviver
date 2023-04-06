@@ -7,5 +7,6 @@ public enum WeaponType
     ShieldWeapon = 0,
     SwordWeapon = 1,
     CrossWeapon = 2,
-    //GundamWeapon = 3,
+    WandWeapon = 3,
+    HammerWeapon = 4,
 }

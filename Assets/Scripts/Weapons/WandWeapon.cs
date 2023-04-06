@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class SwordWeapon : Weapon
+public class WandWeapon : Weapon
 {
     [SerializeField] private int fireSpeed = 10;
     private bool isWaitingTime;
@@ -15,21 +15,21 @@ public class SwordWeapon : Weapon
 
     protected override float CalculateSpeed()
     {
-        return data.Speed - (level - 1) * data.Speed * 0.3f;
+        return data.Speed - (level - 1) * data.Speed * 0.2f;
     }
 
     protected override float CalculateSize()
     {
-        return data.Size + (level - 1) * data.Size * 0.2f;
+        return data.Size + (level - 1) * data.Size * 0.1f;
     }
     protected override float CalculateRange()
     {
-        return data.Range * level * 1;
+        return data.Range * (level - 1) * data.Range * 0.2f;
     }
 
     protected override int CalculateCount()
     {
-        return data.Count;
+        return data.Count * level;
     }
 
     protected override void Movement()
@@ -43,7 +43,7 @@ public class SwordWeapon : Weapon
         for (int i = 0; i < weaponObjects.Count; i++)
         {
             float Scala = 2;
-            float angle = 360 * i / weaponObjects.Count;
+            float angle = Random.Range(0, 360);
             Vector3 AngleToVector3 = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad), 0);
             weaponObjects[i].transform.localPosition = AngleToVector3 * Scala;
             weaponObjects[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, (360 - angle)));
@@ -61,11 +61,6 @@ public class SwordWeapon : Weapon
                     foreach (var weapon in weaponObjects)
                         weapon.transform.Translate(Vector3.up * fireSpeed * Time.fixedDeltaTime);
                 }
-                else
-                {
-                    
-                }
-
             }).AddTo(this);
     }
 
@@ -85,4 +80,5 @@ public class SwordWeapon : Weapon
             yield return new WaitForSeconds(1);
         }
     }
+
 }

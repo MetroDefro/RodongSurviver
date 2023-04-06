@@ -48,10 +48,10 @@ MonoBehaviour:
   data:
     WeaponType: 2
     WeaponObject: {fileID: 8933647714911918373, guid: f1de56507c8a1c341976a2836df5a894, type: 3}
-    Sprite: {fileID: 21300000, guid: 5b654e3b8693aa14d8d95ff4b62307db, type: 3}
+    IconSprite: {fileID: 21300000, guid: 5b654e3b8693aa14d8d95ff4b62307db, type: 3}
     Explanation: Fall from the sky.
     Damage: 1
-    Speed: 1
+    Speed: 5
     Size: 1
     Range: 5
     Count: 1
