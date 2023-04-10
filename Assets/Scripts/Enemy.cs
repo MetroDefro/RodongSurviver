@@ -16,28 +16,28 @@ public class EnemyData
     public float EXP;
 }
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Animator anim;
-    [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private CapsuleCollider2D collider2D;
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private EnemyData data;
-    private Player player;
+    [SerializeField] protected Rigidbody2D rigidbody;
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected EnemyData data;
+    protected Player player;
+
     private int isHitId;
     private int isDeadId;
 
     private bool isDead;
 
     private IObjectPool<Enemy> pool;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    protected CompositeDisposable disposables = new CompositeDisposable();
 
     private void OnEnable()
     {
         collider2D.enabled = true;
-        SubscribeFixedUpdate();
-        SubscribeOnCollisionStay2D();
+        Play();
     }
 
     #region Public Method
@@ -73,30 +73,20 @@ public class Enemy : MonoBehaviour
 
     public void Pause()
     {
+        anim.speed = 0;
         disposables.Clear();
     }
 
     public void Play()
     {
-        SubscribeFixedUpdate();
+        anim.speed = 1;
+        Movement();
         SubscribeOnCollisionStay2D();
     }
     #endregion
 
     #region Private Method
-    private void SubscribeFixedUpdate()
-    {
-        Observable.EveryFixedUpdate()
-            .Subscribe(_ =>
-            {
-                Vector2 targetDirection = (player.transform.position - transform.position).normalized;
-
-                rigidbody.MovePosition(rigidbody.position + targetDirection * data.Speed * Time.deltaTime);
-
-                if (targetDirection.x != 0)
-                    spriteRenderer.flipX = targetDirection.x < 0;
-            }).AddTo(disposables);
-    }
+    protected abstract void Movement();
 
     private void SubscribeOnCollisionStay2D()
     {

@@ -9,4 +9,5 @@ public enum WeaponType
     CrossWeapon = 2,
     WandWeapon = 3,
     HammerWeapon = 4,
+    GunWeapon = 5,
 }

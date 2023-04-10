@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 132884151746741321}
   - component: {fileID: 132884151746741326}
   - component: {fileID: -2708136330554889209}
-  - component: {fileID: 5791111868384125673}
+  - component: {fileID: 8671371480985141817}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
@@ -145,7 +145,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
---- !u!114 &5791111868384125673
+--- !u!114 &8671371480985141817
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,13 +154,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 132884151746741322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e32e638591a624ba2ce173a73330e2, type: 3}
+  m_Script: {fileID: 11500000, guid: fe7092c56b2051849a4f481eb6ee0bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   expMarblePrefab: {fileID: 3999889164516602753, guid: b58215cf105797d4ea076639b967fc41, type: 3}
   anim: {fileID: 132884151746741321}
-  rigidbody: {fileID: 132884151746741326}
   collider2D: {fileID: -2708136330554889209}
+  rigidbody: {fileID: 132884151746741326}
   spriteRenderer: {fileID: 132884151746741323}
   data:
     Damage: 1

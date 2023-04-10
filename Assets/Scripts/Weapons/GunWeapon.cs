@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class SwordWeapon : Weapon
+public class GunWeapon : Weapon
 {
-    [SerializeField] private int fireSpeed = 10;
+    [SerializeField] private int fireSpeed = 20;
     private bool isWaitingTime;
 
     protected override float CalculateDamage()
@@ -15,16 +15,16 @@ public class SwordWeapon : Weapon
 
     protected override float CalculateSpeed()
     {
-        return data.Speed - (level - 1) * data.Speed * 0.3f;
+        return data.Speed - (level - 1) * data.Speed * 0.4f;
     }
 
     protected override float CalculateSize()
     {
-        return data.Size + (level - 1) * data.Size * 0.2f;
+        return data.Size + (level - 1) * data.Size * 0.1f;
     }
     protected override float CalculateRange()
     {
-        return data.Range * level * 1;
+        return data.Range * (level - 1) * data.Range * 0.2f;
     }
 
     protected override int CalculateCount()
@@ -43,10 +43,8 @@ public class SwordWeapon : Weapon
         for (int i = 0; i < weaponObjects.Count; i++)
         {
             float Scala = 2;
-            float angle = 360 * i / weaponObjects.Count;
-            Vector3 AngleToVector3 = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad), 0);
-            weaponObjects[i].transform.localPosition = AngleToVector3 * Scala;
-            weaponObjects[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, (360 - angle)));
+            weaponObjects[i].transform.localPosition = player.InputVector2 * Scala;
+            weaponObjects[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, (360 - Mathf.Atan2(player.InputVector2.x, player.InputVector2.y) * 180 / Mathf.PI)));
         }
     }
 
@@ -68,16 +66,11 @@ public class SwordWeapon : Weapon
     {
         while (true)
         {
-            isWaitingTime = true;
-            foreach (var weapon in weaponObjects)
-                weapon.SetActive(false);
-            SetPosition();
+            isWaitingTime = false;
             yield return new WaitForSeconds(CalculateSpeed());
 
-            isWaitingTime = false;
-            foreach (var weapon in weaponObjects)
-                weapon.SetActive(true);
-            yield return new WaitForSeconds(1);
+            isWaitingTime = true;
+            SetPosition();
         }
     }
 }

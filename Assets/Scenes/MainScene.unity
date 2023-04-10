@@ -65501,7 +65501,7 @@ MonoBehaviour:
   maxPoolEnemyCount: 500
   maxEnemyCount: 30
   spwanRange: 40
-  enemyPrefab: {fileID: 5791111868384125673, guid: e67e0a0badd0ab74396ac7a650af9f02, type: 3}
+  enemyPrefab: {fileID: 8671371480985141817, guid: e67e0a0badd0ab74396ac7a650af9f02, type: 3}
 --- !u!1 &1980667769
 GameObject:
   m_ObjectHideFlags: 0
@@ -65561,6 +65561,7 @@ MonoBehaviour:
   - {fileID: -5241751790682530218, guid: bb12e29cbeb8e034cb8e0ca19999b938, type: 3}
   - {fileID: 7011088409014059877, guid: 1e80238763a523c409a857aeaddc2f57, type: 3}
   - {fileID: -3816222524319298571, guid: dbb651626f5ac184eb54b1439f522af3, type: 3}
+  - {fileID: -4715959011283397271, guid: bd20f7fdef566204e99342dde0593b71, type: 3}
 --- !u!1001 &952526379439727266
 PrefabInstance:
   m_ObjectHideFlags: 0

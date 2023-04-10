@@ -61,7 +61,7 @@ public class WandWeapon : Weapon
                     foreach (var weapon in weaponObjects)
                         weapon.transform.Translate(Vector3.up * fireSpeed * Time.fixedDeltaTime);
                 }
-            }).AddTo(this);
+            }).AddTo(disposables);
     }
 
     private IEnumerator Waiting()

@@ -64,7 +64,7 @@ public class HammerWeapon : Weapon
                         StartCoroutine(Waiting());
                     }
                 }
-            }).AddTo(this);
+            }).AddTo(disposables);
     }
 
     private Vector2 GetRandomRange(float spwanRange)

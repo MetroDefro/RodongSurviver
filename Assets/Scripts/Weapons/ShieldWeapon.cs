@@ -54,6 +54,6 @@ public class ShieldWeapon : Weapon
             {
                 transform.position = player.transform.position;
                 transform.Rotate(Vector3.back * CalculateSpeed() * Time.fixedDeltaTime);
-            }).AddTo(this);
+            }).AddTo(disposables);
     }
 }

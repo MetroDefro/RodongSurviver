@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[5];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
     private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
@@ -71,15 +71,18 @@ public class GameManager : MonoBehaviour
 
     private void PauseGame()
     {
-        //player.Pause();
+        player.Pause();
         disposables.Clear();
         enemySpawner.Pause();
+        weapons.ForEach((weapon) => weapon.Item2.Pause());
     }
 
     private void PlayGame()
     {
         SubscribeEveryUpdate();
+        player.Play();
         enemySpawner.Play();
+        weapons.ForEach((weapon) => weapon.Item2.Play());
     }
 
     private void SubscribeEveryUpdate()

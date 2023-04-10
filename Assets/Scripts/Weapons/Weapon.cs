@@ -31,6 +31,8 @@ public abstract class Weapon : MonoBehaviour
 
     protected List<GameObject> weaponObjects = new List<GameObject>();
 
+    protected CompositeDisposable disposables = new CompositeDisposable();
+
     private void OnDisable()
     {
         weaponObjects.Clear();
@@ -42,6 +44,10 @@ public abstract class Weapon : MonoBehaviour
         this.player = player;
 
         InitObject(data.Count);
+
+        float size = CalculateSize();
+        foreach (GameObject weapon in weaponObjects)
+            weapon.transform.localScale = new Vector3(size, size, size);
 
         Movement();
 
@@ -65,6 +71,16 @@ public abstract class Weapon : MonoBehaviour
         return level;
     }
 
+    public void Pause()
+    {
+        disposables.Clear();
+    }
+
+    public void Play()
+    {
+        Movement();
+    }
+
     private void SubscribeOnCollisionStay2D(GameObject weapon)
     {
         weapon.OnCollisionStay2DAsObservable()
@@ -80,11 +96,13 @@ public abstract class Weapon : MonoBehaviour
 
     private void InitObject(int count)
     {
+        float size = CalculateSize();
         for (int i = 0; i < count; i++)
         {
             GameObject weapon = Instantiate(data.WeaponObject, transform);
             weaponObjects.Add(weapon);
             SubscribeOnCollisionStay2D(weapon);
+            weapon.transform.localScale = new Vector3(size, size, size);
         }
 
         SetPosition();

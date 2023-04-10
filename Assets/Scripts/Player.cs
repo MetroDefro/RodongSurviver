@@ -19,6 +19,7 @@ public class PlayerData
 public class Player : MonoBehaviour
 {
     public WeaponType WeaponType => data.WeaponType;
+    public Vector2 InputVector2 => inputVector2.Value;
 
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -60,9 +61,7 @@ public class Player : MonoBehaviour
 
         hp.Value = data.HP;
 
-        SubscribeFixedUpdate();
-        SubscribeInputVector2();
-        SubscribeHP();
+        Play();
 
         maxHPbarScaleX = hpBar.localScale.x;
 
@@ -94,6 +93,21 @@ public class Player : MonoBehaviour
         rigidbody.MovePosition(new Vector2(0, 0));
         anim.SetBool(isDeadId, false);
     }
+
+    public void Pause()
+    {
+        anim.speed = 0;
+        disposables.Clear();
+    }
+
+    public void Play()
+    {
+        anim.speed = 1;
+        SubscribeFixedUpdate();
+        SubscribeInputVector2();
+        SubscribeHP();
+    }
+
     #endregion
 
     #region Private Method
