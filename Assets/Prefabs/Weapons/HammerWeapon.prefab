@@ -63,7 +63,8 @@ MonoBehaviour:
     IconSprite: {fileID: 21300000, guid: b32acedd5d43cb84e85b3eb45366fc15, type: 3}
     Explanation: attack in a random places
     Damage: 1
-    Speed: 5
+    Speed: 200
+    Term: 5
     Size: 1
     Range: 5
     Count: 2

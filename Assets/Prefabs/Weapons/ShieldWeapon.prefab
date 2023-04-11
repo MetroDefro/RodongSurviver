@@ -51,7 +51,8 @@ MonoBehaviour:
     IconSprite: {fileID: 21300000, guid: a8d4d88c028cb58429e7524de8285054, type: 3}
     Explanation: Spin around and attack enemies.
     Damage: 1
-    Speed: 100
+    Speed: 50
+    Term: 0
     Size: 1
     Range: 1
     Count: 1

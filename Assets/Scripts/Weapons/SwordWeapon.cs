@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -5,9 +6,6 @@ using UnityEngine;
 
 public class SwordWeapon : Weapon
 {
-    [SerializeField] private int fireSpeed = 10;
-    private bool isWaitingTime;
-
     protected override float CalculateDamage()
     {
         return data.Damage * Level * 1;
@@ -15,16 +13,22 @@ public class SwordWeapon : Weapon
 
     protected override float CalculateSpeed()
     {
-        return data.Speed - (level - 1) * data.Speed * 0.3f;
+        return data.Speed;
+    }
+
+    protected override float CalculateTerm()
+    {
+        return data.Term - (level - 1) * data.Term * 0.3f;
     }
 
     protected override float CalculateSize()
     {
         return data.Size + (level - 1) * data.Size * 0.2f;
     }
+
     protected override float CalculateRange()
     {
-        return data.Range * level * 1;
+        return data.Range;
     }
 
     protected override int CalculateCount()
@@ -34,7 +38,7 @@ public class SwordWeapon : Weapon
 
     protected override void Movement()
     {
-        StartCoroutine(Waiting());
+        SubscribeWaiting();
         SubscribeMovement();
     }
 
@@ -59,24 +63,44 @@ public class SwordWeapon : Weapon
                 if (!isWaitingTime)
                 {
                     foreach (var weapon in weaponObjects)
-                        weapon.transform.Translate(Vector3.up * fireSpeed * Time.fixedDeltaTime);
+                        weapon.transform.Translate(Vector3.up * CalculateSpeed() * Time.fixedDeltaTime);
                 }
             }).AddTo(disposables);
     }
 
-    private IEnumerator Waiting()
+    private void SubscribeWaiting()
+    {
+        Observable.FromCoroutine<bool>(observer => Waiting(observer))
+            .Subscribe(value =>
+            {
+                if (value)
+                {
+                    isWaitingTime = true;
+
+                    foreach (var weapon in weaponObjects)
+                        weapon.SetActive(false);
+
+                    SetPosition();
+                }
+                else
+                {
+                    isWaitingTime = false;
+
+                    foreach (var weapon in weaponObjects)
+                        weapon.SetActive(true);
+                }
+            })
+            .AddTo(disposables);
+    }
+
+    private IEnumerator Waiting(IObserver<bool> observer)
     {
         while (true)
         {
-            isWaitingTime = true;
-            foreach (var weapon in weaponObjects)
-                weapon.SetActive(false);
-            SetPosition();
-            yield return new WaitForSeconds(CalculateSpeed());
+            observer.OnNext(true);
+            yield return new WaitForSeconds(CalculateTerm());
 
-            isWaitingTime = false;
-            foreach (var weapon in weaponObjects)
-                weapon.SetActive(true);
+            observer.OnNext(false);
             yield return new WaitForSeconds(1);
         }
     }

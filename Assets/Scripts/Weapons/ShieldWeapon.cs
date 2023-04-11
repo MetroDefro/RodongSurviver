@@ -15,6 +15,11 @@ public class ShieldWeapon : Weapon
         return data.Speed + (level - 1) * data.Speed * 0.6f;
     }
 
+    protected override float CalculateTerm()
+    {
+        return data.Term;
+    }
+
     protected override float CalculateSize()
     {
         return data.Size + (level - 1) * data.Size * 0.2f;
@@ -22,7 +27,7 @@ public class ShieldWeapon : Weapon
 
     protected override float CalculateRange()
     {
-        return data.Range * level * 1;
+        return data.Range;
     }
 
     protected override int CalculateCount()

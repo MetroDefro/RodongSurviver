@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UniRx;
@@ -5,9 +6,6 @@ using UnityEngine;
 
 public class HammerWeapon : Weapon
 {
-    [SerializeField] private float rotateSpeed;
-    private bool isWaitingTime;
-
     protected override float CalculateDamage()
     {
         return data.Damage * Level * 1;
@@ -15,7 +13,12 @@ public class HammerWeapon : Weapon
 
     protected override float CalculateSpeed()
     {
-        return data.Speed - (level - 1) * data.Speed * 0.4f;
+        return data.Speed;
+    }
+
+    protected override float CalculateTerm()
+    {
+        return data.Term - (level - 1) * data.Term * 0.4f;
     }
 
     protected override float CalculateSize()
@@ -55,34 +58,53 @@ public class HammerWeapon : Weapon
                 if (!isWaitingTime)
                 {
                     foreach (var weapon in weaponObjects)
-                        weapon.transform.Rotate(Vector3.forward * rotateSpeed * Time.fixedDeltaTime);
-                    accumulateRotate += rotateSpeed * Time.fixedDeltaTime;
+                        weapon.transform.Rotate(Vector3.forward * CalculateSpeed() * Time.fixedDeltaTime);
+                    accumulateRotate += CalculateSpeed() * Time.fixedDeltaTime;
 
                     if (accumulateRotate >= 90)
                     {
                         accumulateRotate = 0;
-                        StartCoroutine(Waiting());
+                        SubscribeWaiting();
                     }
                 }
             }).AddTo(disposables);
     }
 
-    private Vector2 GetRandomRange(float spwanRange)
+    private void SubscribeWaiting()
     {
-        return new Vector2(Random.Range(player.transform.position.x - spwanRange, player.transform.position.x + spwanRange)
-                , Random.Range(player.transform.position.y - spwanRange, player.transform.position.y + spwanRange));
+        Observable.FromCoroutine<bool>(observer => Waiting(observer))
+            .Subscribe(value =>
+            {
+                if (value)
+                {
+                    isWaitingTime = true;
+
+                    foreach (var weapon in weaponObjects)
+                        weapon.SetActive(false);
+
+                    SetPosition();
+                }
+                else
+                {
+                    isWaitingTime = false;
+
+                    foreach (var weapon in weaponObjects)
+                        weapon.SetActive(true);
+                }
+            });
     }
 
-    private IEnumerator Waiting()
+    private Vector2 GetRandomRange(float spwanRange)
     {
-        isWaitingTime = true;
-        foreach (var weapon in weaponObjects)
-            weapon.SetActive(false);
-        SetPosition();
-        yield return new WaitForSeconds(CalculateSpeed());
+        return new Vector2(UnityEngine.Random.Range(player.transform.position.x - spwanRange, player.transform.position.x + spwanRange)
+                , UnityEngine.Random.Range(player.transform.position.y - spwanRange, player.transform.position.y + spwanRange));
+    }
 
-        foreach (var weapon in weaponObjects)
-            weapon.SetActive(true);
-        isWaitingTime = false;
+    private IEnumerator Waiting(IObserver<bool> observer)
+    {
+        observer.OnNext(true);
+        yield return new WaitForSeconds(CalculateTerm());
+
+        observer.OnNext(false);
     }
 }

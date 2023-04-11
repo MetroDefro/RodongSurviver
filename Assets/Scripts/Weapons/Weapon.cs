@@ -13,6 +13,7 @@ public class WeaponData
     public string Explanation;
     public float Damage;
     public float Speed;
+    public float Term;
     public float Size;
     public float Range;
     public int Count;
@@ -28,11 +29,20 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected WeaponData data;
     protected Player player;
     protected int level;
+    protected bool isWaitingTime;
 
     protected List<GameObject> weaponObjects = new List<GameObject>();
 
     protected CompositeDisposable disposables = new CompositeDisposable();
 
+    private void OnDestroy()
+    {
+        foreach (var weapon in weaponObjects)
+            Destroy(weapon.gameObject);
+
+        weaponObjects.Clear();
+        disposables.Clear();
+    }
     private void OnDisable()
     {
         weaponObjects.Clear();
@@ -112,9 +122,9 @@ public abstract class Weapon : MonoBehaviour
 
     protected abstract void SetPosition();
 
-    // CalculateDamage() * (PlayerDamage * weight)
     protected abstract float CalculateDamage();
     protected abstract float CalculateSpeed();
+    protected abstract float CalculateTerm();
     protected abstract float CalculateSize();
     protected abstract float CalculateRange();
     protected abstract int CalculateCount();

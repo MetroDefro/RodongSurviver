@@ -63,7 +63,8 @@ MonoBehaviour:
     IconSprite: {fileID: 21300000, guid: 950112dbf7f5b3e41baf9efb36a6e47f, type: 3}
     Explanation: Fires magic in random directions
     Damage: 1
-    Speed: 0.5
+    Speed: 10
+    Term: 0.5
     Size: 1
     Range: 15
     Count: 1
