@@ -121,25 +121,39 @@ public class GameManager : MonoBehaviour
         // If all are max level, instead, money & HP will come out
         if (weapons.Count >= 6)
         {
-            Debug.Log("To Do::");
-
             int minLevel = maxLevel;
-            foreach (var weapon in weapons)
+            foreach (var w in weapons)
             {
-                if (minLevel > weapon.Item2.Level)
-                    minLevel = weapon.Item2.Level;
+                if (minLevel > w.Item2.Level)
+                    minLevel = w.Item2.Level;
             }
 
             if (minLevel == maxLevel)
                 return weapons[0].Item2; // must be corrected
-        }
+            else
+            {
+                int index = UnityEngine.Random.Range(0, 6);
+                while (weapons[index].Item2.Level == maxLevel)
+                {
+                    index = UnityEngine.Random.Range(0, 6);
+                }
 
-        int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
-        // If the number of weapon types is less than 6, an error continues
-        //while (weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2.Level == maxLevel)
-        //{
-        //    weaponType = Random.Range(0, allWeaponPrefabs.Length);
-        //}
-        return allWeaponPrefabs[weaponType];
+                return weapons[index].Item2;
+            }
+        }
+        else
+        {
+            int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
+            Weapon weapon = weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2;
+            if (weapon != null)
+            {
+                while (weapon.Level == maxLevel)
+                {
+                    weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
+                }
+            }
+
+            return allWeaponPrefabs[weaponType];
+        }
     }
 }

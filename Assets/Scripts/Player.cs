@@ -14,12 +14,14 @@ public class PlayerData
     public float Damage;
     public float Speed;
     public float Defence;
+    public float Magnetism;
 }
 
 public class Player : MonoBehaviour
 {
     public WeaponType WeaponType => data.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
+    public float Magnetism => data.Magnetism;
 
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -79,8 +81,17 @@ public class Player : MonoBehaviour
 
         if (exp >= necessaryEXP)
         {
+            // need fix
             exp -= necessaryEXP;
-            necessaryEXP *= 1.5f;
+            if (level <= 10)
+                necessaryEXP *= 1.2f;
+            else if(level <= 20)
+                necessaryEXP *= 1.1f;
+            else if (level <= 30)
+                necessaryEXP *= 1.05f;
+            else
+                necessaryEXP *= 1.025f;
+
             level++;
             onLevelUp?.Invoke(level);
         }

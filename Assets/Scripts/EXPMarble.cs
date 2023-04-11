@@ -9,6 +9,7 @@ public class EXPMarble : MonoBehaviour
     public EXPMarble Initialize(Player player, float exp)
     {
         SubscribeOnTriggerEnter2D(player, exp);
+        SubscribeUpdate(player);
 
         return this;
     }
@@ -24,5 +25,20 @@ public class EXPMarble : MonoBehaviour
                     Destroy(gameObject);
                 }
             }).AddTo(this);
+    }
+
+    private void SubscribeUpdate(Player player)
+    {
+        float moveSpeed = 10;
+        Observable.EveryUpdate()
+            .Subscribe(_ => 
+            {
+                if(Mathf.Abs(Vector2.Distance(player.transform.position, transform.position)) <= player.Magnetism)
+                {
+                    Vector2 moveVector = Vector2.Lerp(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+                    transform.position = moveVector;
+                }
+            })
+            .AddTo(this);
     }
 }

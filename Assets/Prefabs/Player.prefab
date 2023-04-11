@@ -120,6 +120,7 @@ MonoBehaviour:
     Damage: 1
     Speed: 5
     Defence: 1
+    Magnetism: 1
   hpBar: {fileID: 1392637895645285384}
 --- !u!50 &952526379523096593
 Rigidbody2D:
@@ -414,7 +415,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 20}
+  m_Size: {x: 41, y: 41}
   m_EdgeRadius: 0
 --- !u!1 &952526380365025235
 GameObject:
