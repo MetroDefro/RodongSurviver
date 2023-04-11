@@ -11,7 +11,11 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] private RectTransform expBar;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private GameObject levelUpPanel;
+    [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button[] levelUpButton;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button playButton;
+    [SerializeField] private Button retryButton;
     [SerializeField] private TextMeshProUGUI[] levelUpButtonExplainText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI moneyText;
@@ -23,18 +27,27 @@ public class PlayerHUD : MonoBehaviour
     private float maxEXPbarWidth;
 
     private Action<WeaponType> onWeaponUp;
+    private Action onPause;
+    private Action onPlay;
 
     private CompositeDisposable levelupButtonDisposables = new CompositeDisposable();
 
-    public void Initialize(Action<WeaponType> onWeaponUp)
+    public void Initialize(Action<WeaponType> onWeaponUp, Action onPause, Action onPlay)
     {
         this.onWeaponUp = onWeaponUp;
+        this.onPause = onPause;
+        this.onPlay = onPlay;
+
         levelUpPanel.SetActive(false);
+        pausePanel.SetActive(false);
 
         maxEXPbarWidth = expBar.sizeDelta.x;
         expBar.sizeDelta = new Vector2(0, expBar.sizeDelta.y);
 
         levelText.text = "LV. " + 1;
+
+        SubscribePauseButton();
+        SubscribePlayButton();
     }
 
     public void Dispose()
@@ -88,5 +101,27 @@ public class PlayerHUD : MonoBehaviour
                 levelupButtonDisposables.Clear();
             })
             .AddTo(levelupButtonDisposables);
+    }
+
+    private void SubscribePauseButton()
+    {
+        pauseButton.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .Subscribe(_ =>
+            {
+                pausePanel.SetActive(true);
+                onPause.Invoke();
+            }).AddTo(this);
+    }
+
+    private void SubscribePlayButton()
+    {
+        playButton.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .Subscribe(_ =>
+            {
+                pausePanel.SetActive(false);
+                onPlay.Invoke();
+            }).AddTo(this);
     }
 }

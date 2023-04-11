@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 
 public class EXPMarble : MonoBehaviour
 {
-    public EXPMarble Initialize(Player player, float exp)
+    public void Dispose()
     {
-        SubscribeOnTriggerEnter2D(player, exp);
+        Destroy(gameObject);
+    }
+
+    public EXPMarble Initialize(Player player, float exp, Action<EXPMarble> onDestroed)
+    {
+        SubscribeOnTriggerEnter2D(player, exp, onDestroed);
         SubscribeUpdate(player);
 
         return this;
     }
 
-    private void SubscribeOnTriggerEnter2D(Player player, float exp)
+    private void SubscribeOnTriggerEnter2D(Player player, float exp, Action<EXPMarble> onDestroed)
     {
         this.OnTriggerEnter2DAsObservable()
             .Subscribe(collision =>
@@ -22,6 +28,7 @@ public class EXPMarble : MonoBehaviour
                 if (collision.gameObject == player.gameObject)
                 {
                     player.AddEXP(exp);
+                    onDestroed.Invoke(this);
                     Destroy(gameObject);
                 }
             }).AddTo(this);

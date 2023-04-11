@@ -18,6 +18,7 @@ public class EnemySpawner : MonoBehaviour
     private Player player;
 
     private List<Enemy> enemies = new List<Enemy>();
+    private List<EXPMarble> expMarbles = new List<EXPMarble>();
     private IObjectPool<Enemy> pool;
 
     private CompositeDisposable Disposables { get; set; } = new CompositeDisposable();
@@ -36,6 +37,12 @@ public class EnemySpawner : MonoBehaviour
 
         foreach(var enemy in enemies.ToArray())
             enemy.Dispose();
+
+        foreach (var expMarble in expMarbles.ToArray())
+        {
+            expMarbles.Remove(expMarble);
+            expMarble.Dispose();
+        }
 
         pool.Clear();
         enemies.Clear();
@@ -80,6 +87,16 @@ public class EnemySpawner : MonoBehaviour
             }).AddTo(Disposables);
     }
 
+    private void AddEXPMarble(EXPMarble expMarble)   
+    {
+        expMarbles.Add(expMarble);
+    }
+
+    private void RemoveEXPMarble(EXPMarble expMarble)
+    {
+        expMarbles.Remove(expMarble);
+    }
+
     private Enemy SpwanEnemy()
     {
         Enemy enemy = Instantiate(enemyPrefab, GetRandomVector(), enemyPrefab.transform.rotation, transform);
@@ -88,7 +105,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnGetPool(Enemy enemy)
     {
-        enemies.Add(enemy.Initialize(player, pool));
+        enemies.Add(enemy.Initialize(player, pool, (exp) => AddEXPMarble(exp), (exp) => RemoveEXPMarble(exp)));
         enemy.transform.position = GetRandomVector();
         enemy.gameObject.SetActive(true);
     }

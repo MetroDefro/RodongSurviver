@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         Initialize();
     }
 
+    public void OnGameOver()
+    {
+        PauseGame();
+    }
+
     public void OnReset()
     {
         disposables.Clear();
@@ -40,7 +45,12 @@ public class GameManager : MonoBehaviour
         Initialize();
     }
 
-    public void SetupDiedAction(Action onDied) => player.OnDied = onDied;
+    public void SetupDiedAction(Action onDied) => 
+        player.OnDied = () =>
+        {
+            onDied.Invoke();
+            OnGameOver();
+        };
 
     public void Initialize()
     {
@@ -52,14 +62,14 @@ public class GameManager : MonoBehaviour
         {
             OnWeaponLevelUp(weaponType);
             PlayGame();
-        });
+        }, () => PauseGame(), () => PlayGame());
         enemySpawner.Initialize(player, gameArea);
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         weapons.Add((player.WeaponType, firstWeapon));
         playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
 
-
+        spanSeconds = 0;
         SubscribeEveryUpdate();
     }
 

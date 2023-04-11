@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
@@ -31,6 +32,8 @@ public abstract class Enemy : MonoBehaviour
 
     private bool isDead;
 
+    private Action<EXPMarble> onDead;
+    private Action<EXPMarble> onEXPMarbleDestroed;
     private IObjectPool<Enemy> pool;
     protected CompositeDisposable disposables = new CompositeDisposable();
 
@@ -41,11 +44,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     #region Public Method
-    public Enemy Initialize(Player player, IObjectPool<Enemy> pool)
+    public Enemy Initialize(Player player, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
     {
-        data.Speed = Random.Range(1, 3);
+        data.Speed = UnityEngine.Random.Range(1, 3);
         this.player = player;
         this.pool = pool;
+        this.onDead = onDead;
+        this.onEXPMarbleDestroed = onEXPMarbleDestroed;
         isHitId = Animator.StringToHash("IsHit");
         isDeadId = Animator.StringToHash("IsDead");
 
@@ -117,7 +122,8 @@ public abstract class Enemy : MonoBehaviour
         collider2D.enabled = false;
 
         EXPMarble expMarble = Instantiate(expMarblePrefab, transform.position, transform.rotation);
-        expMarble.Initialize(player, data.EXP);
+        expMarble.Initialize(player, data.EXP, onEXPMarbleDestroed);
+        onDead.Invoke(expMarble);
 
         yield return new WaitForSeconds(1f);
 
