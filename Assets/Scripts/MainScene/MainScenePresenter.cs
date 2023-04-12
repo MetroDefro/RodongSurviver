@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using UniRx;
 
-public class MainPresenter : MonoBehaviour
+public class MainScenePresenter : MonoBehaviour
 {
     [SerializeField] private Button[] playerButtons;
     [SerializeField] private Button playButton;
@@ -18,7 +18,7 @@ public class MainPresenter : MonoBehaviour
     private void SubscribePlayButton()
     {
         playButton.OnClickAsObservable()
-            .Subscribe(_ => 
+            .Subscribe(_ =>
             {
 
             })
@@ -30,7 +30,7 @@ public class MainPresenter : MonoBehaviour
         foreach (var button in playerButtons)
         {
             button.OnClickAsObservable()
-                .Subscribe(_ => 
+                .Subscribe(_ =>
                 {
 
                 })

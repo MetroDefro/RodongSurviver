@@ -5,7 +5,7 @@ using System.Linq;
 using System;
 using UniRx;
 
-public class GameManager : MonoBehaviour
+public class GameScenePresenter : MonoBehaviour
 {
     [SerializeField] private Player player;
     [SerializeField] private PlayerHUD playerHUD;
@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BoxCollider2D gameArea;
 
     [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
-    private List<(WeaponType, Weapon)> weapons = new List<(WeaponType, Weapon)>();
+    private List<(WeaponType type, Weapon weapon)> weapons = new List<(WeaponType, Weapon)>();
     // private List<Item> items = new List<Item>();
 
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         playerHUD.Dispose();
         enemySpawner.Dispose();
         foreach (var weapon in weapons)
-            DestroyImmediate(weapon.Item2.gameObject);
+            DestroyImmediate(weapon.weapon.gameObject);
 
         weapons.Clear();
         Initialize();
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     private void OnWeaponLevelUp(WeaponType weaponType)
     {
-        Weapon weapon = weapons.Where(o => o.Item1 == weaponType).FirstOrDefault().Item2;
+        Weapon weapon = weapons.Where(o => o.type == weaponType).FirstOrDefault().weapon;
         if (weapon == null)
         {
             weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
@@ -134,27 +134,27 @@ public class GameManager : MonoBehaviour
             int minLevel = maxLevel;
             foreach (var w in weapons)
             {
-                if (minLevel > w.Item2.Level)
-                    minLevel = w.Item2.Level;
+                if (minLevel > w.weapon.Level)
+                    minLevel = w.weapon.Level;
             }
 
             if (minLevel == maxLevel)
-                return weapons[0].Item2; // must be corrected
+                return weapons[0].weapon; // must be corrected
             else
             {
                 int index = UnityEngine.Random.Range(0, 6);
-                while (weapons[index].Item2.Level == maxLevel)
+                while (weapons[index].weapon.Level == maxLevel)
                 {
                     index = UnityEngine.Random.Range(0, 6);
                 }
 
-                return weapons[index].Item2;
+                return weapons[index].weapon;
             }
         }
         else
         {
             int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
-            Weapon weapon = weapons.Where(o => o.Item1 == (WeaponType)weaponType).FirstOrDefault().Item2;
+            Weapon weapon = weapons.Where(o => o.type == (WeaponType)weaponType).FirstOrDefault().weapon;
             if (weapon != null)
             {
                 while (weapon.Level == maxLevel)

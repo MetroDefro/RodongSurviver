@@ -7,7 +7,7 @@ namespace RodongSurviver.State
     {
         #region [ Variables ]
         [SerializeField] private DiedPanelPresenter diedPanelPresenter;
-        [SerializeField] private GameManager gameManager;
+        [SerializeField] private GameScenePresenter gameManager;
         #endregion
 
         #region [ MonoBehaviour Messages ]
