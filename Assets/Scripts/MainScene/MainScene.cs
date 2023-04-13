@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RodongSurviver.Base;
 
 public class MainScene : SceneBase
 {
@@ -16,5 +17,4 @@ public class MainScene : SceneBase
     {
 
     }
-
 }
