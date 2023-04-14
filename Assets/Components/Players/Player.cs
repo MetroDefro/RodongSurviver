@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private Transform hpBar;
-    private GameSceneUIPresenter hud;
+    private PlayerHUDPresenter hud;
     private PlayerData data;
 
     private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
 
 
     #region Public Method
-    public Player Initialize(GameSceneUIPresenter hud, PlayerData data, Action<int> onLevelUp)
+    public Player Initialize(PlayerHUDPresenter hud, PlayerData data, Action<int> onLevelUp)
     {
         this.hud = hud;
         this.data = data;

@@ -26,7 +26,9 @@ public class GameScenePresenter : PresenterBase
     private GameSceneModel model;
 
     [SerializeField] private Player player;
-    [SerializeField] private GameSceneUIPresenter playerHUD;
+    [SerializeField] private SlotsCanvasPresenter slotCanvasPresenter;
+    [SerializeField] private LevelUpPresenter levelUpPresenter;
+    [SerializeField] private PlayerHUDPresenter playerHUD;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
@@ -101,16 +103,18 @@ public class GameScenePresenter : PresenterBase
             bg.Initialize(player, gameArea);
 
         player.Initialize(playerHUD, gameManager.playerData, (level) => OnLevelUp(level));
-        playerHUD.Initialize((weaponType) =>
+        slotCanvasPresenter.Initialize();
+        levelUpPresenter.Initialize((weaponType) =>
         {
             OnWeaponLevelUp(weaponType);
             PlayGame();
-        }, () => PauseGame(), () => PlayGame());
+        });
+        playerHUD.Initialize(() => PauseGame(), () => PlayGame());
         enemySpawner.Initialize(player, gameArea);
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         model.Weapons.Add((player.WeaponType, firstWeapon));
-        playerHUD.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
+        slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
 
         model.SpanSeconds = 0;
         SubscribeEveryUpdate();
@@ -122,7 +126,8 @@ public class GameScenePresenter : PresenterBase
     private void OnLevelUp(int level)
     {
         PauseGame();
-        playerHUD.SetLevelUpPanel(level, new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
+        playerHUD.SetLevelUp(level);
+        levelUpPresenter.SetLevelUpPanel(new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
     }
 
     private void PauseGame()
@@ -156,7 +161,7 @@ public class GameScenePresenter : PresenterBase
 
         int index = model.Weapons.IndexOf((weaponType, weapon));
 
-        playerHUD.SetWeaponSlot(index, weapon.Level, weapon.IconSprite);
+        slotCanvasPresenter.SetWeaponSlot(index, weapon.Level, weapon.IconSprite);
     }
 
     private Weapon GetWeapon()
