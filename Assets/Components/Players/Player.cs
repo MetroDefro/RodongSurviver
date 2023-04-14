@@ -6,33 +6,24 @@ using UniRx.Triggers;
 using UnityEngine.InputSystem;
 using System;
 
-[System.Serializable]
-public class PlayerData
-{
-    public WeaponType WeaponType;
-    public float HP;
-    public float Damage;
-    public float Speed;
-    public float Defence;
-    public float Magnetism;
-}
-
 public class Player : MonoBehaviour
 {
     public WeaponType WeaponType => data.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
     public float Magnetism => data.Magnetism;
 
+    public Action OnDied { get; set; } = null;
+
+
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
-    [SerializeField] private PlayerData data;
     [SerializeField] private Transform hpBar;
     private GameSceneUIPresenter hud;
+    private PlayerData data;
 
     private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
     private ReactiveProperty<float> hp = new ReactiveProperty<float>();
-
     private int level = 1;
     private float exp = 0;
     private float necessaryEXP = 2;
@@ -46,12 +37,12 @@ public class Player : MonoBehaviour
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
-    public Action OnDied { get; set; } = null;
 
     #region Public Method
-    public Player Initialize(GameSceneUIPresenter hud, Action<int> onLevelUp)
+    public Player Initialize(GameSceneUIPresenter hud, PlayerData data, Action<int> onLevelUp)
     {
         this.hud = hud;
+        this.data = data;
         this.onLevelUp = onLevelUp;
 
         level = 1;

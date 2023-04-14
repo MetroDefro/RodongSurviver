@@ -1,40 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
-using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
+using RodongSurviver.Base;
+using RodongSurviver.Manager;
 
-public class MainScenePresenter : MonoBehaviour
+public class MainScenePresenter : PresenterBase
 {
-    [SerializeField] private Button[] playerButtons;
-    [SerializeField] private Button playButton;
+    [SerializeField] private PlayerSelectPresenter playerSelectPresenter;
+
+    private MainSceneView view;
+
+    private GameManager gameManager;
+    private SceneManager sceneManager;
 
     private void Start()
     {
-        SubscribePlayButton();
-        SubscribePlayerButtons();
+        Initialize();
     }
 
-    private void SubscribePlayButton()
+    [Inject]
+    public void Inject(GameManager gameManager, SceneManager sceneManager)
     {
-        playButton.OnClickAsObservable()
-            .Subscribe(_ =>
-            {
-
-            })
-            .AddTo(this);
+        this.gameManager = gameManager;
+        this.sceneManager = sceneManager;
     }
 
-    private void SubscribePlayerButtons()
+    public override void Dispose()
     {
-        foreach (var button in playerButtons)
+        base.Dispose();
+        view.Dispose();
+    }
+
+    public void Initialize()
+    {
+        if (TryGetComponent(out MainSceneView view))
         {
-            button.OnClickAsObservable()
-                .Subscribe(_ =>
-                {
-
-                })
-                .AddTo(this);
+            this.view = view;
         }
+
+        playerSelectPresenter.Initialize(
+            () => sceneManager.LoadSceneAsync(SceneType.Game), 
+            (playerData) => SetPlayerData(playerData));
+    }
+
+    private void SetPlayerData(PlayerData playerData)
+    {
+        gameManager.playerData = playerData;
     }
 }

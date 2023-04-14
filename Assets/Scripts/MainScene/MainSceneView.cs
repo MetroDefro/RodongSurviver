@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using RodongSurviver.Base;
 using System;
-using UnityEngine.UI;
-using TMPro;
-using UniRx;
 
-public class GameSceneView : ViewBase
+public class MainSceneView : ViewBase
 {
-
     public override void Dispose()
     {
 

@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace RodongSurviver.Manager
 {
-    public Player player;
+    public class GameManager : MonoBehaviour
+    {
+        public PlayerData playerData { get; set; }
+    }
 }

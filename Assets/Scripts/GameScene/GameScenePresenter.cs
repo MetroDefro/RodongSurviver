@@ -4,7 +4,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 using UniRx;
+using Zenject;
 using RodongSurviver.Base;
+using RodongSurviver.Manager;
 
 public class GameSceneModel
 {
@@ -18,6 +20,7 @@ public class GameSceneModel
 public class GameScenePresenter : PresenterBase
 {
     #region variable
+    private GameManager gameManager;
 
     private GameSceneView view;
     private GameSceneModel model;
@@ -77,6 +80,12 @@ public class GameScenePresenter : PresenterBase
             OnGameOver();
         };
 
+    [Inject]
+    public void Inject(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
     public void Initialize()
     {
         if (TryGetComponent(out GameSceneView view))
@@ -91,7 +100,7 @@ public class GameScenePresenter : PresenterBase
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        player.Initialize(playerHUD, (level) => OnLevelUp(level));
+        player.Initialize(playerHUD, gameManager.playerData, (level) => OnLevelUp(level));
         playerHUD.Initialize((weaponType) =>
         {
             OnWeaponLevelUp(weaponType);

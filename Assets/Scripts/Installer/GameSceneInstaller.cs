@@ -4,7 +4,7 @@ using RodongSurviver.Manager;
 
 namespace RodongSurviver.Installer
 {
-    public class MainSceneInstaller : MonoInstaller
+    public class GameSceneInstaller : MonoInstaller
     {
         public override void InstallBindings()
         {
