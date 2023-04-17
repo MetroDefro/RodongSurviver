@@ -8,18 +8,19 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    #region [ Properties ]
     public WeaponType WeaponType => data.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
     public float Magnetism => data.Magnetism;
 
     public Action OnDied { get; set; } = null;
+    #endregion
 
-
+    #region [ Variables ]
     [SerializeField] private Animator anim;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private Transform hpBar;
-    private TopCanvasPresenter hud;
     private PlayerData data;
 
     private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
@@ -34,15 +35,16 @@ public class Player : MonoBehaviour
     private float maxHPbarScaleX;
 
     private Action<int> onLevelUp;
+    private Action<float, float> onGetEXP;
 
     private CompositeDisposable disposables = new CompositeDisposable();
+    #endregion
 
-
-    #region Public Method
-    public Player Initialize(TopCanvasPresenter hud, PlayerData data, Action<int> onLevelUp)
+    #region [ Public methods ]
+    public Player Initialize(PlayerData data, Action<float, float> onGetEXP, Action<int> onLevelUp)
     {
-        this.hud = hud;
         this.data = data;
+        this.onGetEXP = onGetEXP;
         this.onLevelUp = onLevelUp;
 
         level = 1;
@@ -87,7 +89,7 @@ public class Player : MonoBehaviour
             onLevelUp?.Invoke(level);
         }
 
-        hud.SetEXPbar(Mathf.InverseLerp(0, necessaryEXP, exp));
+        onGetEXP?.Invoke(necessaryEXP, exp);
     }
 
     public void Dispose()
@@ -112,8 +114,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    #region Private Method
-
+    #region [ Private methods ]
     private void SubscribeFixedUpdate()
     {
         Observable.EveryFixedUpdate()
@@ -150,7 +151,7 @@ public class Player : MonoBehaviour
         }).AddTo(disposables);
     }
 
-    public void SetHPbar(float normalizeHP)
+    private void SetHPbar(float normalizeHP)
     {
         if (maxHPbarScaleX == 0)
             return;

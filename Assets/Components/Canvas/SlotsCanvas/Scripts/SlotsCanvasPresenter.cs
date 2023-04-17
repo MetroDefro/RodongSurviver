@@ -1,17 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UniRx;
-using System;
+using RodongSurviver.Base;
 
-public class SlotsCanvasPresenter : MonoBehaviour
+public class SlotsCanvasPresenter : PresenterBase
 {
+    #region [ Variables ]
     private SlotsCanvasView view;
+    #endregion
 
-    public void Dispose()
+    #region [ Public methods ]
+    public override void Dispose()
     {
-        for (int i = 0; i < view.WeaponSlots.Length; i++)
+        int count = view.WeaponSlots.Length;
+        for (int i = 0; i < count; i++)
         {
             SetWeaponSlot(i, 1, null);
         }
@@ -25,15 +25,14 @@ public class SlotsCanvasPresenter : MonoBehaviour
         }
     }
 
-    public void SetWeaponSlot(int index, int Level, Sprite sprite)
+    public void SetWeaponSlot(int index, int level, Sprite sprite)
     {
-        view.WeaponSlots[index].sprite = sprite;
-        view.WeaponSlotLevelTexts[index].text = "" + Level;
+        view.SetWeaponSlot(index, level, sprite);
     }
 
-    public void SetItemSlot(int index, int Level, Sprite sprite)
+    public void SetItemSlot(int index, int level, Sprite sprite)
     {
-        view.ItemSlots[index].sprite = sprite;
-        view.ItemSlotLevelTexts[index].text = "" + Level;
+        view.SetItemSlot(index, level, sprite);
     }
+    #endregion
 }

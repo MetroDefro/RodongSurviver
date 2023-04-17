@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2708136330554889209}
   - component: {fileID: 8671371480985141817}
   m_Layer: 8
-  m_Name: Enemy
+  m_Name: ZombieEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,8 +162,4 @@ MonoBehaviour:
   collider2D: {fileID: -2708136330554889209}
   rigidbody: {fileID: 132884151746741326}
   spriteRenderer: {fileID: 132884151746741323}
-  data:
-    Damage: 1
-    HP: 1
-    Defence: 1
-    EXP: 1
+  data: {fileID: 11400000, guid: b693d1f988f36784fa8c592c12e2298a, type: 2}

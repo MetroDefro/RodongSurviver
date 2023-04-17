@@ -4,14 +4,18 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using RodongSurviver.Base;
 
-public class LevelUpPresenter : MonoBehaviour
+public class LevelUpPresenter : PresenterBase
 {
+    #region [ Variables ]
     private LevelUpView view;
 
     private Action<WeaponType> onWeaponUp;
     private CompositeDisposable levelupButtonDisposables = new CompositeDisposable();
+    #endregion
 
+    #region [ Public methods ]
     public void Initialize(Action<WeaponType> onWeaponUp)
     {
         if (TryGetComponent(out LevelUpView view))
@@ -24,33 +28,37 @@ public class LevelUpPresenter : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
-
+        view?.Dispose();
     }
 
-    public void SetLevelUpPanel(Weapon[] weapons)
+    public void SetLevelUpPanel(WeaponBase[] weapons)
     {
-        gameObject.SetActive(true);
+        view.ShowImmediate();
 
-        for (int i = 0; i < view.LevelUpButtons.Length; i++)
+        int count = view.LevelUpButtons.Length;
+        for (int i = 0; i < count; i++)
         {
-            view.LevelUpButtons[i].image.sprite = weapons[i].IconSprite;
-            view.LevelUpButtonExplainTexts[i].text = weapons[i].Explanation;
+            view.SetButton(i, weapons[i].IconSprite, weapons[i].Explanation);
             SubscribeLevelUpButton(view.LevelUpButtons[i], weapons[i].WeaponType);
         }
     }
+    #endregion
 
+    #region [ Private methods ]
     private void SubscribeLevelUpButton(Button button, WeaponType weaponType)
     {
         button.OnClickAsObservable()
-            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .ThrottleFirst(ClickThrottleFirstTime)
             .Subscribe(_ =>
             {
                 onWeaponUp.Invoke(weaponType);
-                gameObject.SetActive(false);
                 levelupButtonDisposables.Clear();
+
+                view.HideImmediate();
             })
             .AddTo(levelupButtonDisposables);
     }
+    #endregion
 }

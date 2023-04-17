@@ -10,7 +10,7 @@ using RodongSurviver.Manager;
 
 public class GameSceneModel
 {
-    public List<(WeaponType type, Weapon weapon)> Weapons { get; set; } = new List<(WeaponType, Weapon)>();
+    public List<(WeaponType type, WeaponBase weapon)> Weapons { get; set; } = new List<(WeaponType, WeaponBase)>();
     // private List<Item> items = new List<Item>();
 
     public float SpanSeconds = 0;
@@ -19,7 +19,7 @@ public class GameSceneModel
 
 public class GameScenePresenter : PresenterBase
 {
-    #region variable
+    #region [ Variables ]
     private GameManager gameManager;
 
     private GameSceneView view;
@@ -34,11 +34,11 @@ public class GameScenePresenter : PresenterBase
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
-    
+    [SerializeField] private WeaponBase[] allWeaponPrefabs = new WeaponBase[6];
+
     #endregion
 
-    #region monoBehaviour message
+    #region [ MonoBehaviour Messages ]
     private void Awake()
     {
 
@@ -50,17 +50,18 @@ public class GameScenePresenter : PresenterBase
     }
     #endregion
 
-    #region public method
+    #region [ Public methods ]
+
+    [Inject]
+    public void Inject(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
 
     public override void Dispose()
     {
         base.Dispose();
         view.Dispose();
-    }
-
-    public void OnGameOver()
-    {
-        PauseGame();
     }
 
     public void OnReset()
@@ -82,14 +83,10 @@ public class GameScenePresenter : PresenterBase
             onDied.Invoke();
             OnGameOver();
         };
+    #endregion
 
-    [Inject]
-    public void Inject(GameManager gameManager)
-    {
-        this.gameManager = gameManager;
-    }
-
-    public void Initialize()
+    #region [ Private methods ]
+    private void Initialize()
     {
         if (TryGetComponent(out GameSceneView view))
         {
@@ -103,37 +100,44 @@ public class GameScenePresenter : PresenterBase
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        player.Initialize(topCanvasPresenter, gameManager.playerData, (level) => OnLevelUp(level));
+        player.Initialize(gameManager.playerData, (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp), (level) => OnLevelUp(level));
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) =>
         {
             OnWeaponLevelUp(weaponType);
             PlayGame();
         });
-        pauseCanvasPresenter.Initialize(() => 
+        pauseCanvasPresenter.Initialize(() =>
         {
             pauseCanvasPresenter.gameObject.SetActive(true);
-            PlayGame(); 
+            PlayGame();
         });
         topCanvasPresenter.Initialize(() => PauseGame());
         enemySpawner.Initialize(player, gameArea);
 
-        Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
+        WeaponBase firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         model.Weapons.Add((player.WeaponType, firstWeapon));
         slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
 
         model.SpanSeconds = 0;
         SubscribeEveryUpdate();
     }
-    #endregion
 
-    #region private Method
+    private void OnGameOver()
+    {
+        PauseGame();
+    }
+
+    private void OnGetEXP(float necessaryEXP, float exp)
+    {
+        topCanvasPresenter.SetEXPbar(Mathf.InverseLerp(0, necessaryEXP, exp));
+    }
 
     private void OnLevelUp(int level)
     {
         PauseGame();
         topCanvasPresenter.SetLevelUp(level);
-        levelUpPresenter.SetLevelUpPanel(new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
+        levelUpPresenter.SetLevelUpPanel(new WeaponBase[] { GetWeapon(), GetWeapon(), GetWeapon() });
     }
 
     private void PauseGame()
@@ -154,7 +158,7 @@ public class GameScenePresenter : PresenterBase
 
     private void OnWeaponLevelUp(WeaponType weaponType)
     {
-        Weapon weapon = model.Weapons.Where(o => o.type == weaponType).FirstOrDefault().weapon;
+        WeaponBase weapon = model.Weapons.Where(o => o.type == weaponType).FirstOrDefault().weapon;
         if (weapon == null)
         {
             weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
@@ -170,7 +174,7 @@ public class GameScenePresenter : PresenterBase
         slotCanvasPresenter.SetWeaponSlot(index, weapon.Level, weapon.IconSprite);
     }
 
-    private Weapon GetWeapon()
+    private WeaponBase GetWeapon()
     {
         // If all are max level, instead, money & HP will come out
         if (model.Weapons.Count >= 6)
@@ -198,7 +202,7 @@ public class GameScenePresenter : PresenterBase
         else
         {
             int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
-            Weapon weapon = model.Weapons.Where(o => o.type == (WeaponType)weaponType).FirstOrDefault().weapon;
+            WeaponBase weapon = model.Weapons.Where(o => o.type == (WeaponType)weaponType).FirstOrDefault().weapon;
             if (weapon != null)
             {
                 while (weapon.Level == model.MaxLevel)

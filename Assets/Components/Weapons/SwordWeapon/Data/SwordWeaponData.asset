@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8612630a3f52343bd502b54007fb34, type: 3}
+  m_Name: SwordWeaponData
+  m_EditorClassIdentifier: 
+  weaponType: 1
+  weaponObject: {fileID: 8933647714911918373, guid: 8d0874863a2603b498ed5b5b94afe473, type: 3}
+  iconSprite: {fileID: 21300000, guid: a48f2cb9d21361441b407da8fae3adbf, type: 3}
+  explanation: Fire in 4 directions.
+  damage: 1
+  speed: 10
+  term: 5
+  size: 1
+  range: 1
+  count: 4

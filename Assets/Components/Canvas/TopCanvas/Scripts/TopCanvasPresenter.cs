@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using UniRx;
 using System;
+using RodongSurviver.Base;
 
-public class TopCanvasPresenter : MonoBehaviour
+public class TopCanvasPresenter : PresenterBase
 {
+    #region [ Variables ]
     private TopCanvasView view;
 
     private Action onPause;
+    #endregion
 
+    #region [ Public methods ]
     public void Initialize(Action onPause)
     {
         if (TryGetComponent(out TopCanvasView view))
@@ -25,7 +24,7 @@ public class TopCanvasPresenter : MonoBehaviour
         SubscribePauseButton();
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
 
     }
@@ -45,7 +44,9 @@ public class TopCanvasPresenter : MonoBehaviour
         TimeSpan spantime = TimeSpan.FromSeconds(spanSeconds);
         view.SetTimer(spantime);
     }
+    #endregion
 
+    #region [ Private methods ]
     private void SubscribePauseButton()
     {
         view.PauseButton.OnClickAsObservable()
@@ -55,4 +56,5 @@ public class TopCanvasPresenter : MonoBehaviour
                 onPause.Invoke();
             }).AddTo(this);
     }
+    #endregion
 }

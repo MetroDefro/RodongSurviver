@@ -1,14 +1,16 @@
+using RodongSurviver.Base;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TopCanvasView : MonoBehaviour
+public class TopCanvasView : ViewBase
 {
+    #region [ Properties ]
     public Button PauseButton => pauseButton;
+    #endregion
 
+    #region [ Variables ]
     [SerializeField] private RectTransform expBar;
     [SerializeField] private Button pauseButton;
     [SerializeField] private TextMeshProUGUI levelText;
@@ -16,7 +18,9 @@ public class TopCanvasView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyText;
 
     private float maxEXPbarWidth;
+    #endregion
 
+    #region [ Public methods ]
     public void InitializeView()
     {
         maxEXPbarWidth = expBar.sizeDelta.x;
@@ -42,4 +46,30 @@ public class TopCanvasView : MonoBehaviour
     {
         timerText.text = spantime.ToString("mm' : 'ss");
     }
+
+    public override void Show(Action onComplete)
+    {
+
+    }
+
+    public override void ShowImmediate()
+    {
+
+    }
+
+    public override void Hide(Action onComplete)
+    {
+
+    }
+
+    public override void HideImmediate()
+    {
+
+    }
+
+    public override void Dispose()
+    {
+
+    }
+    #endregion
 }

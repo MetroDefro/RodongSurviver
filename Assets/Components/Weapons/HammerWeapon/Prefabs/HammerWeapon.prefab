@@ -57,15 +57,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b559c3dafb4c4faf1d11ab69987b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    WeaponType: 4
-    WeaponObject: {fileID: 8933647714911918373, guid: 85e848fa7cfdccf4e91b3fb53591db64, type: 3}
-    IconSprite: {fileID: 21300000, guid: b32acedd5d43cb84e85b3eb45366fc15, type: 3}
-    Explanation: attack in a random places
-    Damage: 1
-    Speed: 200
-    Term: 5
-    Size: 1
-    Range: 5
-    Count: 2
-  rotateSpeed: 200
+  data: {fileID: 11400000, guid: 106b761fa103f5e47a27ce9e42c872e5, type: 2}

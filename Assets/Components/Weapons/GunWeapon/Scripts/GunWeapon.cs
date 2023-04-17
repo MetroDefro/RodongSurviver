@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class GunWeapon : Weapon
+public class GunWeapon : WeaponBase
 {
     protected override float CalculateDamage()
     {

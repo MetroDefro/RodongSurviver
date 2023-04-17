@@ -6,19 +6,9 @@ using UniRx;
 using UniRx.Triggers;
 using UnityEngine.Pool;
 
-[System.Serializable]
-public class EnemyData
-{
-    public float Speed { get; set; }
-
-    public float Damage;
-    public float HP;
-    public float Defence;
-    public float EXP;
-}
-
 public abstract class Enemy : MonoBehaviour
 {
+    #region [ Variables ]
     [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Animator anim;
     [SerializeField] private CapsuleCollider2D collider2D;
@@ -36,14 +26,17 @@ public abstract class Enemy : MonoBehaviour
     private Action<EXPMarble> onEXPMarbleDestroed;
     private IObjectPool<Enemy> pool;
     protected CompositeDisposable disposables = new CompositeDisposable();
+    #endregion
 
+    #region [ MonoBehaviour Messages ]
     private void OnEnable()
     {
         collider2D.enabled = true;
         Play();
     }
+    #endregion
 
-    #region Public Method
+    #region [ Public Method ]
     public Enemy Initialize(Player player, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
     {
         data.Speed = UnityEngine.Random.Range(1, 3);
@@ -90,7 +83,7 @@ public abstract class Enemy : MonoBehaviour
     }
     #endregion
 
-    #region Private Method
+    #region [ Private Method ]
     protected abstract void Movement();
 
     private void SubscribeOnCollisionStay2D()

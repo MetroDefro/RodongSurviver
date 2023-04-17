@@ -57,14 +57,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b33a2fac6a661548b0aa022193fcd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    WeaponType: 3
-    WeaponObject: {fileID: 8933647714911918373, guid: 97d1191d14763064d8aa06495d8dc760, type: 3}
-    IconSprite: {fileID: 21300000, guid: 950112dbf7f5b3e41baf9efb36a6e47f, type: 3}
-    Explanation: Fires magic in random directions
-    Damage: 1
-    Speed: 10
-    Term: 1
-    Size: 1
-    Range: 15
-    Count: 1
+  data: {fileID: 11400000, guid: 00a852d67b016bd44abf1e818e881539, type: 2}

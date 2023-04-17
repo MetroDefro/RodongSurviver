@@ -1,15 +1,16 @@
+using RodongSurviver.Base;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UniRx;
-using UnityEngine;
 
-public class PauseCanvasPresenter : MonoBehaviour
+public class PauseCanvasPresenter : PresenterBase
 {
+    #region [ Variables ]
     private PauseCanvasView view;
 
     private Action onPlay;
+    #endregion
 
+    #region [ Public methods ]
     public void Initialize(Action onPlay)
     {
         if (TryGetComponent(out PauseCanvasView view))
@@ -22,7 +23,9 @@ public class PauseCanvasPresenter : MonoBehaviour
         gameObject.SetActive(false);
         SubscribePlayButton();
     }
+    #endregion
 
+    #region [ Private methods ]
     private void SubscribePlayButton()
     {
         view.PlayButton.OnClickAsObservable()
@@ -33,4 +36,5 @@ public class PauseCanvasPresenter : MonoBehaviour
                 onPlay.Invoke();
             }).AddTo(this);
     }
+    #endregion
 }

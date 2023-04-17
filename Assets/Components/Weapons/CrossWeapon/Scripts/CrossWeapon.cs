@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-public class CrossWeapon : Weapon
+public class CrossWeapon : WeaponBase
 {
     [SerializeField] private float fallHeight = 10;
 

@@ -1,31 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 
-[System.Serializable]
-public class WeaponData
+public abstract class WeaponBase : MonoBehaviour
 {
-    public WeaponType WeaponType;
-    public GameObject WeaponObject;
-    public Sprite IconSprite;
-    public string Explanation;
-    public float Damage;
-    public float Speed;
-    public float Term;
-    public float Size;
-    public float Range;
-    public int Count;
-}
-
-public abstract class Weapon : MonoBehaviour
-{
+    #region [ Properties ]
     public WeaponType WeaponType => data.WeaponType;
     public string Explanation => data.Explanation;
     public Sprite IconSprite => data.IconSprite;
     public int Level => level;
+    #endregion
 
+    #region [ Variables ]
     [SerializeField] protected WeaponData data;
     protected Player player;
     protected int level;
@@ -34,7 +21,9 @@ public abstract class Weapon : MonoBehaviour
     protected List<GameObject> weaponObjects = new List<GameObject>();
 
     protected CompositeDisposable disposables = new CompositeDisposable();
+    #endregion
 
+    #region [ MonoBehaviour Messages ]
     private void OnDestroy()
     {
         foreach (var weapon in weaponObjects)
@@ -47,8 +36,10 @@ public abstract class Weapon : MonoBehaviour
     {
         weaponObjects.Clear();
     }
+    #endregion
 
-    public Weapon Initialize(Player player)
+    #region [ Public methods ]
+    public WeaponBase Initialize(Player player)
     {
         level = 1;
         this.player = player;
@@ -90,7 +81,9 @@ public abstract class Weapon : MonoBehaviour
     {
         Movement();
     }
+    #endregion
 
+    #region [ Private methods ]
     private void SubscribeOnCollisionStay2D(GameObject weapon)
     {
         weapon.OnCollisionStay2DAsObservable()
@@ -117,7 +110,9 @@ public abstract class Weapon : MonoBehaviour
 
         SetPosition();
     }
+    #endregion
 
+    #region [ Abstract methods ]
     protected abstract void Movement();
 
     protected abstract void SetPosition();
@@ -128,4 +123,5 @@ public abstract class Weapon : MonoBehaviour
     protected abstract float CalculateSize();
     protected abstract float CalculateRange();
     protected abstract int CalculateCount();
+    #endregion
 }
