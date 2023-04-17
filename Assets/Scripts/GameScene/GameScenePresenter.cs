@@ -28,7 +28,8 @@ public class GameScenePresenter : PresenterBase
     [SerializeField] private Player player;
     [SerializeField] private SlotsCanvasPresenter slotCanvasPresenter;
     [SerializeField] private LevelUpPresenter levelUpPresenter;
-    [SerializeField] private PlayerHUDPresenter playerHUD;
+    [SerializeField] private PauseCanvasPresenter pauseCanvasPresenter;
+    [SerializeField] private TopCanvasPresenter topCanvasPresenter;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
@@ -66,7 +67,7 @@ public class GameScenePresenter : PresenterBase
     {
         Disposables.Clear();
         player.Dispose();
-        playerHUD.Dispose();
+        topCanvasPresenter.Dispose();
         enemySpawner.Dispose();
         foreach (var weapon in model.Weapons)
             DestroyImmediate(weapon.weapon.gameObject);
@@ -102,14 +103,19 @@ public class GameScenePresenter : PresenterBase
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        player.Initialize(playerHUD, gameManager.playerData, (level) => OnLevelUp(level));
+        player.Initialize(topCanvasPresenter, gameManager.playerData, (level) => OnLevelUp(level));
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) =>
         {
             OnWeaponLevelUp(weaponType);
             PlayGame();
         });
-        playerHUD.Initialize(() => PauseGame(), () => PlayGame());
+        pauseCanvasPresenter.Initialize(() => 
+        {
+            pauseCanvasPresenter.gameObject.SetActive(true);
+            PlayGame(); 
+        });
+        topCanvasPresenter.Initialize(() => PauseGame());
         enemySpawner.Initialize(player, gameArea);
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
@@ -126,7 +132,7 @@ public class GameScenePresenter : PresenterBase
     private void OnLevelUp(int level)
     {
         PauseGame();
-        playerHUD.SetLevelUp(level);
+        topCanvasPresenter.SetLevelUp(level);
         levelUpPresenter.SetLevelUpPanel(new Weapon[] { GetWeapon(), GetWeapon(), GetWeapon() });
     }
 
@@ -211,7 +217,7 @@ public class GameScenePresenter : PresenterBase
             .Subscribe(_ =>
             {
                 model.SpanSeconds += Time.deltaTime;
-                playerHUD.SetTimer(model.SpanSeconds);
+                topCanvasPresenter.SetTimer(model.SpanSeconds);
 
                 if (model.SpanSeconds % 30 < 0.1f)
                     enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount + enemySpawner.InitEnemyCount * Mathf.FloorToInt(model.SpanSeconds / 30);
