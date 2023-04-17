@@ -6,34 +6,14 @@ using UnityEngine;
 
 public class GunWeapon : WeaponBase
 {
-    protected override float CalculateDamage()
-    {
-        return data.Damage * Level * 1;
-    }
-
-    protected override float CalculateSpeed()
-    {
-        return data.Speed;
-    }
-
     protected override float CalculateTerm()
     {
-        return data.Term - (level - 1) * data.Term * 0.2f;
+        return base.CalculateTerm() - (level - 1) * data.Term * player.Status.WeaponTerm * 0.2f;
     }
 
     protected override float CalculateSize()
     {
-        return data.Size + (level - 1) * data.Size * 0.1f;
-    }
-
-    protected override float CalculateRange()
-    {
-        return data.Range * (level - 1) * data.Range * 0.2f;
-    }
-
-    protected override int CalculateCount()
-    {
-        return data.Count;
+        return base.CalculateSize() + (level - 1) * data.Size * player.Status.WeaponSize * 0.1f;
     }
 
     protected override void Movement()

@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using UniRx.Triggers;
 using UnityEngine.InputSystem;
 using System;
 
 public class Player : MonoBehaviour
 {
     #region [ Properties ]
-    public WeaponType WeaponType => data.WeaponType;
+    public WeaponType WeaponType => initData.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
-    public float Magnetism => data.Magnetism;
+    public PlayerStatus Status => status;
 
     public Action OnDied { get; set; } = null;
     #endregion
@@ -21,13 +18,10 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private Transform hpBar;
-    private PlayerData data;
+    private PlayerData initData;
+    private PlayerStatus status;
 
     private ReactiveProperty<Vector2> inputVector2 = new ReactiveProperty<Vector2>();
-    private ReactiveProperty<float> hp = new ReactiveProperty<float>();
-    private int level = 1;
-    private float exp = 0;
-    private float necessaryEXP = 2;
 
     private int speedId;
     private int isDeadId;
@@ -43,18 +37,14 @@ public class Player : MonoBehaviour
     #region [ Public methods ]
     public Player Initialize(PlayerData data, Action<float, float> onGetEXP, Action<int> onLevelUp)
     {
-        this.data = data;
+        this.initData = data;
         this.onGetEXP = onGetEXP;
         this.onLevelUp = onLevelUp;
 
-        level = 1;
-        exp = 0;
-        necessaryEXP = 2;
+        status = new PlayerStatus(data.HP, data.Speed, data.Magnetism);
 
         speedId = Animator.StringToHash("Speed");
         isDeadId = Animator.StringToHash("IsDead");
-
-        hp.Value = data.HP;
 
         Play();
 
@@ -65,31 +55,29 @@ public class Player : MonoBehaviour
 
     public void Hit(float damge)
     {
-        hp.Value -= damge;
+        status.MinusHP(damge);
+
+        SetHPbar(Mathf.InverseLerp(0, initData.HP, status.HP));
+
+        if (status.HP <= 0)
+        {
+            anim.SetBool(isDeadId, true);
+            disposables.Clear();
+            OnDied?.Invoke();
+        }
     }
 
     public void AddEXP(float addedEXP)
     {
-        exp += addedEXP;
+        status.AddEXP(addedEXP);
 
-        if (exp >= necessaryEXP)
+        if (status.EXP >= status.NecessaryEXP)
         {
-            // need fix
-            exp -= necessaryEXP;
-            if (level <= 10)
-                necessaryEXP *= 1.2f;
-            else if(level <= 20)
-                necessaryEXP *= 1.1f;
-            else if (level <= 30)
-                necessaryEXP *= 1.05f;
-            else
-                necessaryEXP *= 1.025f;
-
-            level++;
-            onLevelUp?.Invoke(level);
+            status.AddLevel();
+            onLevelUp?.Invoke(status.Level);
         }
 
-        onGetEXP?.Invoke(necessaryEXP, exp);
+        onGetEXP?.Invoke(status.NecessaryEXP, status.EXP);
     }
 
     public void Dispose()
@@ -109,7 +97,6 @@ public class Player : MonoBehaviour
         anim.speed = 1;
         SubscribeFixedUpdate();
         SubscribeInputVector2();
-        SubscribeHP();
     }
 
     #endregion
@@ -120,7 +107,7 @@ public class Player : MonoBehaviour
         Observable.EveryFixedUpdate()
             .Subscribe(_ =>
             {
-                Vector2 direction = inputVector2.Value * data.Speed * Time.deltaTime;
+                Vector2 direction = inputVector2.Value * initData.Speed * Time.deltaTime;
                 rigidbody.MovePosition(rigidbody.position + direction);
             }).AddTo(disposables);
     }
@@ -133,21 +120,6 @@ public class Player : MonoBehaviour
                 spriteRenderer.flipX = value.x > 0;
 
             anim.SetFloat(speedId, value.magnitude);
-        }).AddTo(disposables);
-    }
-
-    private void SubscribeHP()
-    {
-        hp.Subscribe(value =>
-        {
-            SetHPbar(Mathf.InverseLerp(0, data.HP, value));
-
-            if(value <= 0)
-            {
-                anim.SetBool(isDeadId, true);
-                disposables.Clear();
-                OnDied?.Invoke();
-            }
         }).AddTo(disposables);
     }
 

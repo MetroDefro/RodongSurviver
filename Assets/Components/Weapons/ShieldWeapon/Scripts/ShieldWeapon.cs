@@ -5,34 +5,19 @@ using UniRx;
 
 public class ShieldWeapon : WeaponBase
 {
-    protected override float CalculateDamage()
-    {
-        return data.Damage * level * 1;
-    }
-
     protected override float CalculateSpeed()
     {
-        return data.Speed + (level - 1) * data.Speed * 0.6f;
-    }
-
-    protected override float CalculateTerm()
-    {
-        return data.Term;
+        return base.CalculateSpeed() * 0.6f;
     }
 
     protected override float CalculateSize()
     {
-        return data.Size + (level - 1) * data.Size * 0.2f;
-    }
-
-    protected override float CalculateRange()
-    {
-        return data.Range;
+        return base.CalculateSize() + (level - 1) * data.Size * player.Status.WeaponSize * 0.2f;
     }
 
     protected override int CalculateCount()
     {
-        return data.Count + Mathf.FloorToInt(level * 0.4f);
+        return base.CalculateCount() + Mathf.FloorToInt(level * 0.4f);
     }
 
     protected override void Movement()

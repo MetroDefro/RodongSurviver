@@ -40,7 +40,7 @@ public class EXPMarble : MonoBehaviour
         Observable.EveryUpdate()
             .Subscribe(_ => 
             {
-                if(Mathf.Abs(Vector2.Distance(player.transform.position, transform.position)) <= player.Magnetism)
+                if(Mathf.Abs(Vector2.Distance(player.transform.position, transform.position)) <= player.Status.Magnetism)
                 {
                     Vector2 moveVector = Vector2.Lerp(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
                     transform.position = moveVector;

@@ -6,33 +6,23 @@ using UnityEngine;
 
 public class HammerWeapon : WeaponBase
 {
-    protected override float CalculateDamage()
-    {
-        return data.Damage * Level * 1;
-    }
-
-    protected override float CalculateSpeed()
-    {
-        return data.Speed;
-    }
-
     protected override float CalculateTerm()
     {
-        return data.Term - (level - 1) * data.Term * 0.4f;
+        return base.CalculateTerm() - (level - 1) * data.Term * player.Status.WeaponTerm * 0.4f;
     }
 
     protected override float CalculateSize()
     {
-        return data.Size + (level - 1) * data.Size * 0.2f;
+        return base.CalculateSize() + (level - 1) * data.Size * player.Status.WeaponSize * 0.2f;
     }
     protected override float CalculateRange()
     {
-        return data.Range * (level - 1) * data.Range * 0.2f;
+        return base.CalculateRange() + (level - 1) * data.Range * 0.2f;
     }
 
     protected override int CalculateCount()
     {
-        return data.Count + Mathf.FloorToInt(level * 0.5f);
+        return base.CalculateCount() + Mathf.FloorToInt(level * 0.5f);
     }
 
     protected override void Movement()

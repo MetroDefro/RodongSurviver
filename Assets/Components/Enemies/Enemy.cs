@@ -17,6 +17,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected EnemyData data;
     protected Player player;
 
+    private float hp;
     private int isHitId;
     private int isDeadId;
 
@@ -40,6 +41,7 @@ public abstract class Enemy : MonoBehaviour
     public Enemy Initialize(Player player, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
     {
         data.Speed = UnityEngine.Random.Range(1, 3);
+        hp = data.HP;
         this.player = player;
         this.pool = pool;
         this.onDead = onDead;
@@ -55,9 +57,9 @@ public abstract class Enemy : MonoBehaviour
         if (isDead)
             return;
 
-        data.HP -= damage;
+        hp -= damage;
 
-        if (data.HP <= 0)
+        if (hp <= 0)
             StartCoroutine(Dying());
         else
             StartCoroutine(Hitting());

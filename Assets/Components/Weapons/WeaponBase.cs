@@ -117,11 +117,29 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected abstract void SetPosition();
 
-    protected abstract float CalculateDamage();
-    protected abstract float CalculateSpeed();
-    protected abstract float CalculateTerm();
-    protected abstract float CalculateSize();
-    protected abstract float CalculateRange();
-    protected abstract int CalculateCount();
+    protected virtual float CalculateDamage()
+    {
+        return data.Damage * Level * player.Status.Damage;
+    }
+    protected virtual float CalculateSpeed()
+    {
+        return data.Speed * Level * player.Status.WeaponSpeed;
+    }
+    protected virtual float CalculateTerm()
+    {
+        return data.Term;
+    }
+    protected virtual float CalculateSize()
+    {
+        return data.Size;
+    }
+    protected virtual float CalculateRange()
+    {
+        return data.Range;
+    }
+    protected virtual int CalculateCount()
+    {
+        return data.Count + player.Status.WeaponCount;
+    }
     #endregion
 }
