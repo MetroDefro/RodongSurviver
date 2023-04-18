@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -10,8 +9,8 @@ using RodongSurviver.Manager;
 
 public class GameSceneModel
 {
-    public List<(WeaponType type, WeaponBase weapon)> Weapons { get; set; } = new List<(WeaponType, WeaponBase)>();
-    // private List<Item> items = new List<Item>();
+    public List<(ItemType type, Weapon weapon)> Weapons { get; set; } = new List<(ItemType type, Weapon weapon)>();
+    public List<(ItemType type, Buff buff)> Buffs { get; set; } = new List<(ItemType type, Buff buff)>();
 
     public float SpanSeconds = 0;
     public int MaxLevel = 6;
@@ -34,7 +33,8 @@ public class GameScenePresenter : PresenterBase
     [SerializeField] private BackGroundMover[] backGroundMovers;
     [SerializeField] private BoxCollider2D gameArea;
 
-    [SerializeField] private WeaponBase[] allWeaponPrefabs = new WeaponBase[6];
+    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
+    [SerializeField] private ItemData[] allBuffDatas = new ItemData[2];
 
     #endregion
 
@@ -81,7 +81,7 @@ public class GameScenePresenter : PresenterBase
         player.OnDied = () =>
         {
             onDied.Invoke();
-            OnGameOver();
+            PauseGame();
         };
     #endregion
 
@@ -102,30 +102,21 @@ public class GameScenePresenter : PresenterBase
 
         player.Initialize(gameManager.playerData, (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp), (level) => OnLevelUp(level));
         slotCanvasPresenter.Initialize();
-        levelUpPresenter.Initialize((weaponType) =>
-        {
-            OnWeaponLevelUp(weaponType);
-            PlayGame();
+        levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
+        pauseCanvasPresenter.Initialize(() => PlayGame());
+        topCanvasPresenter.Initialize(() => 
+        { 
+            pauseCanvasPresenter.gameObject.SetActive(true); 
+            PauseGame(); 
         });
-        pauseCanvasPresenter.Initialize(() =>
-        {
-            pauseCanvasPresenter.gameObject.SetActive(true);
-            PlayGame();
-        });
-        topCanvasPresenter.Initialize(() => PauseGame());
         enemySpawner.Initialize(player, gameArea);
 
-        WeaponBase firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
-        model.Weapons.Add((player.WeaponType, firstWeapon));
-        slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.IconSprite);
+        Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
+        model.Weapons.Add((firstWeapon.Data.Type, firstWeapon));
+        slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Data.Sprite);
 
         model.SpanSeconds = 0;
         SubscribeEveryUpdate();
-    }
-
-    private void OnGameOver()
-    {
-        PauseGame();
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)
@@ -137,7 +128,7 @@ public class GameScenePresenter : PresenterBase
     {
         PauseGame();
         topCanvasPresenter.SetLevelUp(level);
-        levelUpPresenter.SetLevelUpPanel(new WeaponBase[] { GetWeapon(), GetWeapon(), GetWeapon() });
+        levelUpPresenter.SetLevelUpPanel(new ItemData[] { GetItemData(), GetItemData(), GetItemData() });
     }
 
     private void PauseGame()
@@ -156,28 +147,42 @@ public class GameScenePresenter : PresenterBase
         model.Weapons.ForEach((weapon) => weapon.weapon.Play());
     }
 
-    private void OnWeaponLevelUp(WeaponType weaponType)
+    private void OnItemLevelUp(ItemType type)
     {
-        WeaponBase weapon = model.Weapons.Where(o => o.type == weaponType).FirstOrDefault().weapon;
-        if (weapon == null)
+        IItem item = GetIsItemFromType(type);
+        if(item == null)
         {
-            weapon = Instantiate(allWeaponPrefabs[(int)weaponType]).Initialize(player);
-            model.Weapons.Add((weaponType, weapon));
+            if((int)type < 100)
+            {
+                model.Weapons.Add((allWeaponPrefabs[(int)type].Data.Type, Instantiate(allWeaponPrefabs[(int)type]).Initialize(player)));
+            }
+            else
+            {
+                model.Buffs.Add((allBuffDatas[(int)type - 100].Type, new Buff(player, allBuffDatas[(int)type - 100])));
+            }
         }
         else
         {
-            weapon.AddLevel();
+            if ((int)type < 100)
+            {
+                int index = model.Weapons.IndexOf((item.Data.Type, (Weapon)item));
+                slotCanvasPresenter.SetWeaponSlot(index, item.Level, item.Data.Sprite);
+            }
+            else
+            {
+                int index = model.Buffs.IndexOf((item.Data.Type, (Buff)item));
+                slotCanvasPresenter.SetBuffSlot(index, item.Level, item.Data.Sprite);
+            }
+            item.OnLevelUp();
         }
 
-        int index = model.Weapons.IndexOf((weaponType, weapon));
-
-        slotCanvasPresenter.SetWeaponSlot(index, weapon.Level, weapon.IconSprite);
+        PlayGame();
     }
 
-    private WeaponBase GetWeapon()
+    private ItemData GetItemData()
     {
         // If all are max level, instead, money & HP will come out
-        if (model.Weapons.Count >= 6)
+        if (model.Weapons.Count >= 6 && model.Buffs.Count >= 6)
         {
             int minLevel = model.MaxLevel;
             foreach (var w in model.Weapons)
@@ -185,34 +190,47 @@ public class GameScenePresenter : PresenterBase
                 if (minLevel > w.weapon.Level)
                     minLevel = w.weapon.Level;
             }
+            foreach (var b in model.Buffs)
+            {
+                if (minLevel > b.buff.Level)
+                    minLevel = b.buff.Level;
+            }
 
             if (minLevel == model.MaxLevel)
-                return model.Weapons[0].weapon; // must be corrected
-            else
-            {
-                int index = UnityEngine.Random.Range(0, 6);
-                while (model.Weapons[index].weapon.Level == model.MaxLevel)
-                {
-                    index = UnityEngine.Random.Range(0, 6);
-                }
-
-                return model.Weapons[index].weapon;
-            }
+                return model.Weapons[0].weapon.Data; // must be corrected
         }
-        else
+
+        ItemType type = GetRandomItemType();
+        while (GetIsItemLevelMax(GetIsItemFromType(type)))
         {
-            int weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
-            WeaponBase weapon = model.Weapons.Where(o => o.type == (WeaponType)weaponType).FirstOrDefault().weapon;
-            if (weapon != null)
-            {
-                while (weapon.Level == model.MaxLevel)
-                {
-                    weaponType = UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
-                }
-            }
-
-            return allWeaponPrefabs[weaponType];
+            type = GetRandomItemType();
         }
+
+        if ((int)type < 100)
+            return allWeaponPrefabs[(int)type].Data;
+        else
+            return allBuffDatas[(int)type - 100];
+    }
+
+    private ItemType GetRandomItemType()
+    {
+        Array values = Enum.GetValues(typeof(ItemType));
+        return (ItemType)values.GetValue(new System.Random().Next(0, values.Length));
+    }
+
+    private bool GetIsItemLevelMax(IItem item)
+    {
+        if (item == null)
+            return false;
+        else
+            return item.Level == model.MaxLevel;
+    }
+
+    private IItem GetIsItemFromType(ItemType type)
+    {
+        IItem item = (int)type < 100 ? model.Weapons.Where(o => o.type == type).FirstOrDefault().weapon : model.Buffs.Where(o => o.type == type).FirstOrDefault().buff;
+
+        return item;
     }
 
     private void SubscribeEveryUpdate()

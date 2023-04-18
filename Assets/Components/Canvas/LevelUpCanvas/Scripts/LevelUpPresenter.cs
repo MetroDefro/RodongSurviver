@@ -11,19 +11,19 @@ public class LevelUpPresenter : PresenterBase
     #region [ Variables ]
     private LevelUpView view;
 
-    private Action<WeaponType> onWeaponUp;
+    private Action<ItemType> onItemLevelUp;
     private CompositeDisposable levelupButtonDisposables = new CompositeDisposable();
     #endregion
 
     #region [ Public methods ]
-    public void Initialize(Action<WeaponType> onWeaponUp)
+    public void Initialize(Action<ItemType> onItemLevelUp)
     {
         if (TryGetComponent(out LevelUpView view))
         {
             this.view = view;
         }
 
-        this.onWeaponUp = onWeaponUp;
+        this.onItemLevelUp = onItemLevelUp;
 
         gameObject.SetActive(false);
     }
@@ -33,27 +33,27 @@ public class LevelUpPresenter : PresenterBase
         view?.Dispose();
     }
 
-    public void SetLevelUpPanel(WeaponBase[] weapons)
+    public void SetLevelUpPanel(ItemData[] items)
     {
         view.ShowImmediate();
 
         int count = view.LevelUpButtons.Length;
         for (int i = 0; i < count; i++)
         {
-            view.SetButton(i, weapons[i].IconSprite, weapons[i].Explanation);
-            SubscribeLevelUpButton(view.LevelUpButtons[i], weapons[i].WeaponType);
+            view.SetButton(i, items[i].Sprite, items[i].Explanation);
+            SubscribeLevelUpButton(view.LevelUpButtons[i], items[i].Type);
         }
     }
     #endregion
 
     #region [ Private methods ]
-    private void SubscribeLevelUpButton(Button button, WeaponType weaponType)
+    private void SubscribeLevelUpButton(Button button, ItemType type)
     {
         button.OnClickAsObservable()
             .ThrottleFirst(ClickThrottleFirstTime)
             .Subscribe(_ =>
             {
-                onWeaponUp.Invoke(weaponType);
+                onItemLevelUp.Invoke(type);
                 levelupButtonDisposables.Clear();
 
                 view.HideImmediate();

@@ -65643,6 +65643,9 @@ MonoBehaviour:
   - {fileID: 7011088409014059877, guid: 1e80238763a523c409a857aeaddc2f57, type: 3}
   - {fileID: -3816222524319298571, guid: dbb651626f5ac184eb54b1439f522af3, type: 3}
   - {fileID: -4715959011283397271, guid: bd20f7fdef566204e99342dde0593b71, type: 3}
+  allBuffDatas:
+  - {fileID: 11400000, guid: 539e091c415454c4a99c33a15bb44cf5, type: 2}
+  - {fileID: 11400000, guid: 2c452d94e1e02cd44b79183ac54ea5c9, type: 2}
 --- !u!114 &1980667772
 MonoBehaviour:
   m_ObjectHideFlags: 0

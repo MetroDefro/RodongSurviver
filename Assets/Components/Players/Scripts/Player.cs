@@ -6,7 +6,7 @@ using System;
 public class Player : MonoBehaviour
 {
     #region [ Properties ]
-    public WeaponType WeaponType => initData.WeaponType;
+    public ItemType WeaponType => initData.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
     public PlayerStatus Status => status;
 

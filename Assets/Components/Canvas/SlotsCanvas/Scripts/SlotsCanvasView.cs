@@ -8,16 +8,16 @@ public class SlotsCanvasView : ViewBase
 {
     #region [ Properties ]
     public Image[] WeaponSlots => weaponSlots;
-    public Image[] ItemSlots => itemSlots;
+    public Image[] BuffSlots => buffSlots;
     public TextMeshProUGUI[] WeaponSlotLevelTexts => weaponSlotLevelTexts;
-    public TextMeshProUGUI[] ItemSlotLevelTexts => itemSlotLevelTexts;
+    public TextMeshProUGUI[] BuffSlotLevelTexts => buffSlotLevelTexts;
     #endregion
 
     #region [ Variables ]
     [SerializeField] private Image[] weaponSlots;
-    [SerializeField] private Image[] itemSlots;
+    [SerializeField] private Image[] buffSlots;
     [SerializeField] private TextMeshProUGUI[] weaponSlotLevelTexts;
-    [SerializeField] private TextMeshProUGUI[] itemSlotLevelTexts;
+    [SerializeField] private TextMeshProUGUI[] buffSlotLevelTexts;
     #endregion
 
     #region [ Public methods ]
@@ -27,10 +27,10 @@ public class SlotsCanvasView : ViewBase
         weaponSlotLevelTexts[index].text = "" + level;
     }
 
-    public void SetItemSlot(int index, int level, Sprite sprite)
+    public void SetBuffSlot(int index, int level, Sprite sprite)
     {
-        itemSlots[index].sprite = sprite;
-        itemSlotLevelTexts[index].text = "" + level;
+        buffSlots[index].sprite = sprite;
+        buffSlotLevelTexts[index].text = "" + level;
     }
 
     public override void Show(Action onComplete)

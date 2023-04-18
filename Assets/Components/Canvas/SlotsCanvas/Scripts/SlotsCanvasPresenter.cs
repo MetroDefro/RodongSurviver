@@ -14,6 +14,7 @@ public class SlotsCanvasPresenter : PresenterBase
         for (int i = 0; i < count; i++)
         {
             SetWeaponSlot(i, 1, null);
+            SetBuffSlot(i, 1, null);
         }
     }
 
@@ -30,9 +31,9 @@ public class SlotsCanvasPresenter : PresenterBase
         view.SetWeaponSlot(index, level, sprite);
     }
 
-    public void SetItemSlot(int index, int level, Sprite sprite)
+    public void SetBuffSlot(int index, int level, Sprite sprite)
     {
-        view.SetItemSlot(index, level, sprite);
+        view.SetBuffSlot(index, level, sprite);
     }
     #endregion
 }

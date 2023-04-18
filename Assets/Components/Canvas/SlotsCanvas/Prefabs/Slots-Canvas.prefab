@@ -123,7 +123,7 @@ MonoBehaviour:
   - {fileID: 3629686076135600053}
   - {fileID: 3629686076074403651}
   - {fileID: 3629686076149579539}
-  itemSlots:
+  buffSlots:
   - {fileID: 3629686075557312437}
   - {fileID: 3629686076072071702}
   - {fileID: 3629686074672150477}
@@ -137,7 +137,7 @@ MonoBehaviour:
   - {fileID: 3629686074861880747}
   - {fileID: 3629686074921328504}
   - {fileID: 3629686075956575072}
-  itemSlotLevelTexts:
+  buffSlotLevelTexts:
   - {fileID: 3629686075320370375}
   - {fileID: 3629686076298841894}
   - {fileID: 3629686074724216361}
@@ -1846,7 +1846,7 @@ GameObject:
   - component: {fileID: 3629686075918525965}
   - component: {fileID: 3629686075918525964}
   m_Layer: 5
-  m_Name: ItemSlot
+  m_Name: BuffSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
