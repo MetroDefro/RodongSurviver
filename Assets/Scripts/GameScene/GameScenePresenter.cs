@@ -150,30 +150,32 @@ public class GameScenePresenter : PresenterBase
     private void OnItemLevelUp(ItemType type)
     {
         IItem item = GetIsItemFromType(type);
-        if(item == null)
+
+        if ((int)type < 100)
         {
-            if((int)type < 100)
+            if (item == null)
             {
-                model.Weapons.Add((allWeaponPrefabs[(int)type].Data.Type, Instantiate(allWeaponPrefabs[(int)type]).Initialize(player)));
+                item = Instantiate(allWeaponPrefabs[(int)type]).Initialize(player);
+                model.Weapons.Add((item.Data.Type, (Weapon)item));
             }
             else
-            {
-                model.Buffs.Add((allBuffDatas[(int)type - 100].Type, new Buff(player, allBuffDatas[(int)type - 100])));
-            }
+                item.OnLevelUp();
+
+            int index = model.Weapons.IndexOf((item.Data.Type, (Weapon)item));
+            slotCanvasPresenter.SetWeaponSlot(index, item.Level, item.Data.Sprite);
         }
         else
         {
-            if ((int)type < 100)
+            if (item == null)
             {
-                int index = model.Weapons.IndexOf((item.Data.Type, (Weapon)item));
-                slotCanvasPresenter.SetWeaponSlot(index, item.Level, item.Data.Sprite);
+                item = new Buff(player, allBuffDatas[(int)type - 100]);
+                model.Buffs.Add((item.Data.Type, (Buff)item));
             }
             else
-            {
-                int index = model.Buffs.IndexOf((item.Data.Type, (Buff)item));
-                slotCanvasPresenter.SetBuffSlot(index, item.Level, item.Data.Sprite);
-            }
-            item.OnLevelUp();
+                item.OnLevelUp();
+
+            int index = model.Buffs.IndexOf((item.Data.Type, (Buff)item));
+            slotCanvasPresenter.SetBuffSlot(index, item.Level, item.Data.Sprite);
         }
 
         PlayGame();

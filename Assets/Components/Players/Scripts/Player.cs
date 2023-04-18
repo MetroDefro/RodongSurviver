@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
         Observable.EveryFixedUpdate()
             .Subscribe(_ =>
             {
-                Vector2 direction = inputVector2.Value * initData.Speed * Time.deltaTime;
+                Vector2 direction = inputVector2.Value * status.Speed * Time.deltaTime;
                 rigidbody.MovePosition(rigidbody.position + direction);
             }).AddTo(disposables);
     }
