@@ -68,12 +68,17 @@ public class GameScenePresenter : PresenterBase
     {
         Disposables.Clear();
         player.Dispose();
+        slotCanvasPresenter.Dispose();
+        levelUpPresenter.Dispose();
+        pauseCanvasPresenter.Dispose();
         topCanvasPresenter.Dispose();
+
         enemySpawner.Dispose();
         foreach (var weapon in model.Weapons)
             DestroyImmediate(weapon.weapon.gameObject);
 
         model.Weapons.Clear();
+        model.Buffs.Clear();
         Initialize();
     }
 
@@ -103,7 +108,7 @@ public class GameScenePresenter : PresenterBase
         player.Initialize(gameManager.playerData, (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp), (level) => OnLevelUp(level));
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
-        pauseCanvasPresenter.Initialize(() => PlayGame());
+        pauseCanvasPresenter.Initialize(() => PlayGame(), () => OnReset());
         topCanvasPresenter.Initialize(() => 
         { 
             pauseCanvasPresenter.gameObject.SetActive(true); 

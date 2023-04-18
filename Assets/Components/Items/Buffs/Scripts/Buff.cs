@@ -23,11 +23,11 @@ public class Buff : IItem
         switch (data.Type)
         {
             case ItemType.Magnet:
-                player.Status.AddMagnetism(1.5f);
+                player.Status.AddMagnetism(1.2f);
                 break;
 
             case ItemType.Tornado:
-                player.Status.AddSpeed(1.2f);
+                player.Status.AddSpeed(1.1f);
                 break;
 
             default:
