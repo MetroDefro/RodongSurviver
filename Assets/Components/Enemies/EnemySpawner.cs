@@ -7,6 +7,7 @@ using UniRx;
 public class EnemySpawner : MonoBehaviour
 {
     public int MaxEnemyCount { get => maxEnemyCount; set => maxEnemyCount =  value; }
+    public int CurrentEnemyIndex { get => currentEnemyIndex; set => currentEnemyIndex =  value; }
     public int InitEnemyCount => initEnemyCount;
 
     [SerializeField] private int initEnemyCount = 30;
@@ -14,9 +15,11 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxEnemyCount = 30;
     [SerializeField] private float spwanRange = 60;
     [SerializeField] private Enemy enemyPrefab;
+    private int currentEnemyIndex = 0;
     private BoxCollider2D gameArea;
     private Player player;
 
+    [SerializeField] private EnemyData[] enemyDatas = new EnemyData[3];
     private List<Enemy> enemies = new List<Enemy>();
     private List<EXPMarble> expMarbles = new List<EXPMarble>();
     private IObjectPool<Enemy> pool;
@@ -105,7 +108,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnGetPool(Enemy enemy)
     {
-        enemies.Add(enemy.Initialize(player, pool, (exp) => AddEXPMarble(exp), (exp) => RemoveEXPMarble(exp)));
+        enemies.Add(enemy.Initialize(player, enemyDatas[currentEnemyIndex], pool, (exp) => AddEXPMarble(exp), (exp) => RemoveEXPMarble(exp)));
         enemy.transform.position = GetRandomVector();
         enemy.gameObject.SetActive(true);
     }

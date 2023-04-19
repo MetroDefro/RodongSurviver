@@ -12,7 +12,7 @@ public class GameSceneModel
     public List<(ItemType type, Weapon weapon)> Weapons { get; set; } = new List<(ItemType type, Weapon weapon)>();
     public List<(ItemType type, Buff buff)> Buffs { get; set; } = new List<(ItemType type, Buff buff)>();
 
-    public float SpanSeconds = 0;
+    public int SpanSeconds = 0;
     public int MaxLevel = 6;
 }
 
@@ -121,7 +121,7 @@ public class GameScenePresenter : PresenterBase
         slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Data.Sprite);
 
         model.SpanSeconds = 0;
-        SubscribeEveryUpdate();
+        SubscribeTimer();
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)
@@ -146,7 +146,7 @@ public class GameScenePresenter : PresenterBase
 
     private void PlayGame()
     {
-        SubscribeEveryUpdate();
+        SubscribeTimer();
         player.Play();
         enemySpawner.Play();
         model.Weapons.ForEach((weapon) => weapon.weapon.Play());
@@ -240,18 +240,35 @@ public class GameScenePresenter : PresenterBase
         return item;
     }
 
-    private void SubscribeEveryUpdate()
+    private void SubscribeTimer()
     {
-        Observable.EveryUpdate()
-            .Subscribe(_ =>
+        CreateTimerObservable()
+            .Subscribe(second => 
             {
-                model.SpanSeconds += Time.deltaTime;
+                model.SpanSeconds++;
+
                 topCanvasPresenter.SetTimer(model.SpanSeconds);
 
-                if (model.SpanSeconds % 30 < 0.1f)
-                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount + enemySpawner.InitEnemyCount * Mathf.FloorToInt(model.SpanSeconds / 30);
-            }).AddTo(Disposables);
+                if (model.SpanSeconds % 30 == 0)
+                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount * (model.SpanSeconds / 30 + 1) ;
+
+                if (model.SpanSeconds % 60 == 0)
+                {
+                    if(model.SpanSeconds / 60 >= 3)
+                        enemySpawner.CurrentEnemyIndex = 2;
+                    else
+                        enemySpawner.CurrentEnemyIndex = (model.SpanSeconds / 60);
+                }
+ 
+            })
+            .AddTo(Disposables);
     }
 
+    private IObservable<int> CreateTimerObservable()
+    {
+        return Observable
+            .Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
+            .Select(second => (int)second++);
+    }
     #endregion
 }

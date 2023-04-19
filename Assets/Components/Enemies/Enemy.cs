@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private CapsuleCollider2D collider2D;
     [SerializeField] protected Rigidbody2D rigidbody;
     [SerializeField] protected SpriteRenderer spriteRenderer;
-    [SerializeField] protected EnemyData data;
+    protected EnemyData data;
     protected Player player;
 
     private float hp;
@@ -38,14 +38,18 @@ public abstract class Enemy : MonoBehaviour
     #endregion
 
     #region [ Public Method ]
-    public Enemy Initialize(Player player, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
+    public Enemy Initialize(Player player, EnemyData data, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
     {
-        data.Speed = UnityEngine.Random.Range(1, 3);
-        hp = data.HP;
+        this.data = data;
         this.player = player;
         this.pool = pool;
         this.onDead = onDead;
         this.onEXPMarbleDestroed = onEXPMarbleDestroed;
+
+        data.Speed = UnityEngine.Random.Range(1, 3);
+        hp = data.HP;
+        anim.runtimeAnimatorController = data.AnimatorController;
+
         isHitId = Animator.StringToHash("IsHit");
         isDeadId = Animator.StringToHash("IsDead");
 

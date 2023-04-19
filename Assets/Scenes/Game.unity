@@ -65579,6 +65579,10 @@ MonoBehaviour:
   maxEnemyCount: 30
   spwanRange: 40
   enemyPrefab: {fileID: 8671371480985141817, guid: e67e0a0badd0ab74396ac7a650af9f02, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: b693d1f988f36784fa8c592c12e2298a, type: 2}
+  - {fileID: 11400000, guid: f765cfd2df738a949a69d07250b84cd2, type: 2}
+  - {fileID: 11400000, guid: 3498e53c0074013419c1ca6a83db65af, type: 2}
 --- !u!1 &1980667769
 GameObject:
   m_ObjectHideFlags: 0

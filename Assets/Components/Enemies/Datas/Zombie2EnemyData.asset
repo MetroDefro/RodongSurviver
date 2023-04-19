@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51241a91ad9012643a4ec903ffa5e0a4, type: 3}
-  m_Name: ZombieEnemyData
+  m_Name: Zombie2EnemyData
   m_EditorClassIdentifier: 
-  sprite: {fileID: 613658156, guid: 1bc6097228993f045852159e71f81d5b, type: 3}
-  speed: 1
+  sprite: {fileID: -1521214912, guid: e48a5d68a5d0aa344822ce6aedc56636, type: 3}
+  speed: 2
   damage: 1
-  hp: 1
+  hp: 5
   exp: 1
-  animatorController: {fileID: 22100000, guid: 519b8644625643b4b88a0c5f3a081470, type: 2}
+  animatorController: {fileID: 22100000, guid: b2354721494dca14e9340c32ef3f4169, type: 2}
