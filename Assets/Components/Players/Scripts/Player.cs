@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
     {
         status.MinusHP(damge);
 
-        SetHPbar(Mathf.InverseLerp(0, initData.HP, status.HP));
+        SetHPbar(Mathf.InverseLerp(0, status.MaxHP, status.HP));
 
         if (status.HP <= 0)
         {

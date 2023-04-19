@@ -12,7 +12,7 @@ public class ShieldWeapon : Weapon
 
     protected override float CalculateSize()
     {
-        return base.CalculateSize() + (level - 1) * initData.Size * player.Status.WeaponSize * 0.2f;
+        return base.CalculateSize() + (level - 1) * initData.Size * player.Status.WeaponSize * 0.1f;
     }
 
     protected override int CalculateCount()

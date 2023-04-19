@@ -13,8 +13,8 @@ public class SlotsCanvasPresenter : PresenterBase
         int count = view.WeaponSlots.Length;
         for (int i = 0; i < count; i++)
         {
-            SetWeaponSlot(i, 1, null);
-            SetBuffSlot(i, 1, null);
+            SetWeaponSlot(i, 0, null);
+            SetBuffSlot(i, 0, null);
         }
     }
 

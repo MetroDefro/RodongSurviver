@@ -9,4 +9,8 @@ public enum ItemType
 
     Magnet = 100,
     Tornado = 101,
+    Thunder = 102,
+    Dumbbell = 103,
+    Shoes = 104,
+    Rice = 105,
 }

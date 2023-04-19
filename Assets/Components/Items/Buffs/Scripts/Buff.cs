@@ -27,7 +27,23 @@ public class Buff : IItem
                 break;
 
             case ItemType.Tornado:
+                player.Status.AddWeaponSpeed(1.1f);
+                break;
+
+            case ItemType.Thunder:
+                player.Status.AddWeaponTerm(1.1f);
+                break;
+
+            case ItemType.Dumbbell:
+                player.Status.AddDamage(1.2f);
+                break;
+
+            case ItemType.Shoes:
                 player.Status.AddSpeed(1.1f);
+                break;
+
+            case ItemType.Rice:
+                player.Status.AddMaxpHP(1.2f);
                 break;
 
             default:

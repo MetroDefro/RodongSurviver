@@ -8,6 +8,7 @@ public class PlayerStatus
     public float EXP => exp;
     public float NecessaryEXP => necessaryEXP;
     public float HP => hp;
+    public float MaxHP => maxHP;
     public float Speed => speed;
     public float Magnetism => magnetism;
     public float Damage => damage;
