@@ -29,6 +29,7 @@ public class CrossWeapon : Weapon
 
     protected override void Movement()
     {
+        isWaitingTime = false;
         SubscribeMovement();
     }
 
@@ -82,7 +83,7 @@ public class CrossWeapon : Weapon
                     foreach (var weapon in weaponObjects)
                         weapon.SetActive(true);
                 }
-            });
+            }).AddTo(disposables);
     }
 
     private Vector2 GetRandomRange(float spwanRange)
