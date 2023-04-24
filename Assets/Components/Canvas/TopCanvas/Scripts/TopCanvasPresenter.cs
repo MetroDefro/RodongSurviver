@@ -31,7 +31,12 @@ public class TopCanvasPresenter : PresenterBase
 
     public void SetLevelUp(int level)
     {
-        view.SetLevelUp(level);
+        view.SetLevelUpText(level);
+    }
+
+    public void SetMoney(int money)
+    {
+        view.SetMoneyText(money);
     }
 
     public void SetEXPbar(float normalizeEXP)

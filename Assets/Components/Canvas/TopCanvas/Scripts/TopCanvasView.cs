@@ -29,9 +29,14 @@ public class TopCanvasView : ViewBase
         levelText.text = "LV. " + 1;
     }
 
-    public void SetLevelUp(int level)
+    public void SetLevelUpText(int level)
     {
         levelText.text = "LV. " + level;
+    }
+
+    public void SetMoneyText(int money)
+    {
+        moneyText.text = money + "$";
     }
 
     public void SetEXPbar(float normalizeEXP)

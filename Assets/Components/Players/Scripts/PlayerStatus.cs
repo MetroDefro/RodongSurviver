@@ -7,6 +7,7 @@ public class PlayerStatus
     public int Level => level;
     public float EXP => exp;
     public float NecessaryEXP => necessaryEXP;
+    public int Money => money;
     public float HP => hp;
     public float MaxHP => maxHP;
     public float Speed => speed;
@@ -20,6 +21,7 @@ public class PlayerStatus
     private int level;
     private float exp;
     private float necessaryEXP;
+    private int money;
     private float hp;
     private float maxHP;
     private float speed;
@@ -35,6 +37,7 @@ public class PlayerStatus
         this.level = 1;
         this.exp = 0;
         this.necessaryEXP = 2;
+        this.money = 0;
         this.hp = initHP;
         this.maxHP = initHP;
         this.speed = speed;
@@ -69,6 +72,13 @@ public class PlayerStatus
         exp += value;
 
         return exp;
+    }    
+    
+    public int AddMoney(int value)
+    {
+        money += value;
+
+        return money;
     }
 
     public float PlusHP(float value)

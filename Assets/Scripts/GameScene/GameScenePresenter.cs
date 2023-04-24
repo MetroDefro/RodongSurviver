@@ -6,6 +6,7 @@ using UniRx;
 using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
+using RodongSurviver.Components.DiedPanel;
 
 public class GameSceneModel
 {
@@ -29,9 +30,10 @@ public class GameScenePresenter : PresenterBase
     [SerializeField] private LevelUpPresenter levelUpPresenter;
     [SerializeField] private PauseCanvasPresenter pauseCanvasPresenter;
     [SerializeField] private TopCanvasPresenter topCanvasPresenter;
+    [SerializeField] private DiedPanelPresenter diedPanelPresenter;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BackGroundMover[] backGroundMovers;
-    [SerializeField] private BoxCollider2D gameArea;
+    private BoxCollider2D gameArea;
 
     [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
     [SerializeField] private ItemData[] allBuffDatas = new ItemData[2];
@@ -46,6 +48,8 @@ public class GameScenePresenter : PresenterBase
 
     private void Start()
     {
+        Load();
+
         Initialize();
     }
     #endregion
@@ -82,12 +86,12 @@ public class GameScenePresenter : PresenterBase
         Initialize();
     }
 
-    public void SetupDiedAction(Action onDied) => 
-        player.OnDied = () =>
+    public void SetupDiedAction(Action onDied) { }
+/*        player.OnDied = () =>
         {
             onDied.Invoke();
             PauseGame();
-        };
+        };*/
     #endregion
 
     #region [ Private methods ]
@@ -101,14 +105,34 @@ public class GameScenePresenter : PresenterBase
 
         model = new GameSceneModel();
 
+        gameArea = player.GameArea;
 
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        player.Initialize(gameManager.playerData, (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp), (level) => OnLevelUp(level));
+        player.Initialize(gameManager.playerData, new Player.PlayerActions()
+        {
+            OnLevelUp = (level) => OnLevelUp(level),
+            OnGetEXP = (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp),
+            OnGetMoney = (money) => OnMoney(money),
+            OnDied = () =>
+            {
+                diedPanelPresenter.gameObject.SetActive(true);
+                PauseGame();
+            }
+
+        });
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
         pauseCanvasPresenter.Initialize(() => PlayGame(), () => OnReset());
+        diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
+        {
+            RetryEvent = () =>
+            {
+                diedPanelPresenter.gameObject.SetActive(false);
+                OnReset();
+            }
+        });
         topCanvasPresenter.Initialize(() => 
         { 
             pauseCanvasPresenter.gameObject.SetActive(true); 
@@ -121,7 +145,18 @@ public class GameScenePresenter : PresenterBase
         slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Data.Sprite);
 
         model.SpanSeconds = 0;
+
         SubscribeTimer();
+    }
+
+    private void Load()
+    {
+        player = Instantiate(player);
+        slotCanvasPresenter = Instantiate(slotCanvasPresenter);
+        levelUpPresenter = Instantiate(levelUpPresenter);
+        pauseCanvasPresenter = Instantiate(pauseCanvasPresenter);
+        topCanvasPresenter = Instantiate(topCanvasPresenter);
+        enemySpawner = Instantiate(enemySpawner);
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)
@@ -134,6 +169,11 @@ public class GameScenePresenter : PresenterBase
         PauseGame();
         topCanvasPresenter.SetLevelUp(level);
         levelUpPresenter.SetLevelUpPanel(new ItemData[] { GetItemData(), GetItemData(), GetItemData() });
+    }
+
+    private void OnMoney(int money)
+    {
+        topCanvasPresenter.SetMoney(money);
     }
 
     private void PauseGame()

@@ -114,14 +114,8 @@ MonoBehaviour:
   anim: {fileID: 952526379523096596}
   spriteRenderer: {fileID: 952526379523096595}
   rigidbody: {fileID: 952526379523096593}
-  data:
-    WeaponType: 0
-    HP: 10
-    Damage: 1
-    Speed: 5
-    Defence: 1
-    Magnetism: 1
   hpBar: {fileID: 1392637895645285384}
+  gameArea: {fileID: 952526379975304874}
 --- !u!50 &952526379523096593
 Rigidbody2D:
   serializedVersion: 4

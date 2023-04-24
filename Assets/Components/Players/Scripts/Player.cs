@@ -5,12 +5,21 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    public class PlayerActions
+    {
+        public Action<int> OnLevelUp { get; set; }
+        public Action<float, float> OnGetEXP { get; set; }
+        public Action<int> OnGetMoney { get; set; }
+        public Action OnDied { get; set; }
+    }
+
     #region [ Properties ]
     public ItemType WeaponType => initData.WeaponType;
     public Vector2 InputVector2 => inputVector2.Value;
     public PlayerStatus Status => status;
+    public BoxCollider2D GameArea => gameArea;
 
-    public Action OnDied { get; set; } = null;
+    // public Action OnDied { get; set; } = null;
     #endregion
 
     #region [ Variables ]
@@ -18,6 +27,8 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private Transform hpBar;
+    [SerializeField] private BoxCollider2D gameArea;
+    private PlayerActions actions;
     private PlayerData initData;
     private PlayerStatus status;
 
@@ -28,18 +39,14 @@ public class Player : MonoBehaviour
 
     private float maxHPbarScaleX;
 
-    private Action<int> onLevelUp;
-    private Action<float, float> onGetEXP;
-
     private CompositeDisposable disposables = new CompositeDisposable();
     #endregion
 
     #region [ Public methods ]
-    public Player Initialize(PlayerData data, Action<float, float> onGetEXP, Action<int> onLevelUp)
+    public Player Initialize(PlayerData data, PlayerActions actions)
     {
         this.initData = data;
-        this.onGetEXP = onGetEXP;
-        this.onLevelUp = onLevelUp;
+        this.actions = actions;
 
         status = new PlayerStatus(data.HP, data.Speed, data.Magnetism);
 
@@ -63,7 +70,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool(isDeadId, true);
             disposables.Clear();
-            OnDied?.Invoke();
+            actions.OnDied?.Invoke();
         }
     }
 
@@ -74,10 +81,17 @@ public class Player : MonoBehaviour
         if (status.EXP >= status.NecessaryEXP)
         {
             status.AddLevel();
-            onLevelUp?.Invoke(status.Level);
+            actions.OnLevelUp?.Invoke(status.Level);
         }
 
-        onGetEXP?.Invoke(status.NecessaryEXP, status.EXP);
+        actions.OnGetEXP?.Invoke(status.NecessaryEXP, status.EXP);
+    }    
+    
+    public void AddMoney(int AddedMoney)
+    {
+        status.AddMoney(AddedMoney);
+
+        actions.OnGetMoney?.Invoke(status.Money);
     }
 
     public void Dispose()

@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e1d1459835e5944b0efa03f6d83ea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expBar: {fileID: 7923160689484205833}
+  expBar: {fileID: 7923160689688525817}
   pauseButton: {fileID: 4413589101543774551}
   levelText: {fileID: 7923160689867155402}
   timerText: {fileID: 7923160690403041216}

@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1525496825550724352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1525496825550724353}
+  - component: {fileID: 1525496825550724354}
+  m_Layer: 0
+  m_Name: EnemySpwaner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1525496825550724353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525496825550724352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10, y: 10, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1525496825550724354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525496825550724352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56dbf48f32818c545b4866326b544b37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initEnemyCount: 30
+  maxPoolEnemyCount: 500
+  maxEnemyCount: 30
+  spwanRange: 40
+  enemyPrefab: {fileID: 8671371480985141817, guid: e67e0a0badd0ab74396ac7a650af9f02, type: 3}
+  expMarblePrefab: {fileID: 3999889164516602753, guid: b58215cf105797d4ea076639b967fc41, type: 3}
+  moneyPrefab: {fileID: 3943660428801293491, guid: 9b254ddc45e8575439c496ed16619fc1, type: 3}
+  enemyDatas:
+  - {fileID: 11400000, guid: b693d1f988f36784fa8c592c12e2298a, type: 2}
+  - {fileID: 11400000, guid: f765cfd2df738a949a69d07250b84cd2, type: 2}
+  - {fileID: 11400000, guid: 3498e53c0074013419c1ca6a83db65af, type: 2}

@@ -15,6 +15,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxEnemyCount = 30;
     [SerializeField] private float spwanRange = 60;
     [SerializeField] private Enemy enemyPrefab;
+    [SerializeField] private EXPMarble expMarblePrefab;
+    [SerializeField] private Money moneyPrefab;
     private int currentEnemyIndex = 0;
     private BoxCollider2D gameArea;
     private Player player;
@@ -22,6 +24,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyData[] enemyDatas = new EnemyData[3];
     private List<Enemy> enemies = new List<Enemy>();
     private List<EXPMarble> expMarbles = new List<EXPMarble>();
+    private List<Money> moneys = new List<Money>();
     private IObjectPool<Enemy> pool;
 
     private CompositeDisposable Disposables { get; set; } = new CompositeDisposable();
@@ -90,14 +93,36 @@ public class EnemySpawner : MonoBehaviour
             }).AddTo(Disposables);
     }
 
-    private void AddEXPMarble(EXPMarble expMarble)   
+    private void OnEnemyDead(float exp, Transform enemyTransform)
     {
+        if(Random.Range(0, 50) == 0)
+            AddMoney(enemyTransform);
+
+        AddEXPMarble(exp, enemyTransform);
+    }
+
+    private void AddEXPMarble(float exp, Transform enemyTransform)   
+    {
+        EXPMarble expMarble = Instantiate(expMarblePrefab, enemyTransform.position, enemyTransform.rotation);
+        expMarble.Initialize(player, exp, (expMarble) => RemoveEXPMarble(expMarble));
         expMarbles.Add(expMarble);
     }
 
     private void RemoveEXPMarble(EXPMarble expMarble)
     {
         expMarbles.Remove(expMarble);
+    }
+    
+    private void AddMoney(Transform enemyTransform)
+    {
+        Money money = Instantiate(moneyPrefab, enemyTransform.position, enemyTransform.rotation);
+        money.Initialize(player, 1, (money) => RemoveMoney(money));
+        moneys.Add(money);
+    }
+
+    private void RemoveMoney(Money money)
+    {
+        moneys.Remove(money);
     }
 
     private Enemy SpwanEnemy()
@@ -108,7 +133,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnGetPool(Enemy enemy)
     {
-        enemies.Add(enemy.Initialize(player, enemyDatas[currentEnemyIndex], pool, (exp) => AddEXPMarble(exp), (exp) => RemoveEXPMarble(exp)));
+        enemies.Add(enemy.Initialize(player, enemyDatas[currentEnemyIndex], pool, (exp, enemyTransform) => OnEnemyDead(exp, enemyTransform)));
         enemy.transform.position = GetRandomVector();
         enemy.gameObject.SetActive(true);
     }

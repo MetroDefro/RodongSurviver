@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Enemy
+  m_EditorClassIdentifier: 
+  m_GroupName: Enemy
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 56609ce535c5f384e997e097b26a1e49
+  m_SerializeEntries:
+  - m_GUID: e67e0a0badd0ab74396ac7a650af9f02
+    m_Address: Enemy/ZombieEnemy/Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+  - m_GUID: 11bad4a12d969444d9afa2f4159e6152
+    m_Address: Enemy/EnemySpwaner/Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Enemy
+  - m_GUID: b58215cf105797d4ea076639b967fc41
+    m_Address: EXP/EXPMarble/Prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EXP
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 77fce66ccd717b247a7d92f74d326b13, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e92f1e164706e4a489987e276e33191d, type: 2}
+    - {fileID: 11400000, guid: 7d851b2895db000479b8df8236da6ff3, type: 2}

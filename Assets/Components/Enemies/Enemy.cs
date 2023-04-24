@@ -9,7 +9,6 @@ using UnityEngine.Pool;
 public abstract class Enemy : MonoBehaviour
 {
     #region [ Variables ]
-    [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Animator anim;
     [SerializeField] private CapsuleCollider2D collider2D;
     [SerializeField] protected Rigidbody2D rigidbody;
@@ -23,8 +22,7 @@ public abstract class Enemy : MonoBehaviour
 
     private bool isDead;
 
-    private Action<EXPMarble> onDead;
-    private Action<EXPMarble> onEXPMarbleDestroed;
+    private Action<float, Transform> onDead;
     private IObjectPool<Enemy> pool;
     protected CompositeDisposable disposables = new CompositeDisposable();
     #endregion
@@ -38,13 +36,12 @@ public abstract class Enemy : MonoBehaviour
     #endregion
 
     #region [ Public Method ]
-    public Enemy Initialize(Player player, EnemyData data, IObjectPool<Enemy> pool, Action<EXPMarble> onDead, Action<EXPMarble> onEXPMarbleDestroed)
+    public Enemy Initialize(Player player, EnemyData data, IObjectPool<Enemy> pool, Action<float, Transform> onDead)
     {
         this.data = data;
         this.player = player;
         this.pool = pool;
         this.onDead = onDead;
-        this.onEXPMarbleDestroed = onEXPMarbleDestroed;
 
         data.Speed = UnityEngine.Random.Range(1, 3);
         hp = data.HP;
@@ -122,9 +119,7 @@ public abstract class Enemy : MonoBehaviour
         disposables.Clear();
         collider2D.enabled = false;
 
-        EXPMarble expMarble = Instantiate(expMarblePrefab, transform.position, transform.rotation);
-        expMarble.Initialize(player, data.EXP, onEXPMarbleDestroed);
-        onDead.Invoke(expMarble);
+        onDead.Invoke(data.EXP, transform);
 
         yield return new WaitForSeconds(1f);
 
