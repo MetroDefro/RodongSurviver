@@ -7,24 +7,30 @@ public class PauseCanvasPresenter : PresenterBase
     #region [ Variables ]
     private PauseCanvasView view;
 
-    private Action onPlay;
-    private Action onRetry;
+    public class PauseCanvasActions
+    {
+        public Action OnPlay { get; set; }
+        public Action OnRetry { get; set; }
+        public Action OnHome { get; set; }
+    }
+
+    private PauseCanvasActions actions;
     #endregion
 
     #region [ Public methods ]
-    public void Initialize(Action onPlay, Action onRetry)
+    public void Initialize(PauseCanvasActions actions)
     {
         if (TryGetComponent(out PauseCanvasView view))
         {
             this.view = view;
         }
 
-        this.onPlay = onPlay;
-        this.onRetry = onRetry;
+        this.actions = actions;
 
         gameObject.SetActive(false);
         SubscribePlayButton();
         SubscribeRetryButton();
+        SubscribeHomeButton();
     }
     #endregion
 
@@ -36,7 +42,7 @@ public class PauseCanvasPresenter : PresenterBase
             .Subscribe(_ =>
             {
                 gameObject.SetActive(false);
-                onPlay.Invoke();
+                actions.OnPlay.Invoke();
             }).AddTo(this);
     }
 
@@ -47,7 +53,18 @@ public class PauseCanvasPresenter : PresenterBase
             .Subscribe(_ =>
             {
                 gameObject.SetActive(false);
-                onRetry.Invoke();
+                actions.OnRetry.Invoke();
+            }).AddTo(this);
+    }    
+    
+    private void SubscribeHomeButton()
+    {
+        view.HomeButton.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .Subscribe(_ =>
+            {
+                gameObject.SetActive(false);
+                actions.OnHome.Invoke();
             }).AddTo(this);
     }
     #endregion

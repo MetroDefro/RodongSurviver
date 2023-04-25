@@ -9,10 +9,12 @@ namespace RodongSurviver.Components.DiedPanel
     {
         #region [ Variables ]
         [SerializeField] private Button retryButton;
+        [SerializeField] private Button homeButton;
         #endregion
 
         #region [ Properties ]
         public Button RetryButton => retryButton;
+        public Button HomeButton => homeButton;
         #endregion
 
         #region [ Override Methods ]

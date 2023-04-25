@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
     private BoxCollider2D gameArea;
     private Player player;
 
-    [SerializeField] private EnemyData[] enemyDatas = new EnemyData[3];
+    [SerializeField] private EnemyData[] enemyDatas = new EnemyData[10];
     private List<Enemy> enemies = new List<Enemy>();
     private List<EXPMarble> expMarbles = new List<EXPMarble>();
     private List<Money> moneys = new List<Money>();

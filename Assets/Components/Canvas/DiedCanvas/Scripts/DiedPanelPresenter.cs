@@ -11,6 +11,7 @@ namespace RodongSurviver.Components.DiedPanel
         public class DiedPanelActions 
         {
             public Action RetryEvent { get; set; }
+            public Action HomeEvent { get; set; }
         }
         #region [ Variables ]
         private DiedPanelView view;
@@ -26,12 +27,14 @@ namespace RodongSurviver.Components.DiedPanel
         private void OnEnable()
         {
             RegisterRetryButtonOnClick();
+            RegisterHomeButtonOnClick();
         }
         #endregion
 
         #region [ Public Methods ]
         public void Initialize(DiedPanelActions actions)
         {
+            gameObject.SetActive(false);
             this.actions = actions;
         }
         #endregion
@@ -42,6 +45,13 @@ namespace RodongSurviver.Components.DiedPanel
             .Subscribe(_ =>
             {
                 actions?.RetryEvent.Invoke();
+            }).AddTo(Disposables);
+
+        private void RegisterHomeButtonOnClick()
+            => view?.HomeButton.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                actions?.HomeEvent.Invoke();
             }).AddTo(Disposables);
         #endregion
     }

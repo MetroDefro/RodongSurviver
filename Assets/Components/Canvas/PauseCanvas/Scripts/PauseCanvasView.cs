@@ -8,11 +8,13 @@ public class PauseCanvasView : ViewBase
     #region [ Properties ]
     public Button PlayButton => playButton;
     public Button RetryButton => retryButton;
+    public Button HomeButton => homeButton;
     #endregion
 
     #region [ Variables ]
     [SerializeField] private Button playButton;
     [SerializeField] private Button retryButton;
+    [SerializeField] private Button homeButton;
     #endregion
 
     #region [ Public methods ]

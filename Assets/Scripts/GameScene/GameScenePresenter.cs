@@ -21,6 +21,7 @@ public class GameScenePresenter : PresenterBase
 {
     #region [ Variables ]
     private GameManager gameManager;
+    private SceneManager sceneManager;
 
     private GameSceneView view;
     private GameSceneModel model;
@@ -57,9 +58,10 @@ public class GameScenePresenter : PresenterBase
     #region [ Public methods ]
 
     [Inject]
-    public void Inject(GameManager gameManager)
+    public void Inject(GameManager gameManager, SceneManager sceneManager)
     {
         this.gameManager = gameManager;
+        this.sceneManager = sceneManager;
     }
 
     public override void Dispose()
@@ -76,6 +78,7 @@ public class GameScenePresenter : PresenterBase
         levelUpPresenter.Dispose();
         pauseCanvasPresenter.Dispose();
         topCanvasPresenter.Dispose();
+        diedPanelPresenter.Dispose();
 
         enemySpawner.Dispose();
         foreach (var weapon in model.Weapons)
@@ -124,14 +127,20 @@ public class GameScenePresenter : PresenterBase
         });
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
-        pauseCanvasPresenter.Initialize(() => PlayGame(), () => OnReset());
+        pauseCanvasPresenter.Initialize(new PauseCanvasPresenter.PauseCanvasActions
+        {
+            OnPlay = () => PlayGame(),
+            OnRetry = () => OnReset(),
+            OnHome = () => LoadMainScene()
+        });
         diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
         {
             RetryEvent = () =>
             {
                 diedPanelPresenter.gameObject.SetActive(false);
                 OnReset();
-            }
+            },
+            HomeEvent = () => LoadMainScene()
         });
         topCanvasPresenter.Initialize(() => 
         { 
@@ -156,7 +165,14 @@ public class GameScenePresenter : PresenterBase
         levelUpPresenter = Instantiate(levelUpPresenter);
         pauseCanvasPresenter = Instantiate(pauseCanvasPresenter);
         topCanvasPresenter = Instantiate(topCanvasPresenter);
+        diedPanelPresenter = Instantiate(diedPanelPresenter);
         enemySpawner = Instantiate(enemySpawner);
+    }
+
+    private void LoadMainScene()
+    {
+        sceneManager.LoadSceneAsync(SceneType.Main);
+        Dispose();
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)
@@ -294,10 +310,7 @@ public class GameScenePresenter : PresenterBase
 
                 if (model.SpanSeconds % 60 == 0)
                 {
-                    if(model.SpanSeconds / 60 >= 3)
-                        enemySpawner.CurrentEnemyIndex = 2;
-                    else
-                        enemySpawner.CurrentEnemyIndex = (model.SpanSeconds / 60);
+                    enemySpawner.CurrentEnemyIndex = (model.SpanSeconds / 60);
                 }
  
             })
