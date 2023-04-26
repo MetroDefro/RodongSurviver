@@ -13,4 +13,6 @@ public enum ItemType
     Dumbbell = 103,
     Shoes = 104,
     Rice = 105,
+    Dice = 106,
+    Baloon = 107,
 }

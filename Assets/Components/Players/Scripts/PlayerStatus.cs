@@ -1,152 +1,153 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class PlayerStatus
 {
-    public int Level => level;
-    public float EXP => exp;
-    public float NecessaryEXP => necessaryEXP;
-    public int Money => money;
-    public float HP => hp;
-    public float MaxHP => maxHP;
-    public float Speed => speed;
-    public float Magnetism => magnetism;
-    public float Damage => damage;
-    public float WeaponSpeed => weaponSpeed;
-    public float WeaponTerm => weaponTerm;
-    public float WeaponSize => weaponSize;
-    public int WeaponCount => weaponCount;
+    public IReadOnlyReactiveProperty<int> Level => level;
+    public IReadOnlyReactiveProperty<float> EXP => exp;
+    public IReadOnlyReactiveProperty<float> NecessaryEXP => necessaryEXP;
+    public IReadOnlyReactiveProperty<int> Money => money;
+    public IReadOnlyReactiveProperty<float> HP => hp;
+    public IReadOnlyReactiveProperty<float> MaxHP => maxHP;
+    public IReadOnlyReactiveProperty<float> Speed => speed;
+    public IReadOnlyReactiveProperty<float> Magnetism => magnetism;
+    public IReadOnlyReactiveProperty<float> Damage => damage;
+    public IReadOnlyReactiveProperty<float> WeaponSpeed => weaponSpeed;
+    public IReadOnlyReactiveProperty<float> WeaponTerm => weaponTerm;
+    public IReadOnlyReactiveProperty<float> WeaponSize => weaponSize;
+    public IReadOnlyReactiveProperty<int> WeaponCount => weaponCount;
 
-    private int level;
-    private float exp;
-    private float necessaryEXP;
-    private int money;
-    private float hp;
-    private float maxHP;
-    private float speed;
-    private float magnetism;
-    private float damage;
-    private float weaponSpeed;
-    private float weaponTerm;
-    private float weaponSize;
-    private int weaponCount;
+    private ReactiveProperty<int> level = new ReactiveProperty<int>();
+    private ReactiveProperty<float> exp = new ReactiveProperty<float>();
+    private ReactiveProperty<float> necessaryEXP = new ReactiveProperty<float>();
+    private ReactiveProperty<int> money = new ReactiveProperty<int>();
+    private ReactiveProperty<float> hp = new ReactiveProperty<float>();
+    private ReactiveProperty<float> maxHP = new ReactiveProperty<float>();
+    private ReactiveProperty<float> speed = new ReactiveProperty<float>();
+    private ReactiveProperty<float> magnetism = new ReactiveProperty<float>();
+    private ReactiveProperty<float> damage = new ReactiveProperty<float>();
+    private ReactiveProperty<float> weaponSpeed = new ReactiveProperty<float>();
+    private ReactiveProperty<float> weaponTerm = new ReactiveProperty<float>();
+    private ReactiveProperty<float> weaponSize = new ReactiveProperty<float>();
+    private ReactiveProperty<int> weaponCount= new ReactiveProperty<int>();
 
     public PlayerStatus(float initHP, float speed, float magnetism)
     {
-        this.level = 1;
-        this.exp = 0;
-        this.necessaryEXP = 2;
-        this.money = 0;
-        this.hp = initHP;
-        this.maxHP = initHP;
-        this.speed = speed;
-        this.magnetism = magnetism;
-        this.damage = 1;
-        this.weaponSpeed = 1;
-        this.weaponTerm = 1;
-        this.weaponSize = 1;
-        this.weaponCount = 0;
+        this.level.Value = 1;
+        this.exp.Value = 0;
+        this.necessaryEXP.Value = 2;
+        this.money.Value = 0;
+        this.hp.Value = initHP;
+        this.maxHP.Value = initHP;
+        this.speed.Value = speed;
+        this.magnetism.Value = magnetism;
+        this.damage.Value = 1;
+        this.weaponSpeed.Value = 1;
+        this.weaponTerm.Value = 1;
+        this.weaponSize.Value = 1;
+        this.weaponCount.Value = 0;
     }
 
     public int AddLevel()
     {
-        ++level;
+        ++level.Value;
         
         // need fix
-        exp -= necessaryEXP;
-        if (level <= 10)
-            necessaryEXP *= 1.2f;
-        else if (level <= 20)
-            necessaryEXP *= 1.1f;
-        else if (level <= 30)
-            necessaryEXP *= 1.05f;
+        exp.Value -= necessaryEXP.Value;
+        if (level.Value <= 10)
+            necessaryEXP.Value *= 1.2f;
+        else if (level.Value <= 20)
+            necessaryEXP.Value *= 1.1f;
+        else if (level.Value <= 30)
+            necessaryEXP.Value *= 1.05f;
         else
-            necessaryEXP *= 1.025f;
+            necessaryEXP.Value *= 1.025f;
 
-        return level;
+        return level.Value;
     }
 
     public float AddEXP(float value)
     {
-        exp += value;
+        exp.Value += value;
 
-        return exp;
+        return exp.Value;
     }    
     
     public int AddMoney(int value)
     {
-        money += value;
+        money.Value += value;
 
-        return money;
+        return money.Value;
     }
 
     public float PlusHP(float value)
     {
-        hp += value;
-        if(hp > maxHP)
-            hp = maxHP;
+        hp.Value += value;
+        if(hp.Value > maxHP.Value)
+            hp.Value = maxHP.Value;
 
-        return hp;
+        return hp.Value;
     }
 
     public float MinusHP(float value)
     {
-        hp -= value;
+        hp.Value -= value;
 
-        return hp;
+        return hp.Value;
     }
 
     public float AddMaxpHP(float value)
     {
-        float newMaxHP = maxHP * value;
-        float hpDifference = newMaxHP - maxHP;
+        float newMaxHP = maxHP.Value * value;
+        float hpDifference = newMaxHP - maxHP.Value;
 
-        maxHP = newMaxHP;
+        maxHP.Value = newMaxHP;
         PlusHP(hpDifference);
 
-        return maxHP;
+        return maxHP.Value;
     }
 
     public float AddSpeed(float value)
     {
-        speed *= value;
-        return speed;
+        speed.Value *= value;
+        return speed.Value;
     }
 
     public float AddMagnetism(float value)
     {
-        magnetism *= value;
-        return magnetism;
+        magnetism.Value *= value;
+        return magnetism.Value;
     }
 
     public float AddDamage(float value)
     {
-        damage *= value;
-        return damage;
+        damage.Value *= value;
+        return damage.Value;
     }
 
     public float AddWeaponSpeed(float value)
     {
-        weaponSpeed *= value;
-        return weaponSpeed;
+        weaponSpeed.Value *= value;
+        return weaponSpeed.Value;
     }
 
     public float AddWeaponTerm(float value)
     {
-        weaponTerm *= value;
-        return weaponTerm;
+        weaponTerm.Value *= value;
+        return weaponTerm.Value;
     }
 
     public float AddWeaponSize(float value)
     {
-        weaponSize *= value;
-        return weaponSize;
+        weaponSize.Value *= value;
+        return weaponSize.Value;
     }
 
     public float AddWeaponCount()
     {
-        ++ weaponCount;
-        return weaponCount;
+        ++ weaponCount.Value;
+        return weaponCount.Value;
     }
 }

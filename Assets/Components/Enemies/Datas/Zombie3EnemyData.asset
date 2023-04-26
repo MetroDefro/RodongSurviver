@@ -16,4 +16,4 @@ MonoBehaviour:
   damage: 2
   hp: 10
   exp: 1
-  animatorController: {fileID: 22100000, guid: b2354721494dca14e9340c32ef3f4169, type: 2}
+  animatorController: {fileID: 22100000, guid: d19e44bf7e4dfd344b762e425cb59ea8, type: 2}

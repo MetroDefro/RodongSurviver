@@ -8,12 +8,12 @@ public class SwordWeapon : Weapon
 {
     protected override float CalculateTerm()
     {
-        return base.CalculateTerm() - (level - 1) * initData.Term * player.Status.WeaponTerm * 0.2f;
+        return base.CalculateTerm() - (level - 1) * initData.Term * player.Status.WeaponTerm.Value * 0.2f;
     }
 
     protected override float CalculateSize()
     {
-        return base.CalculateSize() + (level - 1) * initData.Size * player.Status.WeaponSize * 0.1f;
+        return base.CalculateSize() + (level - 1) * initData.Size * player.Status.WeaponSize.Value * 0.1f;
     }
 
     protected override void Movement()

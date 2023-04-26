@@ -63,35 +63,24 @@ public class Player : MonoBehaviour
     public void Hit(float damge)
     {
         status.MinusHP(damge);
-
-        SetHPbar(Mathf.InverseLerp(0, status.MaxHP, status.HP));
-
-        if (status.HP <= 0)
-        {
-            anim.SetBool(isDeadId, true);
-            disposables.Clear();
-            actions.OnDied?.Invoke();
-        }
     }
 
     public void AddEXP(float addedEXP)
     {
         status.AddEXP(addedEXP);
 
-        if (status.EXP >= status.NecessaryEXP)
+        if (status.EXP.Value >= status.NecessaryEXP.Value)
         {
             status.AddLevel();
-            actions.OnLevelUp?.Invoke(status.Level);
+            actions.OnLevelUp?.Invoke(status.Level.Value);
         }
 
-        actions.OnGetEXP?.Invoke(status.NecessaryEXP, status.EXP);
+        actions.OnGetEXP?.Invoke(status.NecessaryEXP.Value, status.EXP.Value);
     }    
     
     public void AddMoney(int AddedMoney)
     {
         status.AddMoney(AddedMoney);
-
-        actions.OnGetMoney?.Invoke(status.Money);
     }
 
     public void Dispose()
@@ -111,6 +100,8 @@ public class Player : MonoBehaviour
         anim.speed = 1;
         SubscribeFixedUpdate();
         SubscribeInputVector2();
+        SubscribeOnHPValueChange();
+        SubscribeOnMoneyValueChange();
     }
 
     #endregion
@@ -121,7 +112,7 @@ public class Player : MonoBehaviour
         Observable.EveryFixedUpdate()
             .Subscribe(_ =>
             {
-                Vector2 direction = inputVector2.Value * status.Speed * Time.deltaTime;
+                Vector2 direction = inputVector2.Value * status.Speed.Value * Time.deltaTime;
                 rigidbody.MovePosition(rigidbody.position + direction);
             }).AddTo(disposables);
     }
@@ -134,6 +125,29 @@ public class Player : MonoBehaviour
                 spriteRenderer.flipX = value.x > 0;
 
             anim.SetFloat(speedId, value.magnitude);
+        }).AddTo(disposables);
+    }
+
+    private void SubscribeOnHPValueChange()
+    {
+        status.HP.Subscribe(vlaue => 
+        {
+            SetHPbar(Mathf.InverseLerp(0, status.MaxHP.Value, vlaue));
+
+            if (vlaue <= 0)
+            {
+                anim.SetBool(isDeadId, true);
+                disposables.Clear();
+                actions.OnDied?.Invoke();
+            }
+        }).AddTo(disposables);
+    }
+
+    private void SubscribeOnMoneyValueChange()
+    {
+        status.Money.Subscribe(vlaue =>
+        {
+            actions.OnGetMoney?.Invoke(vlaue);
         }).AddTo(disposables);
     }
 

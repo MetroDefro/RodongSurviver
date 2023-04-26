@@ -37,7 +37,7 @@ public class GameScenePresenter : PresenterBase
     private BoxCollider2D gameArea;
 
     [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
-    [SerializeField] private ItemData[] allBuffDatas = new ItemData[2];
+    [SerializeField] private ItemData[] allBuffDatas = new ItemData[8];
 
     #endregion
 
@@ -113,18 +113,6 @@ public class GameScenePresenter : PresenterBase
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        player.Initialize(gameManager.playerData, new Player.PlayerActions()
-        {
-            OnLevelUp = (level) => OnLevelUp(level),
-            OnGetEXP = (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp),
-            OnGetMoney = (money) => OnMoney(money),
-            OnDied = () =>
-            {
-                diedPanelPresenter.gameObject.SetActive(true);
-                PauseGame();
-            }
-
-        });
         slotCanvasPresenter.Initialize();
         levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
         pauseCanvasPresenter.Initialize(new PauseCanvasPresenter.PauseCanvasActions
@@ -146,6 +134,18 @@ public class GameScenePresenter : PresenterBase
         { 
             pauseCanvasPresenter.gameObject.SetActive(true); 
             PauseGame(); 
+        });
+        player.Initialize(gameManager.playerData, new Player.PlayerActions()
+        {
+            OnLevelUp = (level) => OnLevelUp(level),
+            OnGetEXP = (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp),
+            OnGetMoney = (money) => OnMoney(money),
+            OnDied = () =>
+            {
+                diedPanelPresenter.gameObject.SetActive(true);
+                PauseGame();
+            }
+
         });
         enemySpawner.Initialize(player, gameArea);
 
@@ -244,25 +244,16 @@ public class GameScenePresenter : PresenterBase
 
     private ItemData GetItemData()
     {
-        // If all are max level, instead, money & HP will come out
-        if (model.Weapons.Count >= 6 && model.Buffs.Count >= 6)
-        {
-            int minLevel = model.MaxLevel;
-            foreach (var w in model.Weapons)
-            {
-                if (minLevel > w.weapon.Level)
-                    minLevel = w.weapon.Level;
-            }
-            foreach (var b in model.Buffs)
-            {
-                if (minLevel > b.buff.Level)
-                    minLevel = b.buff.Level;
-            }
+        bool isWeaponSlotFull = model.Weapons.Count >= 6;
+        bool isBuffSlotFull = model.Buffs.Count >= 6;
 
-            if (minLevel == model.MaxLevel)
+        // If all are max level, instead, money & HP will come out
+        if (isWeaponSlotFull && isBuffSlotFull)
+        {
+            if (GetIsWeaponMaxLevel() && GetIsBuffnMaxLevel())
                 return model.Weapons[0].weapon.Data; // must be corrected
         }
-
+        
         ItemType type = GetRandomItemType();
         while (GetIsItemLevelMax(GetIsItemFromType(type)))
         {
@@ -273,13 +264,33 @@ public class GameScenePresenter : PresenterBase
             return allWeaponPrefabs[(int)type].Data;
         else
             return allBuffDatas[(int)type - 100];
+
+
+        ItemType GetRandomItemType()
+        {
+            ItemType type;
+            bool isWeapon = UnityEngine.Random.Range(0, 2) == 0;
+
+            if (isWeaponSlotFull && GetIsWeaponMaxLevel())
+                isWeapon = false;
+            else if (isBuffSlotFull && GetIsBuffnMaxLevel())
+                isWeapon = true;
+
+            if (isWeapon)
+                type = isWeaponSlotFull ? GetRandomItemTypeInWeaponInSlot() : GetRandomItemTypeInWeapon();
+            else
+                type = isBuffSlotFull ? GetRandomItemTypeInBuffInSlot() : GetRandomItemTypeInBuff();
+
+            return type;
+        }
     }
 
-    private ItemType GetRandomItemType()
-    {
-        Array values = Enum.GetValues(typeof(ItemType));
-        return (ItemType)values.GetValue(new System.Random().Next(0, values.Length));
-    }
+    private bool GetIsWeaponMaxLevel() => model.Weapons.Select(w => w.weapon.Level).Min() == model.MaxLevel;
+    private bool GetIsBuffnMaxLevel() => model.Buffs.Select(w => w.buff.Level).Min() == model.MaxLevel;
+    private ItemType GetRandomItemTypeInWeapon() => (ItemType)UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
+    private ItemType GetRandomItemTypeInBuff() => (ItemType)(UnityEngine.Random.Range(0, allBuffDatas.Length) + 100);
+    private ItemType GetRandomItemTypeInWeaponInSlot() => model.Weapons[UnityEngine.Random.Range(0, model.Weapons.Count)].type;
+    private ItemType GetRandomItemTypeInBuffInSlot() => model.Buffs[UnityEngine.Random.Range(0, model.Buffs.Count)].type;
 
     private bool GetIsItemLevelMax(IItem item)
     {

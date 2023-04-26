@@ -46,6 +46,14 @@ public class Buff : IItem
                 player.Status.AddMaxpHP(1.2f);
                 break;
 
+            case ItemType.Dice:
+                player.Status.AddWeaponCount();
+                break;
+
+            case ItemType.Baloon:
+                player.Status.AddWeaponSize(1.1f);
+                break;
+
             default:
                 break;
         }

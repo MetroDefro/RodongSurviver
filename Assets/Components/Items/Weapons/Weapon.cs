@@ -43,12 +43,10 @@ public abstract class Weapon : MonoBehaviour, IItem
         level = 1;
         this.player = player;
 
-        InitObject(initData.Count);
+        InitObjects();
 
-        float size = CalculateSize();
-        foreach (GameObject weapon in weaponObjects)
-            weapon.transform.localScale = new Vector3(size, size, size);
-
+        SubscribeOnCountValueChange();
+        SubscribeOnSizeValueChange();
         Movement();
 
         return this;
@@ -58,15 +56,9 @@ public abstract class Weapon : MonoBehaviour, IItem
     {
         level++;
 
-        if(weaponObjects.Count < CalculateCount())
-        {
-            int count = CalculateCount() - weaponObjects.Count;
-            InitObject(count);
-        }
+        InitObjects();
 
-        float size = CalculateSize();
-        foreach (GameObject weapon in weaponObjects)
-            weapon.transform.localScale = new Vector3(size, size, size);
+        SetSize();
     }
 
     public void Pause()
@@ -94,18 +86,39 @@ public abstract class Weapon : MonoBehaviour, IItem
             }).AddTo(this);
     }
 
-    private void InitObject(int count)
+    private void InitObjects()
     {
-        float size = CalculateSize();
-        for (int i = 0; i < count; i++)
+        if (weaponObjects.Count < CalculateCount())
         {
-            GameObject weapon = Instantiate(initData.WeaponObject, transform);
-            weaponObjects.Add(weapon);
-            SubscribeOnCollisionStay2D(weapon);
-            weapon.transform.localScale = new Vector3(size, size, size);
+            int count = CalculateCount() - weaponObjects.Count;
+            float size = CalculateSize();
+            for (int i = 0; i < count; i++)
+            {
+                GameObject weapon = Instantiate(initData.WeaponObject, transform);
+                weaponObjects.Add(weapon);
+                SubscribeOnCollisionStay2D(weapon);
+                weapon.transform.localScale = new Vector3(size, size, size);
+            }
         }
 
         SetPosition();
+    }
+
+    private void SetSize()
+    {
+        float size = CalculateSize();
+        foreach (GameObject weapon in weaponObjects)
+            weapon.transform.localScale = new Vector3(size, size, size);
+    }
+
+    private void SubscribeOnCountValueChange()
+    {
+        player.Status.WeaponCount.Subscribe(_ => InitObjects()).AddTo(this);
+    }
+
+    private void SubscribeOnSizeValueChange()
+    {
+        player.Status.WeaponCount.Subscribe(_ => SetSize()).AddTo(this);
     }
     #endregion
 
@@ -116,11 +129,11 @@ public abstract class Weapon : MonoBehaviour, IItem
 
     protected virtual float CalculateDamage()
     {
-        return initData.Damage * Level * player.Status.Damage;
+        return initData.Damage * Level * player.Status.Damage.Value;
     }
     protected virtual float CalculateSpeed()
     {
-        return initData.Speed * Level * player.Status.WeaponSpeed;
+        return initData.Speed * Level * player.Status.WeaponSpeed.Value;
     }
     protected virtual float CalculateTerm()
     {
@@ -136,7 +149,7 @@ public abstract class Weapon : MonoBehaviour, IItem
     }
     protected virtual int CalculateCount()
     {
-        return initData.Count + player.Status.WeaponCount;
+        return initData.Count + player.Status.WeaponCount.Value;
     }
     #endregion
 }
