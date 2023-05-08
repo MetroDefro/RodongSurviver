@@ -15,4 +15,7 @@ public enum ItemType
     Rice = 105,
     Dice = 106,
     Baloon = 107,
+
+    Money = 200,
+    Potion = 201,
 }

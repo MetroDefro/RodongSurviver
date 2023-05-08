@@ -89,17 +89,9 @@ public class Player : MonoBehaviour
         anim.SetBool(isDeadId, false);
     }
 
-    public void Pause()
-    {
-        anim.speed = 0;
-        disposables.Clear();
-    }
-
     public void Play()
     {
-        anim.speed = 1;
         SubscribeFixedUpdate();
-        SubscribeInputVector2();
         SubscribeOnHPValueChange();
         SubscribeOnMoneyValueChange();
     }
@@ -114,18 +106,12 @@ public class Player : MonoBehaviour
             {
                 Vector2 direction = inputVector2.Value * status.Speed.Value * Time.deltaTime;
                 rigidbody.MovePosition(rigidbody.position + direction);
+
+                if (inputVector2.Value.x != 0)
+                    spriteRenderer.flipX = inputVector2.Value.x > 0;
+
+                anim.SetFloat(speedId, inputVector2.Value.magnitude);
             }).AddTo(disposables);
-    }
-
-    private void SubscribeInputVector2()
-    {
-        inputVector2.Subscribe(value =>
-        {
-            if (value.x != 0)
-                spriteRenderer.flipX = value.x > 0;
-
-            anim.SetFloat(speedId, value.magnitude);
-        }).AddTo(disposables);
     }
 
     private void SubscribeOnHPValueChange()

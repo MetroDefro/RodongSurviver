@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
@@ -47,6 +44,6 @@ public class MainScenePresenter : PresenterBase
 
     private void SetPlayerData(PlayerData playerData)
     {
-        gameManager.playerData = playerData;
+        gameManager.PlayerData = playerData;
     }
 }

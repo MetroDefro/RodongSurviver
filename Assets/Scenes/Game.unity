@@ -65565,6 +65565,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 99df5a59e745fcd4c897e6027dd23a15, type: 2}
   - {fileID: 11400000, guid: cbc29e297c6626643b2916c8f933eb75, type: 2}
   - {fileID: 11400000, guid: d31af4a3dbd6c14429d7a1eda5c12cdc, type: 2}
+  potionData: {fileID: 11400000, guid: 065fe6ffbb013c44793e56a7a0805422, type: 2}
+  moneyData: {fileID: 11400000, guid: ea030dfaa4483644b9968b65b00a2d31, type: 2}
 --- !u!114 &1980667772
 MonoBehaviour:
   m_ObjectHideFlags: 0

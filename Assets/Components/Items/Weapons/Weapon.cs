@@ -61,15 +61,6 @@ public abstract class Weapon : MonoBehaviour, IItem
         SetSize();
     }
 
-    public void Pause()
-    {
-        disposables.Clear();
-    }
-
-    public void Play()
-    {
-        Movement();
-    }
     #endregion
 
     #region [ Private methods ]

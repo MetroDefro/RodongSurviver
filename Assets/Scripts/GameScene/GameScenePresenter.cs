@@ -14,7 +14,10 @@ public class GameSceneModel
     public List<(ItemType type, Buff buff)> Buffs { get; set; } = new List<(ItemType type, Buff buff)>();
 
     public int SpanSeconds = 0;
-    public int MaxLevel = 6;
+    public readonly int MaxLevel = 6;
+    public readonly int MaxCount = 6;
+    public readonly int PotionRecoveryAmount = 5;
+    public readonly int MoneyAmount = 1;
 }
 
 public class GameScenePresenter : PresenterBase
@@ -38,6 +41,8 @@ public class GameScenePresenter : PresenterBase
 
     [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
     [SerializeField] private ItemData[] allBuffDatas = new ItemData[8];
+    [SerializeField] private ItemData potionData;
+    [SerializeField] private ItemData moneyData;
 
     #endregion
 
@@ -87,6 +92,8 @@ public class GameScenePresenter : PresenterBase
         model.Weapons.Clear();
         model.Buffs.Clear();
         Initialize();
+
+        PlayGame();
     }
 
     public void SetupDiedAction(Action onDied) { }
@@ -108,34 +115,14 @@ public class GameScenePresenter : PresenterBase
 
         model = new GameSceneModel();
 
+        InitializeUI();
+
         gameArea = player.GameArea;
 
         foreach (var bg in backGroundMovers)
             bg.Initialize(player, gameArea);
 
-        slotCanvasPresenter.Initialize();
-        levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
-        pauseCanvasPresenter.Initialize(new PauseCanvasPresenter.PauseCanvasActions
-        {
-            OnPlay = () => PlayGame(),
-            OnRetry = () => OnReset(),
-            OnHome = () => LoadMainScene()
-        });
-        diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
-        {
-            RetryEvent = () =>
-            {
-                diedPanelPresenter.gameObject.SetActive(false);
-                OnReset();
-            },
-            HomeEvent = () => LoadMainScene()
-        });
-        topCanvasPresenter.Initialize(() => 
-        { 
-            pauseCanvasPresenter.gameObject.SetActive(true); 
-            PauseGame(); 
-        });
-        player.Initialize(gameManager.playerData, new Player.PlayerActions()
+        player.Initialize(gameManager.PlayerData, new Player.PlayerActions()
         {
             OnLevelUp = (level) => OnLevelUp(level),
             OnGetEXP = (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp),
@@ -156,6 +143,32 @@ public class GameScenePresenter : PresenterBase
         model.SpanSeconds = 0;
 
         SubscribeTimer();
+    }
+
+    private void InitializeUI()
+    {
+        slotCanvasPresenter.Initialize();
+        levelUpPresenter.Initialize((weaponType) => OnItemLevelUp(weaponType));
+        pauseCanvasPresenter.Initialize(new PauseCanvasPresenter.PauseCanvasActions
+        {
+            OnPlay = () => PlayGame(),
+            OnRetry = () => OnReset(),
+            OnHome = () => LoadMainScene()
+        });
+        diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
+        {
+            RetryEvent = () =>
+            {
+                diedPanelPresenter.gameObject.SetActive(false);
+                OnReset();
+            },
+            HomeEvent = () => LoadMainScene()
+        });
+        topCanvasPresenter.Initialize(() =>
+        {
+            pauseCanvasPresenter.gameObject.SetActive(true);
+            PauseGame();
+        });
     }
 
     private void Load()
@@ -194,49 +207,53 @@ public class GameScenePresenter : PresenterBase
 
     private void PauseGame()
     {
-        player.Pause();
-        Disposables.Clear();
-        enemySpawner.Pause();
-        model.Weapons.ForEach((weapon) => weapon.weapon.Pause());
+        gameManager.PauseGame();
     }
 
     private void PlayGame()
     {
-        SubscribeTimer();
-        player.Play();
-        enemySpawner.Play();
-        model.Weapons.ForEach((weapon) => weapon.weapon.Play());
+        gameManager.PlayGame();
     }
 
     private void OnItemLevelUp(ItemType type)
     {
-        IItem item = GetIsItemFromType(type);
-
-        if ((int)type < 100)
+        if((int)type < 200)
         {
-            if (item == null)
+            IItem item = GetIsItemFromType(type);
+
+            if ((int)type < 100)
             {
-                item = Instantiate(allWeaponPrefabs[(int)type]).Initialize(player);
-                model.Weapons.Add((item.Data.Type, (Weapon)item));
+                if (item == null)
+                {
+                    item = Instantiate(allWeaponPrefabs[(int)type]).Initialize(player);
+                    model.Weapons.Add((item.Data.Type, (Weapon)item));
+                }
+                else
+                    item.OnLevelUp();
+
+                int index = model.Weapons.IndexOf((item.Data.Type, (Weapon)item));
+                slotCanvasPresenter.SetWeaponSlot(index, item.Level, item.Data.Sprite);
             }
             else
-                item.OnLevelUp();
+            {
+                if (item == null)
+                {
+                    item = new Buff(player, allBuffDatas[(int)type - 100]);
+                    model.Buffs.Add((item.Data.Type, (Buff)item));
+                }
+                else
+                    item.OnLevelUp();
 
-            int index = model.Weapons.IndexOf((item.Data.Type, (Weapon)item));
-            slotCanvasPresenter.SetWeaponSlot(index, item.Level, item.Data.Sprite);
+                int index = model.Buffs.IndexOf((item.Data.Type, (Buff)item));
+                slotCanvasPresenter.SetBuffSlot(index, item.Level, item.Data.Sprite);
+            }
         }
         else
         {
-            if (item == null)
-            {
-                item = new Buff(player, allBuffDatas[(int)type - 100]);
-                model.Buffs.Add((item.Data.Type, (Buff)item));
-            }
-            else
-                item.OnLevelUp();
-
-            int index = model.Buffs.IndexOf((item.Data.Type, (Buff)item));
-            slotCanvasPresenter.SetBuffSlot(index, item.Level, item.Data.Sprite);
+            if (type == ItemType.Potion)
+                player.Status.PlusHP(model.PotionRecoveryAmount);
+            else if (type == ItemType.Money)
+                player.Status.AddMoney(model.MoneyAmount);
         }
 
         PlayGame();
@@ -244,14 +261,17 @@ public class GameScenePresenter : PresenterBase
 
     private ItemData GetItemData()
     {
-        bool isWeaponSlotFull = model.Weapons.Count >= 6;
-        bool isBuffSlotFull = model.Buffs.Count >= 6;
+        bool isWeaponSlotFull = model.Weapons.Count >= model.MaxCount;
+        bool isBuffSlotFull = model.Buffs.Count >= model.MaxCount;
 
-        // If all are max level, instead, money & HP will come out
         if (isWeaponSlotFull && isBuffSlotFull)
         {
             if (GetIsWeaponMaxLevel() && GetIsBuffnMaxLevel())
-                return model.Weapons[0].weapon.Data; // must be corrected
+            {
+                bool isPotion = UnityEngine.Random.Range(0, 2) == 0;
+
+                return isPotion ? potionData : moneyData;
+            }
         }
         
         ItemType type = GetRandomItemType();
@@ -260,10 +280,9 @@ public class GameScenePresenter : PresenterBase
             type = GetRandomItemType();
         }
 
-        if ((int)type < 100)
-            return allWeaponPrefabs[(int)type].Data;
-        else
-            return allBuffDatas[(int)type - 100];
+        bool isWeapon = (int)type < 100;
+
+        return isWeapon ? allWeaponPrefabs[(int)type].Data : allBuffDatas[(int)type - 100];
 
 
         ItemType GetRandomItemType()

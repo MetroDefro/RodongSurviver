@@ -72,17 +72,8 @@ public abstract class Enemy : MonoBehaviour
         pool.Release(this);
     }
 
-    public void Pause()
-    {
-        anim.speed = 0;
-        rigidbody.Sleep();
-        disposables.Clear();
-    }
-
     public void Play()
     {
-        anim.speed = 1;
-        rigidbody.WakeUp();
         Movement();
         SubscribeOnCollisionStay2D();
     }
