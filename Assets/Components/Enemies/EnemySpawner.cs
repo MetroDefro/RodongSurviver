@@ -37,12 +37,38 @@ public class EnemySpawner : MonoBehaviour
         SubscribeUpdate();
     }
 
-    public void Dispose()
+    public void Reset()
     {
         Disposables.Clear();
 
+        foreach (var enemy in enemies.ToArray())
+            enemy.Reset();
+
+        foreach (var expMarble in expMarbles.ToArray())
+        {
+            expMarbles.Remove(expMarble);
+            expMarble.Dispose();
+        }
+
+        foreach (var money in moneys.ToArray())
+        {
+            moneys.Remove(money);
+            money.Dispose();
+        }
+
+        pool.Clear();
+        enemies.Clear();
+    }
+
+    public void Dispose()
+    {
+        Disposables.Dispose();
+
         foreach(var enemy in enemies.ToArray())
-            enemy.Dispose();
+        {
+            if(enemy != null)
+                enemy.Dispose();
+        }
 
         foreach (var expMarble in expMarbles.ToArray())
         {

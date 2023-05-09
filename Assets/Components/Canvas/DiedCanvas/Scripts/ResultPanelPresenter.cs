@@ -5,8 +5,8 @@ using System;
 
 namespace RodongSurviver.Components.DiedPanel
 {
-    [RequireComponent(typeof(DiedPanelView))]
-    public class DiedPanelPresenter : PresenterBase
+    [RequireComponent(typeof(ResultPanelView))]
+    public class ResultPanelPresenter : PresenterBase
     {
         public class DiedPanelActions 
         {
@@ -14,14 +14,14 @@ namespace RodongSurviver.Components.DiedPanel
             public Action HomeEvent { get; set; }
         }
         #region [ Variables ]
-        private DiedPanelView view;
+        private ResultPanelView view;
         private DiedPanelActions actions;
         #endregion
 
         #region [ MonoBehaviour Messages ]
         private void Awake()
         {
-            view = GetComponent<DiedPanelView>();
+            view = GetComponent<ResultPanelView>();
         }
 
         private void OnEnable()
@@ -36,6 +36,19 @@ namespace RodongSurviver.Components.DiedPanel
         {
             gameObject.SetActive(false);
             this.actions = actions;
+        }
+
+        public void Show(bool isGameClear)
+        {
+            view.GameClaerText.gameObject.SetActive(isGameClear);
+            view.GameOverText.gameObject.SetActive(!isGameClear);
+
+            view.ShowImmediate();
+        }
+
+        public void Hide()
+        {
+            view.HideImmediate();
         }
         #endregion
 

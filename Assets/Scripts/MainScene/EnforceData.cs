@@ -6,6 +6,5 @@ using UnityEngine;
 public class EnforceData
 {
     public int Money;
-    public int[] WeaponGrade;
-    public int[] BuffGrade;
+    public int[] BuffGrades;
 }

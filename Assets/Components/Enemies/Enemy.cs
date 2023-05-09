@@ -66,9 +66,15 @@ public abstract class Enemy : MonoBehaviour
             StartCoroutine(Hitting());
     }
 
-    public void Dispose()
+    public void Reset()
     {
         disposables.Clear();
+        pool.Release(this);
+    }
+
+    public void Dispose()
+    {
+        disposables.Dispose();
         pool.Release(this);
     }
 

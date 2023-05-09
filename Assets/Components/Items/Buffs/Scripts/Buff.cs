@@ -47,7 +47,7 @@ public class Buff : IItem
                 break;
 
             case ItemType.Dice:
-                player.Status.AddWeaponCount();
+                player.Status.AddWeaponCount(1);
                 break;
 
             case ItemType.Baloon:

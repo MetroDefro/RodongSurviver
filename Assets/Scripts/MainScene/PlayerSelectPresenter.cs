@@ -11,8 +11,9 @@ public class PlayerSelectPresenter : MonoBehaviour
 
     private Action<PlayerData> setPlayerData;
     private Action onPlay;
+    private Action onShop;
 
-    public void Initialize(Action onPlay, Action<PlayerData> setPlayerData)
+    public void Initialize(Action onPlay, Action onShop, Action<PlayerData> setPlayerData)
     {
         if(TryGetComponent(out PlayerSelectView view))
         {
@@ -20,11 +21,13 @@ public class PlayerSelectPresenter : MonoBehaviour
         }
 
         this.onPlay = onPlay;
+        this.onShop = onShop;
         this.setPlayerData = setPlayerData;
 
         setPlayerData?.Invoke(view.PlayeButtonSets[0].Data);
 
         SubscribePlayButton();
+        SubscribeShopButton();
         SubscribePlayerButtons();
     }
 
@@ -34,6 +37,16 @@ public class PlayerSelectPresenter : MonoBehaviour
             .Subscribe(_ =>
             {
                 onPlay?.Invoke();
+            })
+            .AddTo(this);
+    }
+
+    private void SubscribeShopButton()
+    {
+        view.ShopButton.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                onShop?.Invoke();
             })
             .AddTo(this);
     }
@@ -52,5 +65,5 @@ public class PlayerSelectPresenter : MonoBehaviour
                 })
                 .AddTo(this);
         }
-    }
+    }    
 }

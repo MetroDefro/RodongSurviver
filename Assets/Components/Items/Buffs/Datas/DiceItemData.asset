@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 106
   sprite: {fileID: 21300000, guid: 8cd8dc4e1aa345d40887e9ee04d0f26f, type: 3}
   explation: Weapon count increase.
+  prices: 00040000

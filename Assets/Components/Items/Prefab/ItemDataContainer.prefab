@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2740852258859581313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1866866092435572007}
+  - component: {fileID: 506667366901495518}
+  m_Layer: 0
+  m_Name: ItemDataContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1866866092435572007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740852258859581313}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &506667366901495518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740852258859581313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c0416fb33a791f48b85f839f2f6aea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponPrefabs:
+  - {fileID: 8933647714911918376, guid: fa23be15e1a17f54298aee11328e061b, type: 3}
+  - {fileID: -3073524632526507582, guid: 3b0ccc29378021147b490abef3b33af7, type: 3}
+  - {fileID: -5241751790682530218, guid: bb12e29cbeb8e034cb8e0ca19999b938, type: 3}
+  - {fileID: 7011088409014059877, guid: 1e80238763a523c409a857aeaddc2f57, type: 3}
+  - {fileID: -3816222524319298571, guid: dbb651626f5ac184eb54b1439f522af3, type: 3}
+  - {fileID: -4715959011283397271, guid: bd20f7fdef566204e99342dde0593b71, type: 3}
+  buffItemDatas:
+  - {fileID: 11400000, guid: 539e091c415454c4a99c33a15bb44cf5, type: 2}
+  - {fileID: 11400000, guid: 2c452d94e1e02cd44b79183ac54ea5c9, type: 2}
+  - {fileID: 11400000, guid: e35f9c00f8d1d70439646855160aa84d, type: 2}
+  - {fileID: 11400000, guid: fb3e24cc0ca61304388a9c55cb1e5b21, type: 2}
+  - {fileID: 11400000, guid: d4184cc8245c44a49b02e8c86fe74e10, type: 2}
+  - {fileID: 11400000, guid: 99df5a59e745fcd4c897e6027dd23a15, type: 2}
+  - {fileID: 11400000, guid: cbc29e297c6626643b2916c8f933eb75, type: 2}
+  - {fileID: 11400000, guid: d31af4a3dbd6c14429d7a1eda5c12cdc, type: 2}
+  moneyItemData: {fileID: 11400000, guid: ea030dfaa4483644b9968b65b00a2d31, type: 2}
+  potionItemData: {fileID: 11400000, guid: 065fe6ffbb013c44793e56a7a0805422, type: 2}

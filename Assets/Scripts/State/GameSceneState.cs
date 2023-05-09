@@ -6,7 +6,7 @@ namespace RodongSurviver.State
     public class GameSceneState : MonoBehaviour
     {
         #region [ Variables ]
-        [SerializeField] private DiedPanelPresenter diedPanelPresenter;
+        [SerializeField] private ResultPanelPresenter diedPanelPresenter;
         [SerializeField] private GameScenePresenter gameManager;
         #endregion
 
@@ -31,7 +31,7 @@ namespace RodongSurviver.State
 
         private void InitializeDiedPanel()
         {
-            diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
+            diedPanelPresenter.Initialize(new ResultPanelPresenter.DiedPanelActions()
             {
                 RetryEvent = () => 
                 {

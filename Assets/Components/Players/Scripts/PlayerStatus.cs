@@ -50,6 +50,20 @@ public class PlayerStatus
         this.weaponCount.Value = 0;
     }
 
+    public PlayerStatus SetEnforce(EnforceData enforceData)
+    {
+        // AddMaxpHP(enforceData.BuffGrades[(int)ItemType.Rice - 100] * 2);
+        AddSpeed(1 + enforceData.BuffGrades[(int)ItemType.Shoes - 100] * 0.2f);
+        AddMagnetism(1 + enforceData.BuffGrades[(int)ItemType.Magnet - 100] * 0.2f);
+        AddDamage(1 + enforceData.BuffGrades[(int)ItemType.Dumbbell - 100] * 0.2f);
+        AddWeaponSpeed(1 + enforceData.BuffGrades[(int)ItemType.Tornado - 100] * 0.2f);
+        AddWeaponTerm(1 + enforceData.BuffGrades[(int)ItemType.Thunder - 100] * 0.2f);
+        AddWeaponSize(1 + enforceData.BuffGrades[(int)ItemType.Baloon - 100] * 0.2f);
+        AddWeaponCount(enforceData.BuffGrades[(int)ItemType.Dice - 100]);
+
+        return this;
+    }
+
     public int AddLevel()
     {
         ++level.Value;
@@ -145,9 +159,9 @@ public class PlayerStatus
         return weaponSize.Value;
     }
 
-    public float AddWeaponCount()
+    public float AddWeaponCount(int value)
     {
-        ++ weaponCount.Value;
+        weaponCount.Value += value;
         return weaponCount.Value;
     }
 }

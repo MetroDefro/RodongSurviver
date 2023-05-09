@@ -4,6 +4,8 @@ using Zenject;
 
 public class ProjectInstaller : MonoInstaller
 {
+    [SerializeField] private GameObject ItemDataContainer;
+
     public override void InstallBindings()
     {
         Container.Bind<GameManager>()
@@ -13,6 +15,11 @@ public class ProjectInstaller : MonoInstaller
 
         Container.Bind<SceneManager>()
             .FromNewComponentOnNewGameObject()
+            .AsCached()
+            .NonLazy();
+
+        Container.Bind<ItemDataContainer>()
+            .FromComponentInNewPrefab(ItemDataContainer)
             .AsCached()
             .NonLazy();
     }

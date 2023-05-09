@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 105
   sprite: {fileID: 21300000, guid: 5b894a714513a504c9a8f5f1c74cf2a3, type: 3}
   explation: Max HP increases.
+  prices: 000100000002000000040000

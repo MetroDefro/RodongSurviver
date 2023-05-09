@@ -13,7 +13,6 @@ public class GameSceneModel
     public List<(ItemType type, Weapon weapon)> Weapons { get; set; } = new List<(ItemType type, Weapon weapon)>();
     public List<(ItemType type, Buff buff)> Buffs { get; set; } = new List<(ItemType type, Buff buff)>();
 
-    public int SpanSeconds = 0;
     public readonly int MaxLevel = 6;
     public readonly int MaxCount = 6;
     public readonly int PotionRecoveryAmount = 5;
@@ -23,26 +22,28 @@ public class GameSceneModel
 public class GameScenePresenter : PresenterBase
 {
     #region [ Variables ]
-    private GameManager gameManager;
-    private SceneManager sceneManager;
-
-    private GameSceneView view;
-    private GameSceneModel model;
-
     [SerializeField] private Player player;
     [SerializeField] private SlotsCanvasPresenter slotCanvasPresenter;
     [SerializeField] private LevelUpPresenter levelUpPresenter;
     [SerializeField] private PauseCanvasPresenter pauseCanvasPresenter;
     [SerializeField] private TopCanvasPresenter topCanvasPresenter;
-    [SerializeField] private DiedPanelPresenter diedPanelPresenter;
+    [SerializeField] private ResultPanelPresenter diedPanelPresenter;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BackGroundMover[] backGroundMovers;
+
     private BoxCollider2D gameArea;
 
-    [SerializeField] private Weapon[] allWeaponPrefabs = new Weapon[6];
-    [SerializeField] private ItemData[] allBuffDatas = new ItemData[8];
-    [SerializeField] private ItemData potionData;
-    [SerializeField] private ItemData moneyData;
+    private Weapon[] allWeaponPrefabs;
+    private ItemData[] allBuffDatas;
+    private ItemData potionData;
+    private ItemData moneyData;
+
+    private GameManager gameManager;
+    private SceneManager sceneManager;
+    private ItemDataContainer itemDataContainer;
+
+    private GameSceneView view;
+    private GameSceneModel model;
 
     #endregion
 
@@ -63,21 +64,19 @@ public class GameScenePresenter : PresenterBase
     #region [ Public methods ]
 
     [Inject]
-    public void Inject(GameManager gameManager, SceneManager sceneManager)
+    public void Inject(GameManager gameManager, SceneManager sceneManager, ItemDataContainer itemDataContainer)
     {
         this.gameManager = gameManager;
         this.sceneManager = sceneManager;
+        this.itemDataContainer = itemDataContainer;
     }
 
     public override void Dispose()
     {
         base.Dispose();
         view.Dispose();
-    }
 
-    public void OnReset()
-    {
-        Disposables.Clear();
+        Disposables.Dispose();
         player.Dispose();
         slotCanvasPresenter.Dispose();
         levelUpPresenter.Dispose();
@@ -91,17 +90,31 @@ public class GameScenePresenter : PresenterBase
 
         model.Weapons.Clear();
         model.Buffs.Clear();
+    }
+
+    public void OnReset()
+    {
+        Disposables.Clear();
+        player.Reset();
+        slotCanvasPresenter.Dispose();
+        levelUpPresenter.Dispose();
+        pauseCanvasPresenter.Dispose();
+        topCanvasPresenter.Dispose();
+        diedPanelPresenter.Dispose();
+
+        enemySpawner.Reset();
+        foreach (var weapon in model.Weapons)
+            DestroyImmediate(weapon.weapon.gameObject);
+
+        model.Weapons.Clear();
+        model.Buffs.Clear();
         Initialize();
 
+        gameManager.EnforceData.Money += player.Status.Money.Value;
         PlayGame();
     }
 
     public void SetupDiedAction(Action onDied) { }
-/*        player.OnDied = () =>
-        {
-            onDied.Invoke();
-            PauseGame();
-        };*/
     #endregion
 
     #region [ Private methods ]
@@ -117,6 +130,11 @@ public class GameScenePresenter : PresenterBase
 
         InitializeUI();
 
+        allWeaponPrefabs = itemDataContainer.WeaponPrefabs;
+        allBuffDatas = itemDataContainer.BuffItemDatas;
+        moneyData = itemDataContainer.MoneyItemData;
+        potionData = itemDataContainer.PotionItemData;
+
         gameArea = player.GameArea;
 
         foreach (var bg in backGroundMovers)
@@ -127,21 +145,17 @@ public class GameScenePresenter : PresenterBase
             OnLevelUp = (level) => OnLevelUp(level),
             OnGetEXP = (necessaryEXP, exp) => OnGetEXP(necessaryEXP, exp),
             OnGetMoney = (money) => OnMoney(money),
-            OnDied = () =>
-            {
-                diedPanelPresenter.gameObject.SetActive(true);
-                PauseGame();
-            }
-
+            OnDied = () => GameOver(),
         });
+        player.Status.SetEnforce(gameManager.EnforceData);
+
         enemySpawner.Initialize(player, gameArea);
 
         Weapon firstWeapon = Instantiate(allWeaponPrefabs[(int)player.WeaponType]).Initialize(player);
         model.Weapons.Add((firstWeapon.Data.Type, firstWeapon));
         slotCanvasPresenter.SetWeaponSlot(0, firstWeapon.Level, firstWeapon.Data.Sprite);
 
-        model.SpanSeconds = 0;
-
+        PlayGame();
         SubscribeTimer();
     }
 
@@ -155,7 +169,7 @@ public class GameScenePresenter : PresenterBase
             OnRetry = () => OnReset(),
             OnHome = () => LoadMainScene()
         });
-        diedPanelPresenter.Initialize(new DiedPanelPresenter.DiedPanelActions()
+        diedPanelPresenter.Initialize(new ResultPanelPresenter.DiedPanelActions()
         {
             RetryEvent = () =>
             {
@@ -185,7 +199,23 @@ public class GameScenePresenter : PresenterBase
     private void LoadMainScene()
     {
         sceneManager.LoadSceneAsync(SceneType.Main);
+        gameManager.EnforceData.Money += player.Status.Money.Value;
         Dispose();
+    }
+
+    private void PauseGame() => gameManager.PauseGame();
+
+    private void PlayGame() => gameManager.PlayGame();
+
+    private void GameOver()
+    {
+        diedPanelPresenter.Show(false);
+        PauseGame();
+    }
+
+    private void GameClaer()
+    {
+        diedPanelPresenter.Show(true);
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)
@@ -205,15 +235,6 @@ public class GameScenePresenter : PresenterBase
         topCanvasPresenter.SetMoney(money);
     }
 
-    private void PauseGame()
-    {
-        gameManager.PauseGame();
-    }
-
-    private void PlayGame()
-    {
-        gameManager.PlayGame();
-    }
 
     private void OnItemLevelUp(ItemType type)
     {
@@ -331,18 +352,16 @@ public class GameScenePresenter : PresenterBase
         CreateTimerObservable()
             .Subscribe(second => 
             {
-                model.SpanSeconds++;
+                topCanvasPresenter.SetTimer(second);
 
-                topCanvasPresenter.SetTimer(model.SpanSeconds);
+                if (second % 30 == 0)
+                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount * (second / 30 + 1) ;
 
-                if (model.SpanSeconds % 30 == 0)
-                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount * (model.SpanSeconds / 30 + 1) ;
+                if (second % 60 == 0)
+                    enemySpawner.CurrentEnemyIndex = (second / 60);
 
-                if (model.SpanSeconds % 60 == 0)
-                {
-                    enemySpawner.CurrentEnemyIndex = (model.SpanSeconds / 60);
-                }
- 
+                if (second == 600)
+                    GameClaer();
             })
             .AddTo(Disposables);
     }

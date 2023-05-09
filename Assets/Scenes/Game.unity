@@ -65542,31 +65542,13 @@ MonoBehaviour:
   levelUpPresenter: {fileID: 7862681712687551306, guid: aff60c5bcee95f842b3da28a36f212ef, type: 3}
   pauseCanvasPresenter: {fileID: 7078641697186092706, guid: 2e537c51c06b9dc4ca83af34c9fed173, type: 3}
   topCanvasPresenter: {fileID: 7923160689321948791, guid: 36ea8b9937fd1ba46adc1e1267806c8f, type: 3}
-  diedPanelPresenter: {fileID: 1717455203614199392, guid: 76fbbf11df30ba74a9a5ec298e8ecee9, type: 3}
+  diedPanelPresenter: {fileID: 8062236641596405312, guid: 76fbbf11df30ba74a9a5ec298e8ecee9, type: 3}
   enemySpawner: {fileID: 1525496825550724354, guid: 11bad4a12d969444d9afa2f4159e6152, type: 3}
   backGroundMovers:
   - {fileID: 1571385228}
   - {fileID: 426087923}
   - {fileID: 1609989947}
   - {fileID: 1818569731}
-  allWeaponPrefabs:
-  - {fileID: 8933647714911918376, guid: fa23be15e1a17f54298aee11328e061b, type: 3}
-  - {fileID: -3073524632526507582, guid: 3b0ccc29378021147b490abef3b33af7, type: 3}
-  - {fileID: -5241751790682530218, guid: bb12e29cbeb8e034cb8e0ca19999b938, type: 3}
-  - {fileID: 7011088409014059877, guid: 1e80238763a523c409a857aeaddc2f57, type: 3}
-  - {fileID: -3816222524319298571, guid: dbb651626f5ac184eb54b1439f522af3, type: 3}
-  - {fileID: -4715959011283397271, guid: bd20f7fdef566204e99342dde0593b71, type: 3}
-  allBuffDatas:
-  - {fileID: 11400000, guid: 539e091c415454c4a99c33a15bb44cf5, type: 2}
-  - {fileID: 11400000, guid: 2c452d94e1e02cd44b79183ac54ea5c9, type: 2}
-  - {fileID: 11400000, guid: e35f9c00f8d1d70439646855160aa84d, type: 2}
-  - {fileID: 11400000, guid: fb3e24cc0ca61304388a9c55cb1e5b21, type: 2}
-  - {fileID: 11400000, guid: d4184cc8245c44a49b02e8c86fe74e10, type: 2}
-  - {fileID: 11400000, guid: 99df5a59e745fcd4c897e6027dd23a15, type: 2}
-  - {fileID: 11400000, guid: cbc29e297c6626643b2916c8f933eb75, type: 2}
-  - {fileID: 11400000, guid: d31af4a3dbd6c14429d7a1eda5c12cdc, type: 2}
-  potionData: {fileID: 11400000, guid: 065fe6ffbb013c44793e56a7a0805422, type: 2}
-  moneyData: {fileID: 11400000, guid: ea030dfaa4483644b9968b65b00a2d31, type: 2}
 --- !u!114 &1980667772
 MonoBehaviour:
   m_ObjectHideFlags: 0

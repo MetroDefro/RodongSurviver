@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     private CompositeDisposable disposables = new CompositeDisposable();
     #endregion
 
+
     #region [ Public methods ]
     public Player Initialize(PlayerData data, PlayerActions actions)
     {
@@ -83,10 +84,16 @@ public class Player : MonoBehaviour
         status.AddMoney(AddedMoney);
     }
 
-    public void Dispose()
+    public void Reset()
     {
+        disposables.Clear();
         rigidbody.MovePosition(new Vector2(0, 0));
         anim.SetBool(isDeadId, false);
+    }
+
+    public void Dispose()
+    {
+        disposables.Dispose();
     }
 
     public void Play()

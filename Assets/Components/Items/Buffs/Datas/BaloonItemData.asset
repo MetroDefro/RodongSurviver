@@ -15,3 +15,4 @@ MonoBehaviour:
   type: 107
   sprite: {fileID: 21300000, guid: 32d10377f3155414382d75d7119ba0be, type: 3}
   explation: Increased weapon size.
+  prices: 800000000001000000020000

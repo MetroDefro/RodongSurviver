@@ -6,8 +6,10 @@ public class PlayerSelectView : MonoBehaviour
 {
     public List<PlayerButtonSet> PlayeButtonSets => playeButtonSets;
     public Button PlayButton => playButton;
+    public Button ShopButton => shopButton;
 
     [SerializeField] private Button playButton;
+    [SerializeField] private Button shopButton;
     [SerializeField] private List<PlayerButtonSet> playeButtonSets;
 }
 
