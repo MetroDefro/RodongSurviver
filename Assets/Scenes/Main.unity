@@ -786,15 +786,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemBuySlotPrefab: {fileID: 7899941030645029936, guid: 2211d78d27befb94c94d35a057d52817, type: 3}
-  itemDatas:
-  - {fileID: 11400000, guid: 539e091c415454c4a99c33a15bb44cf5, type: 2}
-  - {fileID: 11400000, guid: 2c452d94e1e02cd44b79183ac54ea5c9, type: 2}
-  - {fileID: 11400000, guid: e35f9c00f8d1d70439646855160aa84d, type: 2}
-  - {fileID: 11400000, guid: fb3e24cc0ca61304388a9c55cb1e5b21, type: 2}
-  - {fileID: 11400000, guid: d4184cc8245c44a49b02e8c86fe74e10, type: 2}
-  - {fileID: 11400000, guid: 99df5a59e745fcd4c897e6027dd23a15, type: 2}
-  - {fileID: 11400000, guid: cbc29e297c6626643b2916c8f933eb75, type: 2}
-  - {fileID: 11400000, guid: d31af4a3dbd6c14429d7a1eda5c12cdc, type: 2}
 --- !u!1 &627135788
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,8 +853,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190335
-  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1334,7 +1325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  m_Color: {r: 0.49790847, g: 0.6320754, b: 0.5788588, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1591,7 +1582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.24647617, a: 1}
+  m_Color: {r: 0.61927825, g: 0.8490566, b: 0.43654326, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1772,7 +1763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.23902416, b: 1, a: 1}
+  m_Color: {r: 0.51174796, g: 0.6150051, b: 0.9433962, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

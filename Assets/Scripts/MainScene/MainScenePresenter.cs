@@ -11,6 +11,7 @@ public class MainScenePresenter : PresenterBase
 
     private GameManager gameManager;
     private SceneManager sceneManager;
+    private PopupManager popupManager;
     private ItemDataContainer itemDataContainer;
 
     private MainSceneView view;
@@ -25,10 +26,11 @@ public class MainScenePresenter : PresenterBase
 
     #region [ Public methods ]
     [Inject]
-    public void Inject(GameManager gameManager, SceneManager sceneManager, ItemDataContainer itemDataContainer)
+    public void Inject(GameManager gameManager, SceneManager sceneManager, PopupManager popupManager, ItemDataContainer itemDataContainer)
     {
         this.gameManager = gameManager;
         this.sceneManager = sceneManager;
+        this.popupManager = popupManager;
         this.itemDataContainer = itemDataContainer;
     }
 
@@ -90,7 +92,9 @@ public class MainScenePresenter : PresenterBase
         }
         else
         {
-            Debug.Log("잔액이 부족합니다.");
+            DefaultPopup popup = (DefaultPopup)popupManager.GetPopup();
+            popup.SetConfirm(() => popup.HideImmediate()).SetContent("잔액이 부족합니다.");
+            popup.ShowImmediate();
         }
     }
     #endregion

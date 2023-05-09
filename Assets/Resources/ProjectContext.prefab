@@ -75,3 +75,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ItemDataContainer: {fileID: 2740852258859581313, guid: a664dfcf9e2c866479aea78187ef8e88, type: 3}
+  PopupManager: {fileID: 8455329752430766169, guid: d4f0fb2204b4c3a4fa6dcd87c3b1e849, type: 3}
