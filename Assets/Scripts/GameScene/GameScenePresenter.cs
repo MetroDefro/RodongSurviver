@@ -27,7 +27,7 @@ public class GameScenePresenter : PresenterBase
     [SerializeField] private LevelUpPresenter levelUpPresenter;
     [SerializeField] private PauseCanvasPresenter pauseCanvasPresenter;
     [SerializeField] private TopCanvasPresenter topCanvasPresenter;
-    [SerializeField] private ResultPanelPresenter diedPanelPresenter;
+    [SerializeField] private ResultPanelPresenter resultPanelPresenter;
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private BackGroundMover[] backGroundMovers;
 
@@ -82,7 +82,7 @@ public class GameScenePresenter : PresenterBase
         levelUpPresenter.Dispose();
         pauseCanvasPresenter.Dispose();
         topCanvasPresenter.Dispose();
-        diedPanelPresenter.Dispose();
+        resultPanelPresenter.Dispose();
 
         enemySpawner.Dispose();
         foreach (var weapon in model.Weapons)
@@ -94,13 +94,15 @@ public class GameScenePresenter : PresenterBase
 
     public void OnReset()
     {
+        gameManager.PluseMoney(player.Status.Money.Value);
+
         Disposables.Clear();
         player.Reset();
         slotCanvasPresenter.Dispose();
         levelUpPresenter.Dispose();
         pauseCanvasPresenter.Dispose();
         topCanvasPresenter.Dispose();
-        diedPanelPresenter.Dispose();
+        resultPanelPresenter.Dispose();
 
         enemySpawner.Reset();
         foreach (var weapon in model.Weapons)
@@ -110,7 +112,6 @@ public class GameScenePresenter : PresenterBase
         model.Buffs.Clear();
         Initialize();
 
-        gameManager.EnforceData.Money += player.Status.Money.Value;
         PlayGame();
     }
 
@@ -169,11 +170,11 @@ public class GameScenePresenter : PresenterBase
             OnRetry = () => OnReset(),
             OnHome = () => LoadMainScene()
         });
-        diedPanelPresenter.Initialize(new ResultPanelPresenter.DiedPanelActions()
+        resultPanelPresenter.Initialize(new ResultPanelPresenter.DiedPanelActions()
         {
             RetryEvent = () =>
             {
-                diedPanelPresenter.gameObject.SetActive(false);
+                resultPanelPresenter.Hide();
                 OnReset();
             },
             HomeEvent = () => LoadMainScene()
@@ -192,14 +193,15 @@ public class GameScenePresenter : PresenterBase
         levelUpPresenter = Instantiate(levelUpPresenter);
         pauseCanvasPresenter = Instantiate(pauseCanvasPresenter);
         topCanvasPresenter = Instantiate(topCanvasPresenter);
-        diedPanelPresenter = Instantiate(diedPanelPresenter);
+        resultPanelPresenter = Instantiate(resultPanelPresenter);
         enemySpawner = Instantiate(enemySpawner);
     }
 
     private void LoadMainScene()
     {
+        gameManager.PluseMoney(player.Status.Money.Value);
+
         sceneManager.LoadSceneAsync(SceneType.Main);
-        gameManager.EnforceData.Money += player.Status.Money.Value;
         Dispose();
     }
 
@@ -209,13 +211,13 @@ public class GameScenePresenter : PresenterBase
 
     private void GameOver()
     {
-        diedPanelPresenter.Show(false);
+        resultPanelPresenter.Show(false);
         PauseGame();
     }
 
     private void GameClaer()
     {
-        diedPanelPresenter.Show(true);
+        resultPanelPresenter.Show(true);
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)

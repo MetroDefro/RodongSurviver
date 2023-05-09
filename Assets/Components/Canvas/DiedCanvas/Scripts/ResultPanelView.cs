@@ -12,7 +12,7 @@ namespace RodongSurviver.Components.DiedPanel
         public Button RetryButton => retryButton;
         public Button HomeButton => homeButton;
         public TextMeshProUGUI GameOverText => gameoverText;
-        public TextMeshProUGUI GameClaerText => GameClaerText;
+        public TextMeshProUGUI GameClaerText => gameclaerText;
         #endregion
 
         #region [ Variables ]

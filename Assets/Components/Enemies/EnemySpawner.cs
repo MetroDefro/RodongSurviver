@@ -14,17 +14,22 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int maxPoolEnemyCount = 500;
     [SerializeField] private int maxEnemyCount = 30;
     [SerializeField] private float spwanRange = 60;
+
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Money moneyPrefab;
+
+    [SerializeField] private EnemyData[] enemyDatas = new EnemyData[10];
+
     private int currentEnemyIndex = 0;
+
     private BoxCollider2D gameArea;
     private Player player;
 
-    [SerializeField] private EnemyData[] enemyDatas = new EnemyData[10];
     private List<Enemy> enemies = new List<Enemy>();
     private List<EXPMarble> expMarbles = new List<EXPMarble>();
     private List<Money> moneys = new List<Money>();
+
     private IObjectPool<Enemy> pool;
 
     private CompositeDisposable Disposables { get; set; } = new CompositeDisposable();

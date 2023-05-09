@@ -2,6 +2,7 @@ using UnityEngine;
 using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
+using System.IO;
 
 public class MainScenePresenter : PresenterBase
 {
@@ -53,7 +54,11 @@ public class MainScenePresenter : PresenterBase
             (playerData) => SetPlayerData(playerData));
 
         if(gameManager.EnforceData == null)
-            gameManager.EnforceData = CreateEnforceData();
+        {
+            gameManager.EnforceData = gameManager.LoadEnforceData();
+            if (gameManager.EnforceData == null)
+                gameManager.EnforceData = CreateEnforceData();
+        }
 
         shopPresenter.Initialize(itemDataContainer.BuffItemDatas, type => OnBuyItem(type), gameManager.EnforceData.Money);
         
@@ -85,7 +90,7 @@ public class MainScenePresenter : PresenterBase
 
         if(currentPrice <= gameManager.EnforceData.Money)
         {
-            gameManager.EnforceData.Money -= currentPrice;
+            gameManager.MinusMoney(currentPrice);
             gameManager.EnforceData.BuffGrades[index]++;
             shopPresenter.SetMoney(gameManager.EnforceData.Money);
             shopPresenter.SetPrice(index, itemDataContainer.BuffItemDatas[index], gameManager.EnforceData.BuffGrades[index]);

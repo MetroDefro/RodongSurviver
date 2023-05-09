@@ -29,6 +29,11 @@ namespace RodongSurviver.Components.DiedPanel
             RegisterRetryButtonOnClick();
             RegisterHomeButtonOnClick();
         }
+
+        private void OnDisable()
+        {
+            Disposables.Clear();
+        }
         #endregion
 
         #region [ Public Methods ]
@@ -55,6 +60,7 @@ namespace RodongSurviver.Components.DiedPanel
         #region [ Register Methods ]
         private void RegisterRetryButtonOnClick()
             => view?.RetryButton.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(_ =>
             {
                 actions?.RetryEvent.Invoke();
@@ -62,6 +68,7 @@ namespace RodongSurviver.Components.DiedPanel
 
         private void RegisterHomeButtonOnClick()
             => view?.HomeButton.OnClickAsObservable()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(_ =>
             {
                 actions?.HomeEvent.Invoke();

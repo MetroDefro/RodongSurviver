@@ -65630,7 +65630,7 @@ MonoBehaviour:
   levelUpPresenter: {fileID: 7862681712687551306, guid: aff60c5bcee95f842b3da28a36f212ef, type: 3}
   pauseCanvasPresenter: {fileID: 7078641697186092706, guid: 2e537c51c06b9dc4ca83af34c9fed173, type: 3}
   topCanvasPresenter: {fileID: 7923160689321948791, guid: 36ea8b9937fd1ba46adc1e1267806c8f, type: 3}
-  diedPanelPresenter: {fileID: 8062236641596405312, guid: 76fbbf11df30ba74a9a5ec298e8ecee9, type: 3}
+  resultPanelPresenter: {fileID: 8062236641596405312, guid: 76fbbf11df30ba74a9a5ec298e8ecee9, type: 3}
   enemySpawner: {fileID: 1525496825550724354, guid: 11bad4a12d969444d9afa2f4159e6152, type: 3}
   backGroundMovers:
   - {fileID: 1571385228}
