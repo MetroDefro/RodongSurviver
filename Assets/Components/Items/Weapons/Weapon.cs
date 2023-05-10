@@ -23,17 +23,9 @@ public abstract class Weapon : MonoBehaviour, IItem
     #endregion
 
     #region [ MonoBehaviour Messages ]
-    private void OnDestroy()
-    {
-        foreach (var weapon in weaponObjects)
-            Destroy(weapon.gameObject);
-
-        weaponObjects.Clear();
-        disposables.Clear();
-    }
     private void OnDisable()
     {
-        weaponObjects.Clear();
+
     }
     #endregion
 
@@ -50,6 +42,17 @@ public abstract class Weapon : MonoBehaviour, IItem
         Movement();
 
         return this;
+    }
+
+    public void Dispose()
+    {
+        foreach (var weapon in weaponObjects)
+            Destroy(weapon.gameObject);
+
+        weaponObjects.Clear();
+        disposables.Clear();
+
+        Destroy(gameObject);
     }
 
     public void OnLevelUp()

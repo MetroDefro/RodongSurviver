@@ -86,7 +86,7 @@ public class GameScenePresenter : PresenterBase
 
         enemySpawner.Dispose();
         foreach (var weapon in model.Weapons)
-            DestroyImmediate(weapon.weapon.gameObject);
+            weapon.weapon.Dispose();
 
         model.Weapons.Clear();
         model.Buffs.Clear();
@@ -106,7 +106,7 @@ public class GameScenePresenter : PresenterBase
 
         enemySpawner.Reset();
         foreach (var weapon in model.Weapons)
-            DestroyImmediate(weapon.weapon.gameObject);
+            weapon.weapon.Dispose();
 
         model.Weapons.Clear();
         model.Buffs.Clear();
@@ -218,6 +218,7 @@ public class GameScenePresenter : PresenterBase
     private void GameClaer()
     {
         resultPanelPresenter.Show(true);
+        PauseGame();
     }
 
     private void OnGetEXP(float necessaryEXP, float exp)

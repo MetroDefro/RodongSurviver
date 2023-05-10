@@ -2,7 +2,6 @@ using UnityEngine;
 using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
-using System.IO;
 
 public class MainScenePresenter : PresenterBase
 {

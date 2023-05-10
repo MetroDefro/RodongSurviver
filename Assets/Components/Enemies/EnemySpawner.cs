@@ -51,18 +51,20 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (var expMarble in expMarbles.ToArray())
         {
-            expMarbles.Remove(expMarble);
-            expMarble.Dispose();
+            if (expMarble != null)
+                expMarble.Dispose();
         }
 
         foreach (var money in moneys.ToArray())
         {
-            moneys.Remove(money);
-            money.Dispose();
+            if (money != null)
+                money.Dispose();
         }
 
         pool.Clear();
         enemies.Clear();
+        expMarbles.Clear();
+        moneys.Clear();
     }
 
     public void Dispose()
@@ -77,18 +79,20 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (var expMarble in expMarbles.ToArray())
         {
-            expMarbles.Remove(expMarble);
-            expMarble.Dispose();
+            if (expMarble != null)
+                expMarble.Dispose();
         }
 
         foreach (var money in moneys.ToArray())
         {
-            moneys.Remove(money);
-            money.Dispose();
+            if (money != null)
+                money.Dispose();
         }
 
         pool.Clear();
         enemies.Clear();
+        expMarbles.Clear();
+        moneys.Clear();
     }
 
     private void SubscribeUpdate()
@@ -105,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnemyDead(float exp, Transform enemyTransform)
     {
-        if(Random.Range(0, 100) == 0)
+        if(Random.Range(0, 50) == 0)
             AddMoney(enemyTransform);
 
         AddEXPMarble(exp, enemyTransform);
