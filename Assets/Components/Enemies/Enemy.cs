@@ -43,7 +43,6 @@ public abstract class Enemy : MonoBehaviour
         this.pool = pool;
         this.onDead = onDead;
 
-        data.Speed = UnityEngine.Random.Range(1, 3);
         hp = data.HP;
         anim.runtimeAnimatorController = data.AnimatorController;
 

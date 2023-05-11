@@ -15,4 +15,5 @@ MonoBehaviour:
   type: 100
   sprite: {fileID: 21300000, guid: 5adbd23f07a1f86499c9575a402e7443, type: 3}
   explation: Draw EXP.
-  prices: 0002000000040000
+  prices: 0001000000020000
+  maxLevel: 6

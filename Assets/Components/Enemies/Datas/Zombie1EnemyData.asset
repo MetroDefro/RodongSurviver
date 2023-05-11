@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51241a91ad9012643a4ec903ffa5e0a4, type: 3}
   m_Name: Zombie1EnemyData
   m_EditorClassIdentifier: 
-  sprite: {fileID: 1819181812, guid: 91247d06fa304f54db53ca3aaf19ea25, type: 3}
   speed: 1.5
   damage: 1
-  hp: 2
+  hp: 4
   exp: 1
   animatorController: {fileID: 22100000, guid: 2888bf40a1cca39409ba59d8106ece7c, type: 2}

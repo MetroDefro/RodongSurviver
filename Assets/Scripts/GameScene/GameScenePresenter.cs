@@ -13,7 +13,6 @@ public class GameSceneModel
     public List<(ItemType type, Weapon weapon)> Weapons { get; set; } = new List<(ItemType type, Weapon weapon)>();
     public List<(ItemType type, Buff buff)> Buffs { get; set; } = new List<(ItemType type, Buff buff)>();
 
-    public readonly int MaxLevel = 6;
     public readonly int MaxCount = 6;
     public readonly int PotionRecoveryAmount = 5;
     public readonly int MoneyAmount = 1;
@@ -328,8 +327,8 @@ public class GameScenePresenter : PresenterBase
         }
     }
 
-    private bool GetIsWeaponMaxLevel() => model.Weapons.Select(w => w.weapon.Level).Min() == model.MaxLevel;
-    private bool GetIsBuffnMaxLevel() => model.Buffs.Select(w => w.buff.Level).Min() == model.MaxLevel;
+    private bool GetIsWeaponMaxLevel() => model.Weapons.Where(w => w.weapon.Level < w.weapon.Data.MaxLevel) == null;
+    private bool GetIsBuffnMaxLevel() => model.Buffs.Where(w => w.buff.Level < w.buff.Data.MaxLevel) == null;
     private ItemType GetRandomItemTypeInWeapon() => (ItemType)UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
     private ItemType GetRandomItemTypeInBuff() => (ItemType)(UnityEngine.Random.Range(0, allBuffDatas.Length) + 100);
     private ItemType GetRandomItemTypeInWeaponInSlot() => model.Weapons[UnityEngine.Random.Range(0, model.Weapons.Count)].type;
@@ -340,7 +339,7 @@ public class GameScenePresenter : PresenterBase
         if (item == null)
             return false;
         else
-            return item.Level == model.MaxLevel;
+            return item.Level == item.Data.MaxLevel;
     }
 
     private IItem GetIsItemFromType(ItemType type)
@@ -357,8 +356,8 @@ public class GameScenePresenter : PresenterBase
             {
                 topCanvasPresenter.SetTimer(second);
 
-                if (second % 30 == 0)
-                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount * (second / 30 + 1) ;
+                if (second % 20 == 0)
+                    enemySpawner.MaxEnemyCount = enemySpawner.InitEnemyCount * (second / 20 + 1) ;
 
                 if (second % 60 == 0)
                     enemySpawner.CurrentEnemyIndex = (second / 60);

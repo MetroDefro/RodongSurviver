@@ -15,3 +15,5 @@ MonoBehaviour:
   type: 1
   sprite: {fileID: 21300000, guid: a48f2cb9d21361441b407da8fae3adbf, type: 3}
   explation: Fire in 4 directions.
+  prices: 
+  maxLevel: 6

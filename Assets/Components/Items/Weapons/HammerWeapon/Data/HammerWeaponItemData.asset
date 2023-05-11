@@ -15,3 +15,5 @@ MonoBehaviour:
   type: 4
   sprite: {fileID: 21300000, guid: b32acedd5d43cb84e85b3eb45366fc15, type: 3}
   explation: Appearance random location.
+  prices: 
+  maxLevel: 6

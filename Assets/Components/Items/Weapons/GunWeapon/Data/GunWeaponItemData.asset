@@ -15,3 +15,5 @@ MonoBehaviour:
   type: 5
   sprite: {fileID: 21300000, guid: 995158bfc9c340b4f9d4d015744a7baf, type: 3}
   explation: Fire in the direction of movement.
+  prices: 
+  maxLevel: 6

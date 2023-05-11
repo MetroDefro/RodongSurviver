@@ -15,3 +15,5 @@ MonoBehaviour:
   type: 200
   sprite: {fileID: 21300000, guid: 733b1c4405a0dfe40b07ff071dbaf1a6, type: 3}
   explation: Get money.
+  prices: 
+  maxLevel: 0

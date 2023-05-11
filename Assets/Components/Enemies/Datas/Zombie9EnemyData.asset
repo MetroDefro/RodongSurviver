@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51241a91ad9012643a4ec903ffa5e0a4, type: 3}
   m_Name: Zombie9EnemyData
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 5
   damage: 2
-  hp: 50
+  hp: 150
   exp: 3
   animatorController: {fileID: 22100000, guid: 0acace2365c6ce14ebbc4df1f2cd4c52, type: 2}

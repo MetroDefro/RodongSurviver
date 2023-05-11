@@ -6,10 +6,13 @@ using UniRx;
 
 public class EnemySpawner : MonoBehaviour
 {
+    #region [ Properties ]
     public int MaxEnemyCount { get => maxEnemyCount; set => maxEnemyCount =  value; }
     public int CurrentEnemyIndex { get => currentEnemyIndex; set => currentEnemyIndex =  value; }
     public int InitEnemyCount => initEnemyCount;
+    #endregion
 
+    #region [ Variables ]
     [SerializeField] private int initEnemyCount = 30;
     [SerializeField] private int maxPoolEnemyCount = 500;
     [SerializeField] private int maxEnemyCount = 30;
@@ -33,7 +36,9 @@ public class EnemySpawner : MonoBehaviour
     private IObjectPool<Enemy> pool;
 
     private CompositeDisposable Disposables { get; set; } = new CompositeDisposable();
+    #endregion
 
+    #region [ Public methods ]
     public void Initialize(Player player, BoxCollider2D gameArea)
     {
         this.player = player;
@@ -94,7 +99,9 @@ public class EnemySpawner : MonoBehaviour
         expMarbles.Clear();
         moneys.Clear();
     }
+    #endregion
 
+    #region [ Private methods ]
     private void SubscribeUpdate()
     {
         Observable.EveryFixedUpdate()
@@ -180,4 +187,5 @@ public class EnemySpawner : MonoBehaviour
         return new Vector2(Random.Range(player.transform.position.x - spwanRange, player.transform.position.x + spwanRange)
                 , Random.Range(player.transform.position.y - spwanRange, player.transform.position.y + spwanRange));
     }
+    #endregion
 }

@@ -15,3 +15,5 @@ MonoBehaviour:
   type: 3
   sprite: {fileID: 21300000, guid: 950112dbf7f5b3e41baf9efb36a6e47f, type: 3}
   explation: Fire random directions.
+  prices: 
+  maxLevel: 6
