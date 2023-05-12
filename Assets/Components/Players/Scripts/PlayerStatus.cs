@@ -52,7 +52,7 @@ public class PlayerStatus
 
     public PlayerStatus SetEnforce(EnforceData enforceData)
     {
-        // AddMaxpHP(enforceData.BuffGrades[(int)ItemType.Rice - 100] * 2);
+        AddMaxpHP(1 + enforceData.BuffGrades[(int)ItemType.Rice - 100] * 2);
         AddSpeed(1 + enforceData.BuffGrades[(int)ItemType.Shoes - 100] * 0.2f);
         AddMagnetism(1 + enforceData.BuffGrades[(int)ItemType.Magnet - 100] * 0.2f);
         AddDamage(1 + enforceData.BuffGrades[(int)ItemType.Dumbbell - 100] * 0.2f);
@@ -73,11 +73,11 @@ public class PlayerStatus
         if (level.Value <= 10)
             necessaryEXP.Value *= 1.2f;
         else if (level.Value <= 20)
-            necessaryEXP.Value *= 1.1f;
+            necessaryEXP.Value *= 1.15f;
         else if (level.Value <= 30)
-            necessaryEXP.Value *= 1.05f;
+            necessaryEXP.Value *= 1.10f;
         else
-            necessaryEXP.Value *= 1.025f;
+            necessaryEXP.Value *= 1.05f;
 
         return level.Value;
     }

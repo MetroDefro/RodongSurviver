@@ -4,6 +4,8 @@ using System;
 using UnityEngine;
 using UniRx;
 using System.Linq;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization;
 
 public class PlayerSelectPresenter : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class PlayerSelectPresenter : MonoBehaviour
     private Action onPlay;
     private Action onShop;
 
+    private LocalizedString localizedString;
     public void Initialize(Action onPlay, Action onShop, Action<PlayerData> setPlayerData)
     {
         if(TryGetComponent(out PlayerSelectView view))
@@ -29,6 +32,30 @@ public class PlayerSelectPresenter : MonoBehaviour
         SubscribePlayButton();
         SubscribeShopButton();
         SubscribePlayerButtons();
+        SubscribeSelectLanguageDropdown();
+
+        localizedString = new LocalizedString("DefaultTable", 1000);
+        localizedString.StringChanged += UpdateString;
+
+    }
+
+    public void Dispose()
+    {
+        localizedString.StringChanged -= UpdateString;
+    }
+
+    private void UpdateString(string str)
+    {
+        view.SelectLanguageText.text = str;
+    }
+
+    private void SubscribeSelectLanguageDropdown()
+    {
+        view.SelectLanguageDropdown.OnValueChangedAsObservable()
+            .Subscribe(index =>
+            {
+                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+            }).AddTo(this);
     }
 
     private void SubscribePlayButton()

@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DefaultTable_ja-JP
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: ja-JP
+  m_SharedData: {fileID: 11400000, guid: 7ac148c6dcaeef64aac5694c74e1fb5c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 32270793674752
+    m_Localized: "\u30D7\u30EC\u30A4\u30E4?\u306E\u5468\u308A\u3092\u56DE\u3063\u3066\u653B?\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1
+    m_Localized: "4\u65B9\u5411\u306B\u767A\u5C04\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2
+    m_Localized: "\u7A7A\u304B\u3089\u653B?\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3
+    m_Localized: "\u30E9\u30F3\u30C0\u30E0\u306A\u65B9\u5411\u306B\u767A\u5C04\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4
+    m_Localized: "\u30E9\u30F3\u30C0\u30E0\u306A\u5834\u6240\u306B\u73FE\u308C\u307E\u3059\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5
+    m_Localized: "\u79FB\u52D5\u65B9\u5411\u306B\u767A\u5C04\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 100
+    m_Localized: "EXP\u3092\u5F15\u304D\u4ED8\u3051\u308B\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 101
+    m_Localized: "\u653B?\u901F\u5EA6?\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102
+    m_Localized: "\u653B?\u9593\u9694\u6E1B\u5C11\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 103
+    m_Localized: "\u30C0\u30E1?\u30B8?\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 104
+    m_Localized: "\u79FB\u52D5\u901F\u5EA6?\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 105
+    m_Localized: "\u6700\u5927HP?\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106
+    m_Localized: "\u6B66\u5668\u306E??\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 107
+    m_Localized: "\u6B66\u5668\u30B5\u30A4\u30BA?\u52A0\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 200
+    m_Localized: "\u304A\u91D1\u7372\u5F97\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 201
+    m_Localized: "HP\u56DE\u5FA9\u3002"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1000
+    m_Localized: "\u8A00\u8A9E\u9078\u629E"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

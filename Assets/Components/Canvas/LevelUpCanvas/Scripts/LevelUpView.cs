@@ -10,12 +10,12 @@ public class LevelUpView : ViewBase
 {
     #region [ Properties ]
     public Button[] LevelUpButtons => levelUpButtons;
-    public TextMeshProUGUI[] LevelUpButtonExplainTexts => levelUpButtonExplainTexts;
+    public Text[] LevelUpButtonExplainTexts => levelUpButtonExplainTexts;
     #endregion
 
     #region [ Variables ]
     [SerializeField] private Button[] levelUpButtons;
-    [SerializeField] private TextMeshProUGUI[] levelUpButtonExplainTexts;
+    [SerializeField] private Text[] levelUpButtonExplainTexts;
     #endregion
 
     #region [ Public methods ]

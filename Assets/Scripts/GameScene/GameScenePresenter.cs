@@ -7,6 +7,7 @@ using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
 using RodongSurviver.Components.DiedPanel;
+using System.Collections;
 
 public class GameSceneModel
 {
@@ -280,6 +281,14 @@ public class GameScenePresenter : PresenterBase
         }
 
         PlayGame();
+
+        StartCoroutine(CheckNeedMoreLevelUp());
+    }
+
+    private IEnumerator CheckNeedMoreLevelUp()
+    {
+        yield return null;
+        player.AddEXP(0);
     }
 
     private ItemData GetItemData()
@@ -327,8 +336,8 @@ public class GameScenePresenter : PresenterBase
         }
     }
 
-    private bool GetIsWeaponMaxLevel() => model.Weapons.Where(w => w.weapon.Level < w.weapon.Data.MaxLevel) == null;
-    private bool GetIsBuffnMaxLevel() => model.Buffs.Where(w => w.buff.Level < w.buff.Data.MaxLevel) == null;
+    private bool GetIsWeaponMaxLevel() => model.Weapons.Where(w => w.weapon.Level < w.weapon.Data.MaxLevel).FirstOrDefault().weapon == null;
+    private bool GetIsBuffnMaxLevel() => model.Buffs.Where(w => w.buff.Level < w.buff.Data.MaxLevel).FirstOrDefault().buff == null;
     private ItemType GetRandomItemTypeInWeapon() => (ItemType)UnityEngine.Random.Range(0, allWeaponPrefabs.Length);
     private ItemType GetRandomItemTypeInBuff() => (ItemType)(UnityEngine.Random.Range(0, allBuffDatas.Length) + 100);
     private ItemType GetRandomItemTypeInWeaponInSlot() => model.Weapons[UnityEngine.Random.Range(0, model.Weapons.Count)].type;

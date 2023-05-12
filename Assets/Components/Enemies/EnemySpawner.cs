@@ -116,7 +116,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnemyDead(float exp, Transform enemyTransform)
     {
-        if(Random.Range(0, 50) == 0)
+        if(Random.Range(0, 30) == 0)
             AddMoney(enemyTransform);
 
         AddEXPMarble(exp, enemyTransform);
