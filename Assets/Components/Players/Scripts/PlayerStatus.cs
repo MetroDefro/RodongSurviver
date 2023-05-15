@@ -52,13 +52,13 @@ public class PlayerStatus
 
     public PlayerStatus SetEnforce(EnforceData enforceData)
     {
-        AddMaxpHP(1 + enforceData.BuffGrades[(int)ItemType.Rice - 100] * 2);
-        AddSpeed(1 + enforceData.BuffGrades[(int)ItemType.Shoes - 100] * 0.2f);
+        AddMaxpHP(1 + enforceData.BuffGrades[(int)ItemType.Rice - 100] * 1.2f);
+        AddSpeed(1 + enforceData.BuffGrades[(int)ItemType.Shoes - 100] * 0.1f);
         AddMagnetism(1 + enforceData.BuffGrades[(int)ItemType.Magnet - 100] * 0.2f);
         AddDamage(1 + enforceData.BuffGrades[(int)ItemType.Dumbbell - 100] * 0.2f);
-        AddWeaponSpeed(1 + enforceData.BuffGrades[(int)ItemType.Tornado - 100] * 0.2f);
-        AddWeaponTerm(1 + enforceData.BuffGrades[(int)ItemType.Thunder - 100] * 0.2f);
-        AddWeaponSize(1 + enforceData.BuffGrades[(int)ItemType.Baloon - 100] * 0.2f);
+        AddWeaponSpeed(1 + enforceData.BuffGrades[(int)ItemType.Tornado - 100] * 0.1f);
+        AddWeaponTerm(1 + enforceData.BuffGrades[(int)ItemType.Thunder - 100] * 0.1f);
+        AddWeaponSize(1 + enforceData.BuffGrades[(int)ItemType.Baloon - 100] * 0.1f);
         AddWeaponCount(enforceData.BuffGrades[(int)ItemType.Dice - 100]);
 
         return this;

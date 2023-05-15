@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
@@ -8,12 +7,17 @@ public class GunWeapon : Weapon
 {
     protected override float CalculateTerm()
     {
-        return base.CalculateTerm() - (level - 1) * initData.Term * player.Status.WeaponTerm.Value * 0.1f;
+        return base.CalculateTerm() - (level - 1) * initData.Term * player.Status.WeaponTerm.Value * 0.2f;
     }
 
     protected override float CalculateSize()
     {
         return base.CalculateSize() + (level - 1) * initData.Size * player.Status.WeaponSize.Value * 0.05f;
+    }
+
+    protected override int CalculateCount()
+    {
+        return base.CalculateCount() + Mathf.FloorToInt((level - 1) * 0.5f);
     }
 
     protected override void Movement()
@@ -48,15 +52,30 @@ public class GunWeapon : Weapon
     private void SubscribeWaiting()
     {
         int index = 0;
-        Observable.Interval(TimeSpan.FromSeconds(CalculateTerm()))
-            .Subscribe(_ => 
+        Observable.FromCoroutine<bool>(observer => Waiting(observer))
+            .Subscribe(value => 
             {
-                SetPosition(weaponObjects[index]);
+                if (value)
+                {
+                    SetPosition(weaponObjects[index]);
 
-                if (index >= weaponObjects.Count - 1)
-                    index = 0;
-                else
-                    index++;
+                    if (index >= weaponObjects.Count - 1)
+                        index = 0;
+                    else
+                        index++;
+                }
             }).AddTo(disposables);
+    }
+
+    private IEnumerator Waiting(IObserver<bool> observer)
+    {
+        while (true)
+        {
+            observer.OnNext(true);
+            yield return new WaitForSeconds(CalculateTerm());
+
+            observer.OnNext(false);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

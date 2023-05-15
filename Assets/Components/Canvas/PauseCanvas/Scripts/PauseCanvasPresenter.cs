@@ -25,6 +25,7 @@ public class PauseCanvasPresenter : PresenterBase
             this.view = view;
         }
 
+        
         this.actions = actions;
 
         gameObject.SetActive(false);

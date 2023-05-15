@@ -12,6 +12,6 @@ public class EnemyData: ScriptableObject
     [SerializeField] private float speed;
     [SerializeField] private float damage;
     [SerializeField] private float hp;
-    [SerializeField] private float exp;
+    [SerializeField] private float exp; 
     [SerializeField] private AnimatorOverrideController animatorController;
 }

@@ -51,6 +51,8 @@ public class Player : MonoBehaviour
 
         status = new PlayerStatus(data.HP, data.Speed, data.Magnetism);
 
+        anim.runtimeAnimatorController = data.AnimatorController;
+
         speedId = Animator.StringToHash("Speed");
         isDeadId = Animator.StringToHash("IsDead");
 

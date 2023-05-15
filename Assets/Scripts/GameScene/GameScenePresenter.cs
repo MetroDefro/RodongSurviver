@@ -8,6 +8,7 @@ using RodongSurviver.Base;
 using RodongSurviver.Manager;
 using RodongSurviver.Components.DiedPanel;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class GameSceneModel
 {
@@ -382,6 +383,21 @@ public class GameScenePresenter : PresenterBase
         return Observable
             .Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
             .Select(second => (int)second++);
+    }
+
+    private void OnPause(InputValue value)
+    {
+        if (pauseCanvasPresenter.gameObject.activeSelf)
+        {
+            pauseCanvasPresenter.gameObject.SetActive(false);
+            PlayGame();
+        }
+        else
+        {
+            pauseCanvasPresenter.gameObject.SetActive(true);
+            PauseGame();
+        }
+
     }
     #endregion
 }

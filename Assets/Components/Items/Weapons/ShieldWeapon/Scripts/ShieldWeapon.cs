@@ -22,6 +22,7 @@ public class ShieldWeapon : Weapon
 
     protected override void Movement()
     {
+        SetPosition();
         SubscribeMovement();
     }    
     

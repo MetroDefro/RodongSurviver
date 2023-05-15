@@ -17,7 +17,7 @@ public class WandWeapon : Weapon
     }
     protected override int CalculateCount()
     {
-        return base.CalculateCount() * level;
+        return base.CalculateCount() + level;
     }
 
     protected override void Movement()
@@ -31,7 +31,7 @@ public class WandWeapon : Weapon
         for (int i = 0; i < weaponObjects.Count; i++)
         {
             float Scala = 2;
-            float angle = UnityEngine.Random.Range(0, 360);
+            float angle = 360 * i / weaponObjects.Count + UnityEngine.Random.Range(-90, 90);
             Vector3 AngleToVector3 = new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), Mathf.Cos(angle * Mathf.Deg2Rad), 0);
             weaponObjects[i].transform.localPosition = AngleToVector3 * Scala;
             weaponObjects[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, (360 - angle)));

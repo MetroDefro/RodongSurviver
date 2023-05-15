@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponType: 3
   hp: 10
-  damage: 1
   speed: 5
-  defence: 1
   magnetism: 2
+  animatorController: {fileID: 22100000, guid: 0c74dc56b93a31c498eb8607675cf956, type: 2}

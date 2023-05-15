@@ -9,9 +9,11 @@ public class PlayerData : ScriptableObject
     public float HP => hp;
     public float Speed => speed;
     public float Magnetism => magnetism;
+    public AnimatorOverrideController AnimatorController => animatorController;
 
     [SerializeField] private ItemType weaponType;
     [SerializeField] private float hp;
     [SerializeField] private float speed;
     [SerializeField] private float magnetism;
+    [SerializeField] private AnimatorOverrideController animatorController;
 }

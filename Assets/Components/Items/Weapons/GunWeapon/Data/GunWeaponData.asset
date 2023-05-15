@@ -12,12 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8612630a3f52343bd502b54007fb34, type: 3}
   m_Name: GunWeaponData
   m_EditorClassIdentifier: 
-  weaponType: 5
   weaponObject: {fileID: 8933647714911918373, guid: c09ad2ca22a20b44ba72b600cdda32d7, type: 3}
-  iconSprite: {fileID: 21300000, guid: 995158bfc9c340b4f9d4d015744a7baf, type: 3}
-  explanation: Fire in the direction of movement.
   damage: 1
-  speed: 10
+  speed: 5
   term: 0.5
   size: 0.5
   range: 1
