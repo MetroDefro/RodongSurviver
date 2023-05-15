@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponObject: {fileID: 8933647714911918373, guid: c09ad2ca22a20b44ba72b600cdda32d7, type: 3}
   damage: 1
-  speed: 5
+  speed: 10
   term: 0.5
   size: 0.5
   range: 1

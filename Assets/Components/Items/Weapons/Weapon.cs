@@ -40,6 +40,8 @@ public abstract class Weapon : MonoBehaviour, IItem
         SubscribeOnCountValueChange();
         SubscribeOnSizeValueChange();
 
+        Movement();
+
         return this;
     }
 
@@ -94,7 +96,7 @@ public abstract class Weapon : MonoBehaviour, IItem
             }
         }
 
-        Movement();
+        SetPosition();
     }
 
     private void SetSize()

@@ -63,8 +63,6 @@ public class WandWeapon : Weapon
 
                     foreach (var weapon in weaponObjects)
                         weapon.SetActive(false);
-
-                    SetPosition();
                 }
                 else
                 {
@@ -72,6 +70,8 @@ public class WandWeapon : Weapon
 
                     foreach (var weapon in weaponObjects)
                         weapon.SetActive(true);
+
+                    SetPosition();
                 }
             })
             .AddTo(disposables);
