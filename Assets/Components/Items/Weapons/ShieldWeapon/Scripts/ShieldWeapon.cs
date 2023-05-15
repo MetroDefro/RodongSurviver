@@ -20,8 +20,15 @@ public class ShieldWeapon : Weapon
         return base.CalculateCount() + Mathf.FloorToInt(level * 0.4f);
     }
 
+    public override void OnLevelUp()
+    {
+        base.OnLevelUp();
+        SetPosition();
+    }
+
     protected override void Movement()
     {
+        SetPosition();
         SubscribeMovement();
     }    
     

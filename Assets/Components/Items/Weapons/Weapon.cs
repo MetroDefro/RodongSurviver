@@ -54,7 +54,7 @@ public abstract class Weapon : MonoBehaviour, IItem
         Destroy(gameObject);
     }
 
-    public void OnLevelUp()
+    public virtual void OnLevelUp()
     {
         level++;
 

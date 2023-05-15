@@ -51,6 +51,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 8671371480985141817, guid: e67e0a0badd0ab74396ac7a650af9f02, type: 3}
   expMarblePrefab: {fileID: 3999889164516602753, guid: b58215cf105797d4ea076639b967fc41, type: 3}
   moneyPrefab: {fileID: 3943660428801293491, guid: 9b254ddc45e8575439c496ed16619fc1, type: 3}
+  potionPrefab: {fileID: -1247504367873739072, guid: bc87655fee66c9a49b972e552581de8f, type: 3}
   enemyDatas:
   - {fileID: 11400000, guid: b693d1f988f36784fa8c592c12e2298a, type: 2}
   - {fileID: 11400000, guid: f765cfd2df738a949a69d07250b84cd2, type: 2}

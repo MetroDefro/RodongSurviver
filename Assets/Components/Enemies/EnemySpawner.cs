@@ -21,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private EXPMarble expMarblePrefab;
     [SerializeField] private Money moneyPrefab;
+    [SerializeField] private Potion potionPrefab;
 
     [SerializeField] private EnemyData[] enemyDatas = new EnemyData[10];
 
@@ -32,6 +33,7 @@ public class EnemySpawner : MonoBehaviour
     private List<Enemy> enemies = new List<Enemy>();
     private List<EXPMarble> expMarbles = new List<EXPMarble>();
     private List<Money> moneys = new List<Money>();
+    private List<Potion> potions = new List<Potion>();
 
     private IObjectPool<Enemy> pool;
 
@@ -66,10 +68,17 @@ public class EnemySpawner : MonoBehaviour
                 money.Dispose();
         }
 
+        foreach (var potion in potions.ToArray())
+        {
+            if (potion != null)
+                potion.Dispose();
+        }
+
         pool.Clear();
         enemies.Clear();
         expMarbles.Clear();
         moneys.Clear();
+        potions.Clear();
     }
 
     public void Dispose()
@@ -94,10 +103,17 @@ public class EnemySpawner : MonoBehaviour
                 money.Dispose();
         }
 
+        foreach (var potion in potions.ToArray())
+        {
+            if (potion != null)
+                potion.Dispose();
+        }
+
         pool.Clear();
         enemies.Clear();
         expMarbles.Clear();
         moneys.Clear();
+        potions.Clear();
     }
     #endregion
 
@@ -118,6 +134,8 @@ public class EnemySpawner : MonoBehaviour
     {
         if(Random.Range(0, 30) == 0)
             AddMoney(enemyTransform);
+        else if(Random.Range(0, 100) == 0)
+            AddPotion(enemyTransform);
 
         AddEXPMarble(exp, enemyTransform);
     }
@@ -144,6 +162,18 @@ public class EnemySpawner : MonoBehaviour
     private void RemoveMoney(Money money)
     {
         moneys.Remove(money);
+    }
+
+    private void AddPotion(Transform enemyTransform)
+    {
+        Potion potion = Instantiate(potionPrefab, enemyTransform.position, enemyTransform.rotation);
+        potion.Initialize(player, 5, (potion) => RemovePotion(potion));
+        potions.Add(potion);
+    }
+
+    private void RemovePotion(Potion potion)
+    {
+        potions.Remove(potion);
     }
 
     private Enemy SpwanEnemy()
