@@ -35,8 +35,6 @@ public abstract class Weapon : MonoBehaviour, IItem
         level = 1;
         this.player = player;
 
-        InitObjects();
-
         SubscribeOnCountValueChange();
         SubscribeOnSizeValueChange();
 
@@ -59,8 +57,6 @@ public abstract class Weapon : MonoBehaviour, IItem
     public void OnLevelUp()
     {
         level++;
-
-        InitObjects();
 
         SetSize();
     }
@@ -95,8 +91,6 @@ public abstract class Weapon : MonoBehaviour, IItem
                 weapon.transform.localScale = new Vector3(size, size, size);
             }
         }
-
-        SetPosition();
     }
 
     private void SetSize()
@@ -120,7 +114,10 @@ public abstract class Weapon : MonoBehaviour, IItem
     #region [ Abstract methods ]
     protected abstract void Movement();
 
-    protected abstract void SetPosition();
+    protected virtual void SetPosition()
+    {
+        InitObjects();
+    }
 
     protected virtual float CalculateDamage()
     {

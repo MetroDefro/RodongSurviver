@@ -24,6 +24,7 @@ public class SwordWeapon : Weapon
 
     protected override void SetPosition()
     {
+        base.SetPosition();
         for (int i = 0; i < weaponObjects.Count; i++)
         {
             float Scala = 2;

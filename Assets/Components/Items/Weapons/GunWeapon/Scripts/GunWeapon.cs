@@ -28,11 +28,12 @@ public class GunWeapon : Weapon
 
     protected override void SetPosition()
     {
-
+        base.SetPosition();
     }
 
     private void SetPosition(GameObject gameObject)
     {
+        SetPosition();
         float Scala = 2;
         gameObject.transform.localPosition = player.InputVector2 * Scala;
         gameObject.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, (360 - Mathf.Atan2(player.InputVector2.x, player.InputVector2.y) * 180 / Mathf.PI)));

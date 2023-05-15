@@ -35,6 +35,7 @@ public class CrossWeapon : Weapon
 
     protected override void SetPosition()
     {
+        base.SetPosition();
         for (int i = 0; i < weaponObjects.Count; i++)
         {
             weaponObjects[i].transform.position = GetRandomRange(CalculateRange()) + new Vector2(0, fallHeight);
