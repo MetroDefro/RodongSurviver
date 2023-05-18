@@ -11,70 +11,53 @@ public class PlayerSelectPresenter : MonoBehaviour
 {
     private PlayerSelectView view;
 
-    private Action<PlayerData> setPlayerData;
-    private Action onPlay;
-    private Action onShop;
-
-    private LocalizedString localizedString;
-    public void Initialize(Action onPlay, Action onShop, Action<PlayerData> setPlayerData)
+    public class PlayerSelectAction
     {
-        if(TryGetComponent(out PlayerSelectView view))
+        public Action<PlayerData> SetPlayerData;
+        public Action OnPlay;
+        public Action OnShop;
+        public Action<int> OnSelectLangauge;
+    }
+
+    private PlayerSelectAction actions;
+
+    public void Initialize(PlayerSelectAction actions, int currentLangaugeIndex)
+    {
+        if (TryGetComponent(out PlayerSelectView view))
         {
             this.view = view;
         }
 
-        this.onPlay = onPlay;
-        this.onShop = onShop;
-        this.setPlayerData = setPlayerData;
+        this.actions = actions;
 
-        setPlayerData?.Invoke(view.PlayeButtonSets[0].Data);
+        this.actions.SetPlayerData?.Invoke(view.PlayeButtonSets[0].Data);
+
+        view.SelectLanguageDropdown.value = currentLangaugeIndex;
 
         SubscribePlayButton();
         SubscribeShopButton();
         SubscribePlayerButtons();
         SubscribeSelectLanguageDropdown();
-
-        localizedString = new LocalizedString("DefaultTable", 1000);
-        localizedString.StringChanged += UpdateString;
-
-    }
-
-    public void Dispose()
-    {
-        localizedString.StringChanged -= UpdateString;
-    }
-
-    private void UpdateString(string str)
-    {
-        view.SelectLanguageText.text = str;
     }
 
     private void SubscribeSelectLanguageDropdown()
     {
         view.SelectLanguageDropdown.OnValueChangedAsObservable()
-            .Subscribe(index =>
-            {
-                LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
-            }).AddTo(this);
+            .Subscribe(index => actions.OnSelectLangauge?.Invoke(index))
+            .AddTo(this);
     }
 
     private void SubscribePlayButton()
     {
         view.PlayButton.OnClickAsObservable()
-            .Subscribe(_ =>
-            {
-                onPlay?.Invoke();
-            })
+            .Subscribe(_ => actions.OnPlay?.Invoke())
             .AddTo(this);
     }
 
     private void SubscribeShopButton()
     {
         view.ShopButton.OnClickAsObservable()
-            .Subscribe(_ =>
-            {
-                onShop?.Invoke();
-            })
+            .Subscribe(_ => actions.OnShop?.Invoke())
             .AddTo(this);
     }
 
@@ -88,7 +71,7 @@ public class PlayerSelectPresenter : MonoBehaviour
                 .Subscribe(_ =>
                 {
                     PlayerData playerData = view.PlayeButtonSets[index].Data;
-                    setPlayerData?.Invoke(playerData);
+                    actions.SetPlayerData?.Invoke(playerData);
                 })
                 .AddTo(this);
         }

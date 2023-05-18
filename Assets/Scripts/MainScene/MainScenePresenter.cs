@@ -2,6 +2,7 @@ using UnityEngine;
 using Zenject;
 using RodongSurviver.Base;
 using RodongSurviver.Manager;
+using UnityEngine.Localization.Settings;
 
 public class MainScenePresenter : PresenterBase
 {
@@ -47,12 +48,20 @@ public class MainScenePresenter : PresenterBase
             this.view = view;
         }
 
-        playerSelectPresenter.Initialize(
-            () => sceneManager.LoadSceneAsync(SceneType.Game),
-            () => shopPresenter.Show(),
-            (playerData) => SetPlayerData(playerData));
+        playerSelectPresenter.Initialize(new PlayerSelectPresenter.PlayerSelectAction
+            {
+                OnPlay = () => sceneManager.LoadSceneAsync(SceneType.Game),
+                OnShop = () => shopPresenter.Show(),
+                SetPlayerData = (playerData) => SetPlayerData(playerData),
+                OnSelectLangauge = (index) => 
+                {
+                    LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+                    gameManager.CurrentLanguage = index;
+                },
+            }, gameManager.CurrentLanguage);
 
-        if(gameManager.EnforceData == null)
+
+        if (gameManager.EnforceData == null)
         {
             gameManager.EnforceData = gameManager.LoadEnforceData();
             if (gameManager.EnforceData == null)

@@ -18,10 +18,6 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 32270793674752
-    m_Localized: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uC704\uB97C \uB3CC\uBA70 \uACF5\uACA9."
-    m_Metadata:
-      m_Items: []
   - m_Id: 1
     m_Localized: "\uB124 \uBC29\uD5A5\uC73C\uB85C \uBC1C\uC0AC."
     m_Metadata:
@@ -84,6 +80,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1000
     m_Localized: "\uC5B8\uC5B4 \uC120\uD0DD"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6
+    m_Localized: "\uD50C\uB808\uC774\uC5B4 \uC8FC\uC704\uB97C \uB3CC\uBA70 \uACF5\uACA9."
     m_Metadata:
       m_Items: []
   references:

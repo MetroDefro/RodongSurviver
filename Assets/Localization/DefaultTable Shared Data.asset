@@ -15,68 +15,68 @@ MonoBehaviour:
   m_TableCollectionName: DefaultTable
   m_TableCollectionNameGuidString: 7ac148c6dcaeef64aac5694c74e1fb5c
   m_Entries:
-  - m_Id: 32270793674752
-    m_Key: ITEM-0
+  - m_Id: 6
+    m_Key: ITEM-ShieldWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 1
-    m_Key: ITEM-1
+    m_Key: ITEM-SwordWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 2
-    m_Key: ITEM-2
+    m_Key: ITEM-CrossWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 3
-    m_Key: ITEM-3
+    m_Key: ITEM-WandWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 4
-    m_Key: ITEM-4
+    m_Key: ITEM-HammerWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 5
-    m_Key: ITEM-5
+    m_Key: ITEM-GunWeapon
     m_Metadata:
       m_Items: []
   - m_Id: 100
-    m_Key: ITEM-100
+    m_Key: ITEM-Magnet
     m_Metadata:
       m_Items: []
   - m_Id: 101
-    m_Key: ITEM-101
+    m_Key: ITEM-Tornado
     m_Metadata:
       m_Items: []
   - m_Id: 102
-    m_Key: ITEM-102
+    m_Key: ITEM-Thunder
     m_Metadata:
       m_Items: []
   - m_Id: 103
-    m_Key: ITEM-103
+    m_Key: ITEM-Dumbbell
     m_Metadata:
       m_Items: []
   - m_Id: 104
-    m_Key: ITEM-104
+    m_Key: ITEM-Shoes
     m_Metadata:
       m_Items: []
   - m_Id: 105
-    m_Key: ITEM-105
+    m_Key: ITEM-Rice
     m_Metadata:
       m_Items: []
   - m_Id: 106
-    m_Key: ITEM-106
+    m_Key: ITEM-Dice
     m_Metadata:
       m_Items: []
   - m_Id: 107
-    m_Key: ITEM-107
+    m_Key: ITEM-Baloon
     m_Metadata:
       m_Items: []
   - m_Id: 200
-    m_Key: ITEM-200
+    m_Key: ITEM-Money
     m_Metadata:
       m_Items: []
   - m_Id: 201
-    m_Key: ITEM-201
+    m_Key: ITEM-Potion
     m_Metadata:
       m_Items: []
   - m_Id: 1000

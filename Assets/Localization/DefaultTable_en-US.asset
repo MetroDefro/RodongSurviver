@@ -18,10 +18,6 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_TableData:
-  - m_Id: 32270793674752
-    m_Localized: Attack around player.
-    m_Metadata:
-      m_Items: []
   - m_Id: 1
     m_Localized: Fire in 4 directions.
     m_Metadata:
@@ -84,6 +80,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 1000
     m_Localized: Select language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6
+    m_Localized: Attack around player.
     m_Metadata:
       m_Items: []
   references:

@@ -8,6 +8,8 @@ namespace RodongSurviver.Manager
 {
     public class GameManager : MonoBehaviour
     {
+        public int CurrentLanguage { get; set; }
+
         public PlayerData PlayerData { get; set; }
         public EnforceData EnforceData { get; set; }
 
