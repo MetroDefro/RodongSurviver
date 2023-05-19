@@ -13,6 +13,12 @@ namespace RodongSurviver.Manager
         public PlayerData PlayerData { get; set; }
         public EnforceData EnforceData { get; set; }
 
+
+        private void Awake()
+        {
+            Application.targetFrameRate = 60;    
+        }
+
         public void PauseGame()
         {
             Time.timeScale = 0;

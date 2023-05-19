@@ -29,8 +29,8 @@ MonoBehaviour:
         m_Collection: {fileID: 11400000}
         m_ColumnsList:
         - rid: 3355428287626084398
-        - rid: 3355428287626084399
         - rid: 3355428287626084401
+        - rid: 3355428287626084399
         - rid: 3355428287626084400
         m_ConnectedFile: Assets/Localization/LocalizationSheet.csv
     - rid: 3355428287626084398
